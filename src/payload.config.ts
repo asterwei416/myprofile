@@ -7,6 +7,9 @@ import sharp from 'sharp'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
+import { Tags } from './collections/Tags'
+import { Projects } from './collections/Projects'
+import { Posts } from './collections/Posts'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -17,8 +20,11 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    meta: {
+      titleSuffix: ' - Wei Aster Portfolio',
+    },
   },
-  collections: [Users, Media],
+  collections: [Users, Media, Tags, Projects, Posts],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
@@ -30,3 +36,4 @@ export default buildConfig({
   sharp,
   plugins: [],
 })
+
