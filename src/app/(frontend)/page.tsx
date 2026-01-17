@@ -14,13 +14,13 @@ const timelineData = [
         type: 'foundation',
         title: '機械航太 × MBA 的跨界底子',
         description:
-          '練出「結構決定功能」的直覺；並在工程腦上裝了商業邏輯，開始懂得用策略、金錢跟資源調度來拆解這個世界',
+          '練出「結構決定功能」的直覺；並在工程腦上裝了商業邏輯，開始懂得用策略、金錢跟資源調度來拆解這個世界。',
         icon: '⚙️🎓',
       },
       {
         type: 'foundation',
         title: '商場運作的資源調度',
-        description: '搞定千萬級預算跟招商——現實版的資源配置最佳化，在一團亂中理出順暢的流程',
+        description: '搞定千萬級預算跟招商——現實版的資源配置最佳化，在一團亂中理出順暢的流程。',
         icon: '💼',
         websites: [
           {
@@ -33,35 +33,53 @@ const timelineData = [
       {
         type: 'foundation',
         title: '公司治理的代碼審計',
-        description: '拆解 30+ 上市櫃公司的財報與組織架構，從數字的破綻看穿企業底層運作邏輯',
+        description: '拆解 30+ 上市櫃公司的財報與組織架構，從數字的破綻看穿企業底層運作邏輯。',
         icon: '🔍',
         websites: [{ name: '中華公司治理協會', url: 'https://www.cga.org.tw/' }],
       },
     ],
   },
   {
-    year: '2013 - 2020',
-    phase: '第二階段：數位技能狂飆期',
+    year: '2013 - 2016',
+    phase: '第二階段：創業逼出的全棧肉搏與打怪升級',
     items: [
       {
         type: 'growth',
-        title: '創業新手村地獄模式',
-        description:
-          'SEO、廣告投放、自媒體經營、CRM 架構通通自己來——不是在學工具，是在學怎麼讓公司活下去',
-        icon: '�',
-      },
-      {
-        type: 'growth',
-        title: '技術自己搞的打怪升級',
-        description:
-          '為了提高轉換率，開始研究網頁結構跟自動化腳本——技術不是拿來炫的，是拿來解決實際增長問題的',
+        title: '創業所學到的地獄模式',
+        description: [
+          'SEO、廣告、自媒體、CRM 通通自己來；從網站架構、CIS 到品牌策略親手佈局；制定產品規格與時程控管，用系統思考確保開發不偏離目標——「規格沒定義好，再強技術也是空轉」',
+          '我用「設計服務」當主軸，開始幫客戶搞行銷溝通跟設計管理。從網站架構、CIS 視覺到社群跟廣告投放，我搞懂了怎麼從零開始打造品牌形象跟策略，這不只是做美美的圖，而是要精準抓住市場的眼球。',
+        ],
         icon: '⚔️',
+        images: [
+          '/startup/oxytive.jpg',
+          '/startup/unionrusty-box.jpg',
+          '/startup/tshirts.jpg',
+          '/startup/jocelin.jpg',
+          '/startup/unionrusty-web.jpg',
+          '/startup/unionrusty-artist.jpg',
+          '/startup/manufacturer.jpg',
+          '/startup/camel-photo.jpg',
+          '/startup/car-web.jpg',
+          '/startup/fitness-web.jpg',
+          '/startup/car-web2.jpg',
+          '/startup/water-machine.jpg',
+          '/startup/tea-brand.jpg',
+        ],
       },
+    ],
+  },
+  {
+    year: '2016 - 2020',
+    phase: '第三階段：數位媒體的實戰試煉',
+    items: [
       {
         type: 'growth',
-        title: '流量暴增 250%',
-        description:
-          '在 Bella/媽媽寶寶用 SEO工程一波操作，網站 PV 直接噴發——跟流量跟權重互尬的日子',
+        title: '流量與權重的互尬攻防',
+        description: [
+          '在傳統媒體轉型的關鍵期，我負責官網的深度改版——這不是換介面而已，而是一場對搜尋引擎與用戶行為的「逆向工程」。',
+          '透過 SEO 底層架構最佳化與內容行銷策略，成功讓流量翻倍成長，我學會了在海量資訊中，精準抓到演算法的「脾氣」。',
+        ],
         icon: '📈',
         websites: [
           { name: 'Bella 儂儂', url: 'https://www.bella.tw/' },
@@ -72,56 +90,65 @@ const timelineData = [
         type: 'growth',
         title: '數據中樞的全地圖外掛',
         description:
-          '在壹傳媒集團當 GA360 與 Data Warehouse 的 PM，把亂七八糟的數據整理成能用的數位情報系統',
+          '在壹傳媒集團當 GA360 與 Data Warehouse 的 PM，把亂七八糟的數據整理成能用的數位情報系統。從跨部門協作到資料視覺化，我建立了從「行為洞察」到「產品策略」的閉環。',
         icon: '🏗️',
+        websites: [
+          {
+            name: '壹蘋新聞網',
+            url: 'https://news.nextapple.com/',
+            image: '/screenshots/nextapple.png',
+          },
+        ],
       },
     ],
   },
   {
     year: '2020 - 2025',
-    phase: '第三階段：定義局勢的策略架構師',
+    phase: '第四階段：策略架構與營運定義者 — 從增長到全局佈局',
     items: [
       {
         type: 'work',
-        title: '產品領導力',
-        description: '帶領 10 人以上團隊進行全通路行銷，確立 North Star Metric 與 OKR 目標管理',
+        title: '產品領導力的培養',
+        description: [
+          '負責確立團隊 North Star Metric 與 OKR 目標管理，我開始從 C-level 的視野看「局」，優化行銷預算配置與產品開發時程。',
+          '主導了雙邊市場的資料探勘架構，重點不在於蒐集數據，而在於如何定義產品規格，讓數據自動轉化為可獲利的商業模式。',
+        ],
         icon: '👥',
+        websites: [
+          { name: '樂屋網', url: 'https://www.rakuya.com.tw/', image: '/screenshots/rakuya.png' },
+        ],
       },
       {
         type: 'work',
-        title: 'CRM 與行為分析',
-        description: '主導導入 Amplitude 行為分析平台，建立精準的 RFM 模型與自動化分群行銷',
+        title: '會員經濟的數位煉金術',
+        description: [
+          '主導導入 Amplitude 行為分析平台，用 Martech 工具打造會員自動上線與再行銷流程，靠 RFM 模型與 A/B 測試，把用戶行為轉化為可預測的成長公式。',
+          '擔任跨部門的數據橋樑——不只是做執行，而是拿數據當武器，幫各部門把 KPI 對齊，讓數位轉型不只是口號，而是真的做出成績。',
+        ],
         icon: '📊',
-      },
-      {
-        type: 'work',
-        title: '數據驅動決策',
-        description: '企劃雙邊市場的資料探勘架構，將數據觀察深度整合至產品開發流程中',
-        icon: '🎯',
+        websites: [
+          {
+            name: '角角者',
+            url: 'https://www.kadokado.com.tw/',
+            image: '/screenshots/kadokado.png',
+          },
+        ],
       },
     ],
   },
   {
-    year: '現在 - 2026',
-    phase: '第四階段：AI 時代的定義者',
+    year: '2025 - Now',
+    phase: '第五階段：AI 時代的實踐與學習者',
     items: [
       {
         type: 'ai',
-        title: 'Vibe Coding 實踐',
-        description: '告別低效開發，利用 Cursor Composer 與 AI 生成快速產出 MVP 並進行驗證',
+        title: '想像力的即時落地',
+        description: [
+          'Vibe Coding 的直覺實踐：不再死磕碎片的語法，而是專注於「意圖定義」與「架構設計」，只要邏輯架構正確，剩下的髒活就交給 AI 即時顯化，這是一種「想像力即戰鬥力」的體現，讓開發回歸到解決問題的本質，而不是在代碼海裡肉搏。',
+          'Agent Workflow 的靈魂封裝：將多年來的龜毛要求寫成 Agent 的 SOP，我建立了一套 24 小時不休息的自動化工作流，現在，我不必親自上陣，AI 代理人就是具備我專業靈魂的執行終端。',
+          'AIGC 的全速顯化：將 AI 視為認知的「擴大機」，在我的世界裡，沒有「沒時間做」這件事，只有「沒定義清楚」的問題，透過 AIGC 讓創意與邏輯快速落地，我只負責在最後一關進行價值審核。',
+        ],
         icon: '🚀',
-      },
-      {
-        type: 'ai',
-        title: '自動化爬蟲 Pipeline',
-        description: '建置智慧爬蟲系統，自動抓取競品數據與媒體聲量，提升策略反應速度',
-        icon: '🕷️',
-      },
-      {
-        type: 'ai',
-        title: 'Google Antigravity 進化',
-        description: '持續優化 Agent Skills 與爬蟲核心邏輯，實現「算力即權力」的技術落實',
-        icon: '🛸',
       },
     ],
   },
@@ -165,7 +192,7 @@ export default async function HomePage() {
 
           {/* 名字 */}
           <h1 className="profile-name">Aster</h1>
-          <p className="profile-role">Frontend Developer</p>
+          <p className="profile-role">AI 實驗家</p>
 
           {/* 座右銘 */}
           <blockquote className="profile-quote">
@@ -193,11 +220,11 @@ export default async function HomePage() {
             <div className="about-text">
               <h2 className="about-title">
                 <span className="about-title-icon">👋</span>
-                認識 Aster (唉斯特)
+                認識 Aster (欸斯特)
               </h2>
               <p>
                 以前的我，搞數位行銷、玩數據、做成長駭客，但 AI
-                這波「超音速海嘯」來了之後，我發現人類史上第一次有機會「開外掛」當超人，這次我決定不想錯過！
+                這波「超音速海嘯」來了之後，我發現人類史上第一次有機會「開外掛」當超人，這次決心不想錯過！
               </p>
               <p>
                 目前的狀態：<strong>AI 實驗家</strong> / 也是專業的「數位行銷廢材」。
@@ -228,7 +255,7 @@ export default async function HomePage() {
                 </li>
               </ul>
               <p style={{ marginTop: 'var(--space-lg)' }}>
-                本質來看，我是在做一場認知的「逆向工程」，在這個執行力逐漸貶值的時代，我想用系統化的視角看透本質，並用
+                本質來看，我就是在做一場認知的「逆向工程」，在這個執行力逐漸貶值的時代，用系統化的視角看透本質，並用
                 AI 加速實現那個被我們定義好的未來。
               </p>
               <p
@@ -238,8 +265,8 @@ export default async function HomePage() {
                   color: 'var(--color-primary)',
                 }}
               >
-                這裡就是我的 #AI廢人養成計劃 實踐紀錄 —— 看我怎麼用 n8n、Gemini 跟 Vibe
-                Coding，一步步把自己「自動化」。
+                這裡就是我的 #AI廢人養成計劃 —— 看我怎麼用 n8n、Gemini、GPT 跟 Vibe
+                Coding等工具，一步步把自己「自動化」。
               </p>
               <div className="about-tags">
                 <span className="tag">Growth Hacking</span>
@@ -247,13 +274,6 @@ export default async function HomePage() {
                 <span className="tag">AI/LLM</span>
                 <span className="tag">Prompt Engineering</span>
                 <span className="tag">系統思考</span>
-              </div>
-            </div>
-            <div className="about-illustration">
-              <div className="about-decoration">
-                <div className="deco-circle deco-1"></div>
-                <div className="deco-circle deco-2"></div>
-                <div className="deco-icon">🎯</div>
               </div>
             </div>
           </div>
@@ -264,8 +284,8 @@ export default async function HomePage() {
       <section className="timeline-section">
         <div className="container">
           <h2 className="section-title-center">
-            <span className="section-title-icon">🧬</span>
-            Aster 的進化日誌
+            <img src="/evolution-icon.jpg" alt="" className="section-title-icon-img" />
+            我的進化日誌
           </h2>
           <p
             style={{
@@ -280,54 +300,81 @@ export default async function HomePage() {
             從數據解碼到 AI 建築師
           </p>
           <div className="timeline">
-            {timelineData.map((yearGroup, yearIndex) => (
-              <div key={yearIndex} className="timeline-year-group">
-                <div className="timeline-year">{yearGroup.year}</div>
-                {yearGroup.phase && <div className="timeline-phase">{yearGroup.phase}</div>}
-                {yearGroup.items.map((item, itemIndex) => (
-                  <div
-                    key={itemIndex}
-                    className={`timeline-item ${itemIndex % 2 === 0 ? 'left' : 'right'}`}
-                  >
-                    <div className="timeline-card">
-                      <h3 className="timeline-title">{item.title}</h3>
-                      <p className="timeline-desc">{item.description}</p>
-                      {/* 網站 iframe 區塊（如果有的話） */}
-                      {item.websites && (
-                        <div className="timeline-websites-section">
-                          <div className="timeline-websites-divider"></div>
-                          <div className="timeline-websites-grid">
-                            {item.websites.map(
-                              (
-                                site: { name: string; url: string; image?: string },
-                                siteIndex: number,
-                              ) => (
-                                <a
-                                  key={siteIndex}
-                                  href={site.url}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="timeline-website-item"
-                                >
-                                  <div className="timeline-website-preview">
-                                    {site.image ? (
-                                      <img src={site.image} alt={site.name} />
-                                    ) : (
-                                      <iframe src={site.url} title={site.name} loading="lazy" />
-                                    )}
+            {(() => {
+              let globalIndex = 0
+              return timelineData.map((yearGroup, yearIndex) => (
+                <div key={yearIndex} className="timeline-year-group">
+                  <div className="timeline-year">{yearGroup.year}</div>
+                  {yearGroup.phase && <div className="timeline-phase">{yearGroup.phase}</div>}
+                  {yearGroup.items.map((item, itemIndex) => {
+                    const currentIndex = globalIndex++
+                    return (
+                      <div
+                        key={itemIndex}
+                        className={`timeline-item ${currentIndex % 2 === 0 ? 'left' : 'right'}`}
+                      >
+                        <div className="timeline-card">
+                          <h3 className="timeline-title">{item.title}</h3>
+                          {Array.isArray(item.description) ? (
+                            <ul className="timeline-desc-list">
+                              {item.description.map((desc: string, descIndex: number) => (
+                                <li key={descIndex}>{desc}</li>
+                              ))}
+                            </ul>
+                          ) : (
+                            <p className="timeline-desc">{item.description}</p>
+                          )}
+                          {/* 作品圖片區塊（如果有的話） */}
+                          {item.images && (
+                            <div className="timeline-images-section">
+                              <div className="timeline-websites-divider"></div>
+                              <div className="timeline-images-grid">
+                                {item.images.map((img: string, imgIndex: number) => (
+                                  <div key={imgIndex} className="timeline-image-item">
+                                    <img src={img} alt="" />
                                   </div>
-                                  <span className="timeline-website-name">{site.name}</span>
-                                </a>
-                              ),
-                            )}
-                          </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                          {/* 網站 iframe 區塊（如果有的話） */}
+                          {item.websites && (
+                            <div className="timeline-websites-section">
+                              <div className="timeline-websites-divider"></div>
+                              <div className="timeline-websites-grid">
+                                {item.websites.map(
+                                  (
+                                    site: { name: string; url: string; image?: string },
+                                    siteIndex: number,
+                                  ) => (
+                                    <a
+                                      key={siteIndex}
+                                      href={site.url}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="timeline-website-item"
+                                    >
+                                      <div className="timeline-website-preview">
+                                        {site.image ? (
+                                          <img src={site.image} alt={site.name} />
+                                        ) : (
+                                          <iframe src={site.url} title={site.name} loading="lazy" />
+                                        )}
+                                      </div>
+                                      <span className="timeline-website-name">{site.name}</span>
+                                    </a>
+                                  ),
+                                )}
+                              </div>
+                            </div>
+                          )}
                         </div>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ))}
+                      </div>
+                    )
+                  })}
+                </div>
+              ))
+            })()}
             <div className="timeline-line"></div>
           </div>
         </div>
@@ -337,7 +384,7 @@ export default async function HomePage() {
       <section className="section" style={{ backgroundColor: 'var(--bg-surface)' }}>
         <div className="container">
           <h2 className="section-title-center">
-            <span className="section-title-icon">🚀</span>
+            <img src="/projects-icon.jpg" alt="" className="section-title-icon-img" />
             最新作品
           </h2>
           {projects.length > 0 ? (
@@ -417,7 +464,7 @@ export default async function HomePage() {
       <section className="section">
         <div className="container">
           <h2 className="section-title-center">
-            <span className="section-title-icon">✍️</span>
+            <img src="/blog-icon.jpg" alt="" className="section-title-icon-img" />
             最新文章
           </h2>
           {posts.length > 0 ? (

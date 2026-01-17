@@ -164,6 +164,20 @@ pre code {
   padding: 0 var(--space-lg);
 }
 
+/* === 導覽列 Logo === */
+.nav-logo {
+  height: 40px;
+  width: auto;
+  display: block;
+  border-radius: 8px;
+  transition: all var(--transition-normal);
+}
+
+.nav-logo:hover {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-glow-cyan);
+}
+
 /* === 卡片元件 === */
 .card {
   background-color: var(--bg-surface);
@@ -410,6 +424,29 @@ pre code {
 .about-section {
   padding: var(--space-3xl) 0;
   background-color: var(--bg-surface);
+  position: relative;
+  overflow: hidden;
+}
+
+.about-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('/about-bg.jpg');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.08;
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .about-section::before {
+    opacity: 0.06;
+  }
 }
 
 .about-content {
@@ -523,6 +560,13 @@ pre code {
   font-size: 1.5rem;
 }
 
+.section-title-icon-img {
+  width: 2rem;
+  height: 2rem;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
 .timeline {
   position: relative;
   max-width: 800px;
@@ -568,13 +612,15 @@ pre code {
 }
 
 .timeline-phase {
+  position: relative;
+  z-index: 2;
   text-align: center;
   font-size: 1rem;
   font-weight: 600;
   color: var(--text-primary);
   margin-bottom: var(--space-lg);
   padding: var(--space-xs) var(--space-md);
-  background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(139, 92, 246, 0.1));
+  background: var(--bg-surface);
   border-radius: 8px;
   max-width: 400px;
   margin-left: auto;
@@ -625,10 +671,60 @@ pre code {
   border-radius: 12px;
   transition: all var(--transition-normal);
   text-align: center;
+  overflow: hidden;
+}
+
+/* 邊框光軌動畫 */
+.timeline-card::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: conic-gradient(
+    from 0deg,
+    transparent,
+    transparent 30%,
+    var(--color-primary) 50%,
+    transparent 70%,
+    transparent
+  );
+  border-radius: 14px;
+  opacity: 0;
+  z-index: -1;
+  animation: none;
+  transition: opacity var(--transition-normal);
+}
+
+.timeline-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--bg-surface);
+  border-radius: 11px;
+  z-index: -1;
+}
+
+.timeline-card:hover::before {
+  opacity: 1;
+  animation: borderRotate 2s linear infinite;
+}
+
+@keyframes borderRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .timeline-card:hover {
-  border-color: var(--color-primary);
+  border-color: transparent;
   box-shadow: var(--shadow-glow-cyan);
 }
 
@@ -648,6 +744,117 @@ pre code {
   font-size: 0.875rem;
   color: var(--text-secondary);
   margin: 0;
+}
+
+/* 時間軸描述列表（多個 bullet points） */
+.timeline-desc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+}
+
+.timeline-desc-list li {
+  position: relative;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  padding-left: var(--space-lg);
+  margin-bottom: var(--space-sm);
+  line-height: 1.6;
+}
+
+.timeline-desc-list li:last-child {
+  margin-bottom: 0;
+}
+
+.timeline-desc-list li::before {
+  content: '▹';
+  position: absolute;
+  left: 0;
+  color: var(--color-primary);
+  font-size: 0.75rem;
+}
+
+/* 時間軸卡片內的作品圖片區塊 - 自動輪播 */
+.timeline-images-section {
+  margin-top: var(--space-md);
+}
+
+.timeline-images-grid {
+  position: relative;
+  width: 100%;
+  height: 280px;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.timeline-image-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  animation: carousel 39s infinite;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.timeline-image-item:nth-child(1) {
+  animation-delay: 0s;
+}
+.timeline-image-item:nth-child(2) {
+  animation-delay: 3s;
+}
+.timeline-image-item:nth-child(3) {
+  animation-delay: 6s;
+}
+.timeline-image-item:nth-child(4) {
+  animation-delay: 9s;
+}
+.timeline-image-item:nth-child(5) {
+  animation-delay: 12s;
+}
+.timeline-image-item:nth-child(6) {
+  animation-delay: 15s;
+}
+.timeline-image-item:nth-child(7) {
+  animation-delay: 18s;
+}
+.timeline-image-item:nth-child(8) {
+  animation-delay: 21s;
+}
+.timeline-image-item:nth-child(9) {
+  animation-delay: 24s;
+}
+.timeline-image-item:nth-child(10) {
+  animation-delay: 27s;
+}
+.timeline-image-item:nth-child(11) {
+  animation-delay: 30s;
+}
+.timeline-image-item:nth-child(12) {
+  animation-delay: 33s;
+}
+.timeline-image-item:nth-child(13) {
+  animation-delay: 36s;
+}
+
+@keyframes carousel {
+  0%,
+  6% {
+    opacity: 1;
+  }
+  7.7%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.timeline-image-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /* 時間軸卡片內的網站區塊 */
@@ -688,7 +895,7 @@ pre code {
 
 /* 網站預覽 iframe 容器 */
 .timeline-website-preview {
-  height: 140px;
+  height: 280px;
   overflow: hidden;
   pointer-events: none;
   background: var(--bg-base);
@@ -696,7 +903,7 @@ pre code {
 
 .timeline-website-preview iframe {
   width: 200%;
-  height: 280px;
+  height: 560px;
   border: none;
   transform: scale(0.5);
   transform-origin: top left;
@@ -1075,5 +1282,62 @@ pre code {
 
   .nav-links {
     display: none;
+  }
+}
+
+/* === 頁面載入器 === */
+.page-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(10, 10, 10, 0.7); /* 半透明深色背景 */
+  backdrop-filter: blur(10px); /* 毛玻璃效果 */
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.page-loader-content {
+  text-align: center;
+}
+
+.page-loader-progress {
+  font-family: var(--font-mono);
+  font-size: clamp(3rem, 10vw, 6rem);
+  font-weight: 700;
+  color: var(--color-primary);
+  text-shadow: var(--shadow-glow-cyan);
+  margin-bottom: var(--space-sm);
+  line-height: 1;
+}
+
+.page-loader-text {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  color: var(--text-secondary);
+  letter-spacing: 2px;
+  animation: blink 1s infinite;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
   }
 }
