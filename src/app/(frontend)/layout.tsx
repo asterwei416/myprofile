@@ -3,16 +3,13 @@ import Link from 'next/link'
 import './styles.css'
 
 export const metadata = {
-  title: 'Wei Aster · Frontend Dev | AI 作品集與技術文章',
-  description: '一位專注於前端開發與 AI 應用的數位工匠。探索我的 AI 作品集、技術文章，以及開發思維與架構拆解。',
-  keywords: ['前端開發', 'AI', '作品集', 'Next.js', 'React', 'TypeScript'],
+  title: 'Aster · AI 實驗家 | 數據驅動 × AI 賦能的成長實踐',
+  description:
+    '從數位行銷到 AI 探索者，用系統思考拆解大局，用算力放大想像。這是我的 #AI廢人養成計劃 實踐紀錄。',
+  keywords: ['AI 實驗家', '數據分析', 'Growth Hacking', 'AI 自動化', 'Vibe Coding', '數位行銷'],
 }
 
-export default async function FrontendLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default async function FrontendLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="zh-Hant">
       <body>
@@ -20,7 +17,7 @@ export default async function FrontendLayout({
         <nav className="nav">
           <div className="container nav-container">
             <Link href="/" className="nav-brand">
-              Wei_Aster.dev
+              Aster.dev
             </Link>
             <ul className="nav-links">
               <li>
@@ -48,9 +45,7 @@ export default async function FrontendLayout({
         {/* 頁尾 */}
         <footer className="footer">
           <div className="container">
-            <p className="footer-text">
-              © 2026 Wei Aster. Built with Next.js + Payload CMS.
-            </p>
+            <p className="footer-text">© 2026 Aster. Built with Next.js + Payload CMS.</p>
           </div>
         </footer>
       </body>
