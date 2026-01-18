@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { getPayload } from 'payload'
 import React from 'react'
 
+import { Tag } from './components/Tag'
 import config from '@/payload.config'
 
 // 時間軸資料（之後可移至 CMS）
@@ -47,8 +48,8 @@ const timelineData = [
         type: 'growth',
         title: '創業所學到的地獄模式',
         description: [
-          'SEO、廣告、自媒體、CRM 通通自己來；從網站架構、CIS 到品牌策略親手佈局；制定產品規格與時程控管，用系統思考確保開發不偏離目標——「規格沒定義好，再強技術也是空轉」',
-          '我用「設計服務」當主軸，開始幫客戶搞行銷溝通跟設計管理。從網站架構、CIS 視覺到社群跟廣告投放，我搞懂了怎麼從零開始打造品牌形象跟策略，這不只是做美美的圖，而是要精準抓住市場的眼球。',
+          'SEO、廣告、自媒體、CRM 通通自己來；從網站架構、CIS 到品牌策略親手佈局；制定產品規格與時程控管，用系統思考確保開發不偏離目標——「規格沒定義好，再強技術也是空轉」。',
+          '用「設計服務」當主軸，開始幫客戶搞行銷溝通跟設計管理。從網站架構、CIS 視覺到社群跟廣告投放，我搞懂了怎麼從零開始打造品牌形象跟策略，這不只是做美美的圖，而是要精準抓住市場的眼球。',
         ],
         icon: '⚔️',
         images: [
@@ -144,15 +145,32 @@ const timelineData = [
         type: 'ai',
         title: '想像力的即時落地',
         description: [
-          'Vibe Coding 的直覺實踐：不再死磕碎片的語法，而是專注於「意圖定義」與「架構設計」，只要邏輯架構正確，剩下的髒活就交給 AI 即時顯化，這是一種「想像力即戰鬥力」的體現，讓開發回歸到解決問題的本質，而不是在代碼海裡肉搏。',
-          'Agent Workflow 的靈魂封裝：將多年來的龜毛要求寫成 Agent 的 SOP，我建立了一套 24 小時不休息的自動化工作流，現在，我不必親自上陣，AI 代理人就是具備我專業靈魂的執行終端。',
-          'AIGC 的全速顯化：將 AI 視為認知的「擴大機」，在我的世界裡，沒有「沒時間做」這件事，只有「沒定義清楚」的問題，透過 AIGC 讓創意與邏輯快速落地，我只負責在最後一關進行價值審核。',
+          'Vibe Coding 的直覺實踐：拒絕代碼肉搏，專注意圖定義與架構設計，邏輯對了，剩下的髒活交給 AI。想像力，就是我的戰鬥力。',
+          'Agent Workflow 的靈魂封裝：將高標要求轉化為 24/7 自動化工作流，我不用親自上陣，AI 代理人就是我的執行終端。',
+          'AIGC 的全速顯化：將 AI 視為認知的「擴大機」，沒有沒時間做的專案，只有沒定義清楚的問題，創意快速落地，我只負責最後的價值審核。',
         ],
         icon: '🚀',
       },
     ],
   },
 ]
+
+// 輔助函式：從 Lexical JSON 遞迴提取純文字
+function extractTextFromLexical(node: any): string {
+  if (!node) return ''
+  if (typeof node === 'string') return node
+  // 處理 text node
+  if (node.text) return node.text
+  // 處理 children
+  if (Array.isArray(node.children)) {
+    return node.children.map(extractTextFromLexical).join('')
+  }
+  // 處理 root
+  if (node.root) {
+    return extractTextFromLexical(node.root)
+  }
+  return ''
+}
 
 export default async function HomePage() {
   const payloadConfig = await config
@@ -178,7 +196,17 @@ export default async function HomePage() {
     limit: 3,
   })
 
-  console.log('首頁文章資料:', JSON.stringify(posts, null, 2))
+  // 預處理文章資料：生成摘要
+  const postsWithExcerpt = posts.map((post: any) => {
+    let excerpt = ''
+    if (post.content && post.content.root) {
+      const fullText = extractTextFromLexical(post.content)
+      // 截取前 250 字
+      excerpt = fullText.slice(0, 250)
+      if (fullText.length > 250) excerpt += '...'
+    }
+    return { ...post, excerpt }
+  })
 
   return (
     <>
@@ -271,11 +299,11 @@ export default async function HomePage() {
                 Coding等工具，一步步把自己「自動化」。
               </p>
               <div className="about-tags">
-                <span className="tag">Growth Hacking</span>
-                <span className="tag">數據分析</span>
-                <span className="tag">AI/LLM</span>
-                <span className="tag">Prompt Engineering</span>
-                <span className="tag">系統思考</span>
+                <Tag name="Growth Hacking" className="tag-green" />
+                <Tag name="數據分析" className="tag-cyan" />
+                <Tag name="AI/LLM" className="tag-purple" />
+                <Tag name="Prompt Engineering" className="tag-yellow" />
+                <Tag name="系統思考" className="tag-cyan" />
               </div>
             </div>
           </div>
@@ -464,9 +492,7 @@ export default async function HomePage() {
                       {project.techStack && project.techStack.length > 0 && (
                         <div className="project-card-tags">
                           {project.techStack.slice(0, 3).map((tech: any, i: number) => (
-                            <span key={i} className="tag">
-                              {tech.name}
-                            </span>
+                            <Tag key={i} name={tech.name} />
                           ))}
                         </div>
                       )}
@@ -501,9 +527,9 @@ export default async function HomePage() {
             <img src="/blog-icon.jpg" alt="" className="section-title-icon-img" />
             最新文章
           </h2>
-          {posts.length > 0 ? (
+          {postsWithExcerpt.length > 0 ? (
             <div className="grid" style={{ gap: 'var(--space-md)' }}>
-              {posts.map((post: any) => (
+              {postsWithExcerpt.map((post: any) => (
                 <Link key={post.id} href={`/blog/${post.slug}`} style={{ textDecoration: 'none' }}>
                   <article className="post-card">
                     <div
@@ -538,32 +564,40 @@ export default async function HomePage() {
                           🖼️
                         </div>
                       )}
-                      {/* 分類 Badge (Always render for debugging, maybe '未分類') */}
-                      <div
-                        style={{
-                          position: 'absolute',
-                          top: '10px',
-                          left: '10px',
-                          padding: '4px 10px',
-                          borderRadius: '20px',
-                          fontSize: '0.75rem',
-                          fontWeight: 500,
-                          color: '#fff',
-                          background: 'rgba(0, 0, 0, 0.6)',
-                          backdropFilter: 'blur(8px)',
-                          border: '1px solid rgba(255, 255, 255, 0.3)',
-                          zIndex: 10,
-                          boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
-                        }}
-                      >
-                        {post.category && typeof post.category !== 'string'
-                          ? post.category.name
-                          : '未分類'}
-                      </div>
                     </div>
                     <div className="post-card-content">
                       <h3 className="post-card-title">{post.title}</h3>
-                      {post.excerpt && <p className="post-card-excerpt">{post.excerpt}</p>}
+                      {post.excerpt && (
+                        <p
+                          className="post-card-excerpt"
+                          style={{
+                            fontSize: '0.9rem',
+                            color: 'var(--text-secondary)',
+                            margin: '0.5rem 0',
+                            display: '-webkit-box',
+                            WebkitLineClamp: 3,
+                            WebkitBoxOrient: 'vertical',
+                            overflow: 'hidden',
+                          }}
+                        >
+                          {post.excerpt}
+                        </p>
+                      )}
+
+                      {/* 標籤顯示 */}
+                      {post.tags && (post.tags as any[]).length > 0 && (
+                        <div
+                          style={{
+                            display: 'flex',
+                            gap: 'var(--space-xs)',
+                            marginBottom: 'var(--space-sm)',
+                          }}
+                        >
+                          {(post.tags as any[]).slice(0, 3).map((tag: any, i: number) => (
+                            <Tag key={i} name={typeof tag === 'string' ? tag : tag.name} />
+                          ))}
+                        </div>
+                      )}
                       <p className="post-card-meta">
                         {post.publishedAt
                           ? new Date(post.publishedAt).toLocaleDateString('zh-TW')
@@ -583,7 +617,7 @@ export default async function HomePage() {
               新增第一篇文章。
             </p>
           )}
-          {posts.length > 0 && (
+          {postsWithExcerpt.length > 0 && (
             <div style={{ textAlign: 'center', marginTop: 'var(--space-xl)' }}>
               <Link href="/blog" className="btn btn-secondary">
                 閱讀更多文章 →
