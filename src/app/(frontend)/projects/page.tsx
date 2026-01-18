@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { getPayload } from 'payload'
 import React from 'react'
 
+import { Tag } from '../components/Tag'
 import config from '@/payload.config'
 
 export const metadata = {
@@ -29,11 +30,10 @@ export default async function ProjectsPage() {
       <section className="section" style={{ paddingBottom: 0 }}>
         <div className="container">
           <div className="section-header">
-            <h1>AI 作品集</h1>
+            <h1>AI 作品</h1>
           </div>
           <p style={{ maxWidth: '600px', marginBottom: 'var(--space-xl)' }}>
-            每個專案都包含完整的 Prompt 邏輯、開發思維，以及技術架構拆解。
-            點擊任一作品深入了解開發過程與技術細節。
+            做人如果沒有一點廢物專案，那跟鹹魚有什麼分別？這些東西幫我擋掉了那些蠢到想哭的手動任務，節省下來的數百個小時—讓我能毫無愧疚地多追幾百集影集。
           </p>
         </div>
       </section>
@@ -50,31 +50,63 @@ export default async function ProjectsPage() {
                   style={{ textDecoration: 'none' }}
                 >
                   <article className="project-card">
-                    <div className="project-card-image">
-                      {project.thumbnail ? (
+                    <div
+                      className="project-card-image"
+                      style={{
+                        position: 'relative',
+                        height: '200px',
+                        overflow: 'hidden',
+                        backgroundColor: '#2a2a2a',
+                      }}
+                    >
+                      {project.thumbnail &&
+                      typeof project.thumbnail !== 'string' &&
+                      project.thumbnail.url ? (
                         <img
-                          src={
-                            typeof project.thumbnail === 'string'
-                              ? project.thumbnail
-                              : project.thumbnail.url
-                          }
+                          src={project.thumbnail.url}
                           alt={project.title}
+                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                         />
                       ) : (
                         <div
                           style={{
                             width: '100%',
                             height: '100%',
-                            backgroundColor: 'var(--bg-elevated)',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            color: 'var(--text-muted)',
+                            color: '#666',
+                            fontSize: '3rem',
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
                           }}
                         >
-                          No Image
+                          🖼️
                         </div>
                       )}
+                      {/* 分類 Badge */}
+                      <div
+                        style={{
+                          position: 'absolute',
+                          top: '10px',
+                          left: '10px',
+                          padding: '4px 10px',
+                          borderRadius: '20px',
+                          fontSize: '0.75rem',
+                          fontWeight: 500,
+                          color: '#fff',
+                          background: 'rgba(0, 0, 0, 0.6)',
+                          backdropFilter: 'blur(8px)',
+                          border: '1px solid rgba(255, 255, 255, 0.3)',
+                          zIndex: 10,
+                          boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+                        }}
+                      >
+                        {project.category && typeof project.category !== 'string'
+                          ? project.category.name
+                          : '未分類'}
+                      </div>
                     </div>
                     <div className="project-card-body">
                       <h3 className="project-card-title">{project.title}</h3>
@@ -83,14 +115,9 @@ export default async function ProjectsPage() {
                       </p>
                       {project.techStack && project.techStack.length > 0 && (
                         <div className="project-card-tags">
-                          {project.techStack.slice(0, 4).map((tech: any, i: number) => (
-                            <span key={i} className="tag">
-                              {tech.name}
-                            </span>
+                          {project.techStack.slice(0, 3).map((tech: any, i: number) => (
+                            <Tag key={i} name={tech.name} />
                           ))}
-                          {project.techStack.length > 4 && (
-                            <span className="tag">+{project.techStack.length - 4}</span>
-                          )}
                         </div>
                       )}
                     </div>

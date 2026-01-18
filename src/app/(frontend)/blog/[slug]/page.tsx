@@ -3,6 +3,7 @@ import { getPayload } from 'payload'
 import React from 'react'
 import { notFound } from 'next/navigation'
 
+import { Tag } from '../../components/Tag'
 import config from '@/payload.config'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 
@@ -145,9 +146,7 @@ export default async function BlogPostPage({ params }: Props) {
             {post.tags && (post.tags as any[]).length > 0 && (
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-xs)' }}>
                 {(post.tags as any[]).map((tag: any, i: number) => (
-                  <span key={i} className="tag">
-                    {typeof tag === 'string' ? tag : tag.name}
-                  </span>
+                  <Tag key={i} name={typeof tag === 'string' ? tag : tag.name} />
                 ))}
               </div>
             )}

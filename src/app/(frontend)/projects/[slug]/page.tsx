@@ -3,6 +3,7 @@ import { getPayload } from 'payload'
 import React from 'react'
 import { notFound } from 'next/navigation'
 
+import { Tag } from '../../components/Tag'
 import config from '@/payload.config'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 
@@ -130,9 +131,7 @@ export default async function ProjectDetailPage({ params }: Props) {
             {project.techStack && (project.techStack as any[]).length > 0 && (
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-xs)' }}>
                 {(project.techStack as any[]).map((tech, i) => (
-                  <span key={i} className="tag">
-                    {tech.name}
-                  </span>
+                  <Tag key={i} name={tech.name} />
                 ))}
               </div>
             )}

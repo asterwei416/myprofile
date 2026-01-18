@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useEffect, useState, useCallback } from 'react'
+import { createPortal } from 'react-dom'
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
 import { $isListNode, ListNode } from '@lexical/list'
 import { $getSelection, $isRangeSelection } from 'lexical'
@@ -10,116 +11,208 @@ export function ListStartNumberPlugin(): React.ReactElement | null {
   const [editor] = useLexicalComposerContext()
   const [showModal, setShowModal] = useState(false)
   const [startNumber, setStartNumber] = useState(1)
+  const [activeListNode, setActiveListNode] = useState<ListNode | null>(null)
+  const [buttonPosition, setButtonPosition] = useState<{ top: number; left: number } | null>(null)
+  const [mounted, setMounted] = useState(false)
 
-  const updateListStart = useCallback(
-    (number: number) => {
-      editor.update(() => {
-        const selection = $getSelection()
-        if ($isRangeSelection(selection)) {
-          const anchorNode = selection.anchor.getNode()
-          const listNode = $getNearestNodeOfType(anchorNode, ListNode)
-
-          if (listNode && $isListNode(listNode) && listNode.getListType() === 'number') {
-            listNode.setStart(number)
-          }
-        }
-      })
-      setShowModal(false)
-    },
-    [editor],
-  )
-
-  // 監聽右鍵選單或快捷鍵來開啟設定
+  // 避免 SSR 問題
   useEffect(() => {
-    const handleContextMenu = (_event: MouseEvent) => {
-      editor.update(() => {
-        const selection = $getSelection()
-        if ($isRangeSelection(selection)) {
-          const anchorNode = selection.anchor.getNode()
-          const listNode = $getNearestNodeOfType(anchorNode, ListNode)
+    setMounted(true)
+  }, [])
 
-          if (listNode && $isListNode(listNode) && listNode.getListType() === 'number') {
-            // 在 ordered list 中右鍵時，阻止預設選單
-            // 這裡可以添加自訂選單邏輯
-          }
+  // 偵測是否在有序列表中
+  const $updateToolbar = useCallback(() => {
+    const selection = $getSelection()
+    if ($isRangeSelection(selection)) {
+      const anchorNode = selection.anchor.getNode()
+      const listNode = $getNearestNodeOfType(anchorNode, ListNode)
+
+      if (listNode && $isListNode(listNode) && listNode.getListType() === 'number') {
+        setActiveListNode(listNode)
+        setStartNumber(listNode.getStart())
+
+        // 計算按鈕位置
+        const domElement = editor.getElementByKey(listNode.getKey())
+        if (domElement) {
+          const rect = domElement.getBoundingClientRect()
+          setButtonPosition({
+            // 使用 fixed positioning，直接用 rect (viewport coordinates)
+            top: rect.top,
+            left: rect.left - 40,
+          })
         }
-      })
-    }
-
-    const rootElement = editor.getRootElement()
-    if (rootElement) {
-      rootElement.addEventListener('contextmenu', handleContextMenu)
-    }
-
-    return () => {
-      if (rootElement) {
-        rootElement.removeEventListener('contextmenu', handleContextMenu)
+        return
       }
     }
-  }, [editor])
+    // 如果 Modal 正在顯示，不要隱藏 activeListNode，否則無法更新
+    if (!showModal) {
+      setActiveListNode(null)
+      setButtonPosition(null)
+    }
+  }, [editor, showModal])
 
-  // 這個 Plugin 主要是確保 ListNode 的 start 屬性可以被正確序列化和反序列化
-  // Lexical 的 ListNode 已經支援 start 屬性，我們只需要確保它被正確處理
+  useEffect(() => {
+    return editor.registerUpdateListener(({ editorState }) => {
+      editorState.read(() => {
+        $updateToolbar()
+      })
+    })
+  }, [editor, $updateToolbar])
 
-  if (!showModal) {
-    return null
+  const updateListStart = () => {
+    if (activeListNode) {
+      editor.update(() => {
+        // 重新獲取最新的 node 以確保安全
+        const node = editor.getElementByKey(activeListNode.getKey()) ? activeListNode : null
+        if (node) {
+          node.setStart(startNumber)
+        }
+      })
+    }
+    setShowModal(false)
+    setActiveListNode(null)
+    setButtonPosition(null)
   }
 
-  return (
-    <div
-      style={{
-        position: 'fixed',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        background: 'white',
-        padding: '20px',
-        borderRadius: '8px',
-        boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
-        zIndex: 10000,
-      }}
-    >
-      <h3 style={{ margin: '0 0 15px 0' }}>設定列表起始編號</h3>
-      <input
-        type="number"
-        min="1"
-        value={startNumber}
-        onChange={(e) => setStartNumber(parseInt(e.target.value) || 1)}
-        style={{
-          width: '100%',
-          padding: '8px',
-          marginBottom: '15px',
-          border: '1px solid #ccc',
-          borderRadius: '4px',
-        }}
-      />
-      <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
+  // 設定按鈕樣式
+  const buttonStyle: React.CSSProperties = {
+    position: 'fixed', // Fixed viewport positioning
+    top: buttonPosition?.top || 0,
+    left: buttonPosition?.left || 0,
+    width: '30px',
+    height: '30px',
+    borderRadius: '50%',
+    backgroundColor: '#3b82f6',
+    color: 'white',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    cursor: 'pointer',
+    boxShadow: '0 2px 10px rgba(0,0,0,0.3)', // 加重陰影
+    zIndex: 99999, // 確保最高層級
+    fontSize: '14px',
+    border: '2px solid white', // 增加白邊避免背景干擾
+    transition: 'top 0.1s, left 0.1s', // 稍微快一點
+  }
+
+  // Modal 樣式
+  const modalOverlayStyle: React.CSSProperties = {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 100000,
+  }
+
+  const modalContentStyle: React.CSSProperties = {
+    background: 'white',
+    padding: '24px',
+    borderRadius: '12px',
+    boxShadow: '0 10px 25px rgba(0,0,0,0.2)',
+    width: '320px',
+    maxWidth: '90%',
+  }
+
+  if (!mounted) return null
+  if (!editor) return null
+
+  // 使用 Portal 渲染到 body，確保不被裁切
+  return createPortal(
+    <>
+      {activeListNode && buttonPosition && !showModal && (
         <button
-          onClick={() => setShowModal(false)}
-          style={{
-            padding: '8px 16px',
-            background: '#eee',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
+          type="button"
+          style={buttonStyle}
+          onClick={(e) => {
+            e.preventDefault()
+            e.stopPropagation() // 避免失去焦點
+            setShowModal(true)
           }}
+          title="設定列表起始編號"
         >
-          取消
+          🔢
         </button>
-        <button
-          onClick={() => updateListStart(startNumber)}
-          style={{
-            padding: '8px 16px',
-            background: '#667eea',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-          }}
-        >
-          確定
-        </button>
-      </div>
-    </div>
+      )}
+
+      {showModal && (
+        <div style={modalOverlayStyle} onClick={() => setShowModal(false)}>
+          <div style={modalContentStyle} onClick={(e) => e.stopPropagation()}>
+            <h3 style={{ margin: '0 0 16px', fontSize: '18px', fontWeight: 600, color: '#1a202c' }}>
+              設定起始編號
+            </h3>
+
+            <div style={{ marginBottom: '20px' }}>
+              <label
+                style={{
+                  display: 'block',
+                  marginBottom: '8px',
+                  fontSize: '14px',
+                  color: '#4a5568',
+                }}
+              >
+                列表將從此號碼開始：
+              </label>
+              <input
+                type="number"
+                min="1"
+                value={startNumber}
+                onChange={(e) => setStartNumber(parseInt(e.target.value) || 1)}
+                autoFocus
+                style={{
+                  width: '100%',
+                  padding: '10px',
+                  fontSize: '16px',
+                  border: '1px solid #cbd5e0',
+                  borderRadius: '6px',
+                  outline: 'none',
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') updateListStart()
+                  if (e.key === 'Escape') setShowModal(false)
+                }}
+              />
+            </div>
+
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
+              <button
+                onClick={() => setShowModal(false)}
+                style={{
+                  padding: '8px 16px',
+                  background: '#f7fafc',
+                  border: '1px solid #cbd5e0',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                  color: '#4a5568',
+                }}
+              >
+                取消
+              </button>
+              <button
+                onClick={updateListStart}
+                style={{
+                  padding: '8px 16px',
+                  background: '#3b82f6',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                  fontWeight: 600,
+                }}
+              >
+                確認修改
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>,
+    document.body,
   )
 }

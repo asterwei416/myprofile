@@ -18,7 +18,7 @@ export const Categories: CollectionConfig = {
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'slug'],
-    group: '內容管理',
+    group: '資料整理',
   },
   access: {
     read: () => true,

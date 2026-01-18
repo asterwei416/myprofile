@@ -9,7 +9,7 @@ export const Posts: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'publishedAt', 'status'],
-    group: '內容管理',
+    group: '網站內容',
   },
   access: {
     read: () => true,

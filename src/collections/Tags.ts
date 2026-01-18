@@ -9,6 +9,7 @@ export const Tags: CollectionConfig = {
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'slug'],
+    group: '資料整理',
   },
   access: {
     read: () => true,

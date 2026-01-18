@@ -9,7 +9,7 @@ export const Projects: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'date', 'status'],
-    group: '內容管理',
+    group: '網站內容',
   },
   access: {
     read: () => true,

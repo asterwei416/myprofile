@@ -2,11 +2,29 @@ import Link from 'next/link'
 import { getPayload } from 'payload'
 import React from 'react'
 
+import { Tag } from '../components/Tag'
 import config from '@/payload.config'
 
 export const metadata = {
   title: '技術部落格 | Aster',
   description: '分享前端開發、AI 應用、React、Next.js、TypeScript 等技術文章與心得。',
+}
+
+// 輔助函式：從 Lexical JSON 遞迴提取純文字
+function extractTextFromLexical(node: any): string {
+  if (!node) return ''
+  if (typeof node === 'string') return node
+  // 處理 text node
+  if (node.text) return node.text
+  // 處理 children
+  if (Array.isArray(node.children)) {
+    return node.children.map(extractTextFromLexical).join('')
+  }
+  // 處理 root
+  if (node.root) {
+    return extractTextFromLexical(node.root)
+  }
+  return ''
 }
 
 export default async function BlogPage() {
@@ -23,7 +41,19 @@ export default async function BlogPage() {
     limit: 100,
   })
 
-  console.log('部落格文章資料:', JSON.stringify(posts, null, 2))
+  // 預處理文章資料：生成摘要
+  const postsWithExcerpt = posts.map((post: any) => {
+    let excerpt = ''
+    if (post.content && post.content.root) {
+      const fullText = extractTextFromLexical(post.content)
+      // 截取前 250 字
+      excerpt = fullText.slice(0, 250)
+      if (fullText.length > 250) excerpt += '...'
+    }
+    return { ...post, excerpt }
+  })
+
+  console.log('部落格文章資料:', JSON.stringify(postsWithExcerpt, null, 2))
 
   return (
     <>
@@ -31,11 +61,12 @@ export default async function BlogPage() {
       <section className="section" style={{ paddingBottom: 0 }}>
         <div className="container">
           <div className="section-header">
-            <h1>技術部落格</h1>
+            <h1>文章</h1>
           </div>
           <p style={{ maxWidth: '600px', marginBottom: 'var(--space-xl)' }}>
-            分享前端開發經驗、AI 應用實作、以及技術探索心得。 這裡記錄著我在
-            React、Next.js、TypeScript 等領域的學習與實踐。
+            只探討邏輯但沒什麼大道理，純粹是我的「釋放記憶體」儀式，
+            <br />
+            撇開生硬的教科書，這裡只有我為了跟上 AI 時代，燃燒腦細胞換來的卡路里。
           </p>
         </div>
       </section>
@@ -43,17 +74,18 @@ export default async function BlogPage() {
       {/* 文章列表 */}
       <section className="section">
         <div className="container">
-          {posts.length > 0 ? (
-            <div className="blog-list">
-              {posts.map((post: any) => (
+          {postsWithExcerpt.length > 0 ? (
+            <div className="grid" style={{ gap: 'var(--space-md)' }}>
+              {postsWithExcerpt.map((post: any) => (
                 <Link key={post.id} href={`/blog/${post.slug}`} style={{ textDecoration: 'none' }}>
-                  <article className="blog-card">
+                  <article className="post-card">
                     <div
-                      className="blog-card-image"
+                      className="post-card-image"
                       style={{
                         position: 'relative',
+                        height: '200px',
+                        overflow: 'hidden',
                         backgroundColor: '#2a2a2a',
-                        minHeight: '200px', // Ensure height
                       }}
                     >
                       {post.thumbnail &&
@@ -74,60 +106,50 @@ export default async function BlogPage() {
                             justifyContent: 'center',
                             color: '#666',
                             fontSize: '3rem',
-                            position: 'absolute',
-                            top: 0,
-                            left: 0,
                           }}
                         >
                           🖼️
                         </div>
                       )}
-                      {/* 分類 Badge (Always render) */}
-                      <div
-                        style={{
-                          position: 'absolute',
-                          top: '12px',
-                          left: '12px',
-                          padding: '4px 12px',
-                          borderRadius: '20px',
-                          fontSize: '0.85rem',
-                          fontWeight: 500,
-                          color: '#fff',
-                          background: 'rgba(0, 0, 0, 0.6)',
-                          backdropFilter: 'blur(8px)',
-                          border: '1px solid rgba(255, 255, 255, 0.3)',
-                          zIndex: 10,
-                          boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-                        }}
-                      >
-                        {post.category && typeof post.category !== 'string'
-                          ? post.category.name
-                          : '未分類'}
-                      </div>
                     </div>
-                    <div className="blog-card-content">
-                      <h2 className="blog-card-title">{post.title}</h2>
-                      {post.excerpt && <p className="blog-card-excerpt">{post.excerpt}</p>}
-                      <div className="blog-card-footer">
-                        <span className="blog-card-date">
-                          {post.publishedAt
-                            ? new Date(post.publishedAt).toLocaleDateString('zh-TW', {
-                                year: 'numeric',
-                                month: 'long',
-                                day: 'numeric',
-                              })
-                            : ''}
-                        </span>
-                        {post.tags && (post.tags as any[]).length > 0 && (
-                          <div className="blog-card-tags">
-                            {(post.tags as any[]).slice(0, 3).map((tag: any, i: number) => (
-                              <span key={i} className="tag">
-                                {typeof tag === 'string' ? tag : tag.name}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-                      </div>
+                    <div className="post-card-content">
+                      <h3 className="post-card-title">{post.title}</h3>
+                      {post.excerpt && (
+                        <p
+                          className="post-card-excerpt"
+                          style={{
+                            fontSize: '0.9rem',
+                            color: 'var(--text-secondary)',
+                            margin: '0.5rem 0',
+                            display: '-webkit-box',
+                            WebkitLineClamp: 3,
+                            WebkitBoxOrient: 'vertical',
+                            overflow: 'hidden',
+                          }}
+                        >
+                          {post.excerpt}
+                        </p>
+                      )}
+
+                      {/* 標籤顯示 */}
+                      {post.tags && (post.tags as any[]).length > 0 && (
+                        <div
+                          style={{
+                            display: 'flex',
+                            gap: 'var(--space-xs)',
+                            marginBottom: 'var(--space-sm)',
+                          }}
+                        >
+                          {(post.tags as any[]).slice(0, 3).map((tag: any, i: number) => (
+                            <Tag key={i} name={typeof tag === 'string' ? tag : tag.name} />
+                          ))}
+                        </div>
+                      )}
+                      <p className="post-card-meta">
+                        {post.publishedAt
+                          ? new Date(post.publishedAt).toLocaleDateString('zh-TW')
+                          : ''}
+                      </p>
                     </div>
                   </article>
                 </Link>
