@@ -33,12 +33,12 @@ export default async function FrontendLayout({ children }: { children: React.Rea
               </li>
               <li>
                 <Link href="/projects" className="nav-link">
-                  作品集
+                  AI 作品
                 </Link>
               </li>
               <li>
                 <Link href="/blog" className="nav-link">
-                  部落格
+                  文章
                 </Link>
               </li>
             </ul>

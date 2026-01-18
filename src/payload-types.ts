@@ -70,6 +70,7 @@ export interface Config {
     users: User;
     media: Media;
     tags: Tag;
+    categories: Category;
     projects: Project;
     posts: Post;
     'payload-kv': PayloadKv;
@@ -82,6 +83,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     tags: TagsSelect<false> | TagsSelect<true>;
+    categories: CategoriesSelect<false> | CategoriesSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
@@ -173,9 +175,26 @@ export interface Tag {
   id: string;
   name: string;
   /**
-   * 用於 URL，例如 "react" 或 "ai-tools"
+   * 系統自動生成
    */
-  slug: string;
+  slug?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories".
+ */
+export interface Category {
+  id: string;
+  /**
+   * 例如：n8n、GEM、React、AI 工具
+   */
+  name: string;
+  /**
+   * 系統自動生成
+   */
+  slug?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -186,95 +205,12 @@ export interface Tag {
 export interface Project {
   id: string;
   title: string;
-  /**
-   * 用於 URL，例如 "ai-chatbot-project"
-   */
   slug: string;
   date: string;
   status?: ('draft' | 'published') | null;
-  thumbnail?: (string | null) | Media;
   /**
-   * 使用的技術、框架、工具等
+   * 使用編輯器自由創建內容：技術棧、開發思維、架構說明、圖片等
    */
-  techStack?:
-    | {
-        name: string;
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * 記錄 AI 專案使用的核心 Prompt 邏輯
-   */
-  promptLogic?: string | null;
-  /**
-   * 記錄開發過程中的思考、決策與心得
-   */
-  devThinking?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  /**
-   * 詳細說明專案的技術架構與設計
-   */
-  architecture?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  externalLinks?:
-    | {
-        label: string;
-        url: string;
-        icon?: ('github' | 'external-link' | 'video' | 'file-text') | null;
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * 選擇相關標籤，系統會自動關聯同標籤的文章
-   */
-  tags?: (string | Tag)[] | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "posts".
- */
-export interface Post {
-  id: string;
-  title: string;
-  /**
-   * 用於 URL，例如 "react-hooks-guide"
-   */
-  slug: string;
-  publishedAt?: string | null;
-  status?: ('draft' | 'published') | null;
-  /**
-   * 文章簡短描述，用於列表頁預覽
-   */
-  excerpt?: string | null;
-  coverImage?: (string | null) | Media;
   content: {
     root: {
       type: string;
@@ -291,9 +227,100 @@ export interface Post {
     [k: string]: unknown;
   };
   /**
-   * 選擇相關標籤，系統會自動關聯同標籤的作品
+   * 作品列表顯示的縮圖，建議尺寸 1200x630px
    */
+  thumbnail?: (string | null) | Media;
+  /**
+   * 選擇主要分類（如 n8n、GEM）
+   */
+  category?: (string | null) | Category;
   tags?: (string | Tag)[] | null;
+  /**
+   * 搜尋引擎最佳化設定
+   */
+  seo?: {
+    metaTitle?: string | null;
+    metaDescription?: string | null;
+    /**
+     * 建議尺寸 1200x630px，用於 Facebook、Twitter 等社群分享
+     */
+    ogImage?: (string | null) | Media;
+    /**
+     * 指定內容的權威網址 (留空則自動生成)
+     */
+    canonicalUrl?: string | null;
+    /**
+     * 勾選後搜尋引擎不會索引此頁面
+     */
+    noIndex?: boolean | null;
+    /**
+     * 勾選後搜尋引擎不會跟蹤此頁面的連結
+     */
+    noFollow?: boolean | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts".
+ */
+export interface Post {
+  id: string;
+  title: string;
+  slug: string;
+  publishedAt?: string | null;
+  status?: ('draft' | 'published') | null;
+  /**
+   * 使用編輯器自由創建內容：插入圖片、標題、列表、引用等
+   */
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  /**
+   * 文章列表顯示的縮圖，建議尺寸 1200x630px
+   */
+  thumbnail?: (string | null) | Media;
+  /**
+   * 選擇主要分類（如 n8n、GEM）
+   */
+  category?: (string | null) | Category;
+  tags?: (string | Tag)[] | null;
+  /**
+   * 搜尋引擎最佳化設定
+   */
+  seo?: {
+    metaTitle?: string | null;
+    metaDescription?: string | null;
+    /**
+     * 建議尺寸 1200x630px，用於 Facebook、Twitter 等社群分享
+     */
+    ogImage?: (string | null) | Media;
+    /**
+     * 指定內容的權威網址 (留空則自動生成)
+     */
+    canonicalUrl?: string | null;
+    /**
+     * 勾選後搜尋引擎不會索引此頁面
+     */
+    noIndex?: boolean | null;
+    /**
+     * 勾選後搜尋引擎不會跟蹤此頁面的連結
+     */
+    noFollow?: boolean | null;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -332,6 +359,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'tags';
         value: string | Tag;
+      } | null)
+    | ({
+        relationTo: 'categories';
+        value: string | Category;
       } | null)
     | ({
         relationTo: 'projects';
@@ -435,6 +466,16 @@ export interface TagsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories_select".
+ */
+export interface CategoriesSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "projects_select".
  */
 export interface ProjectsSelect<T extends boolean = true> {
@@ -442,25 +483,20 @@ export interface ProjectsSelect<T extends boolean = true> {
   slug?: T;
   date?: T;
   status?: T;
+  content?: T;
   thumbnail?: T;
-  techStack?:
-    | T
-    | {
-        name?: T;
-        id?: T;
-      };
-  promptLogic?: T;
-  devThinking?: T;
-  architecture?: T;
-  externalLinks?:
-    | T
-    | {
-        label?: T;
-        url?: T;
-        icon?: T;
-        id?: T;
-      };
+  category?: T;
   tags?: T;
+  seo?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        ogImage?: T;
+        canonicalUrl?: T;
+        noIndex?: T;
+        noFollow?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -473,10 +509,20 @@ export interface PostsSelect<T extends boolean = true> {
   slug?: T;
   publishedAt?: T;
   status?: T;
-  excerpt?: T;
-  coverImage?: T;
   content?: T;
+  thumbnail?: T;
+  category?: T;
   tags?: T;
+  seo?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        ogImage?: T;
+        canonicalUrl?: T;
+        noIndex?: T;
+        noFollow?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }

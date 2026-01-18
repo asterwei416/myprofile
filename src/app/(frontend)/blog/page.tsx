@@ -23,6 +23,8 @@ export default async function BlogPage() {
     limit: 100,
   })
 
+  console.log('部落格文章資料:', JSON.stringify(posts, null, 2))
+
   return (
     <>
       {/* 頁面標題區塊 */}
@@ -46,18 +48,63 @@ export default async function BlogPage() {
               {posts.map((post: any) => (
                 <Link key={post.id} href={`/blog/${post.slug}`} style={{ textDecoration: 'none' }}>
                   <article className="blog-card">
-                    {post.coverImage && (
-                      <div className="blog-card-image">
+                    <div
+                      className="blog-card-image"
+                      style={{
+                        position: 'relative',
+                        backgroundColor: '#2a2a2a',
+                        minHeight: '200px', // Ensure height
+                      }}
+                    >
+                      {post.thumbnail &&
+                      typeof post.thumbnail !== 'string' &&
+                      post.thumbnail.url ? (
                         <img
-                          src={
-                            typeof post.coverImage === 'string'
-                              ? post.coverImage
-                              : post.coverImage.url
-                          }
+                          src={post.thumbnail.url}
                           alt={post.title}
+                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                         />
+                      ) : (
+                        <div
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            color: '#666',
+                            fontSize: '3rem',
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                          }}
+                        >
+                          🖼️
+                        </div>
+                      )}
+                      {/* 分類 Badge (Always render) */}
+                      <div
+                        style={{
+                          position: 'absolute',
+                          top: '12px',
+                          left: '12px',
+                          padding: '4px 12px',
+                          borderRadius: '20px',
+                          fontSize: '0.85rem',
+                          fontWeight: 500,
+                          color: '#fff',
+                          background: 'rgba(0, 0, 0, 0.6)',
+                          backdropFilter: 'blur(8px)',
+                          border: '1px solid rgba(255, 255, 255, 0.3)',
+                          zIndex: 10,
+                          boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+                        }}
+                      >
+                        {post.category && typeof post.category !== 'string'
+                          ? post.category.name
+                          : '未分類'}
                       </div>
-                    )}
+                    </div>
                     <div className="blog-card-content">
                       <h2 className="blog-card-title">{post.title}</h2>
                       {post.excerpt && <p className="blog-card-excerpt">{post.excerpt}</p>}

@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: Props) {
 
   return {
     title: `${post.title} | Aster`,
-    description: post.excerpt || `閱讀 ${post.title} — Aster 技術部落格`,
+    description: (post as any).meta?.description || `閱讀 ${post.title} — Aster 技術部落格`,
   }
 }
 
@@ -155,8 +155,8 @@ export default async function BlogPostPage({ params }: Props) {
         </div>
       </section>
 
-      {/* 封面圖片 */}
-      {post.coverImage && (
+      {/* 封面圖片 (縮圖) */}
+      {post.thumbnail && (
         <section style={{ marginBottom: 'var(--space-xl)' }}>
           <div className="container" style={{ maxWidth: '800px' }}>
             <div
@@ -168,9 +168,7 @@ export default async function BlogPostPage({ params }: Props) {
             >
               <img
                 src={
-                  typeof post.coverImage === 'string'
-                    ? post.coverImage
-                    : (post.coverImage as any).url
+                  typeof post.thumbnail === 'string' ? post.thumbnail : (post.thumbnail as any).url
                 }
                 alt={post.title}
                 style={{ width: '100%', display: 'block' }}

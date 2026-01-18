@@ -178,6 +178,8 @@ export default async function HomePage() {
     limit: 3,
   })
 
+  console.log('首頁文章資料:', JSON.stringify(posts, null, 2))
+
   return (
     <>
       {/* Hero 區塊 - 置中設計 */}
@@ -204,10 +206,10 @@ export default async function HomePage() {
           {/* 快速連結 */}
           <div className="profile-links">
             <Link href="/projects" className="btn btn-primary">
-              作品集
+              AI 作品
             </Link>
             <Link href="/blog" className="btn btn-secondary">
-              部落格
+              文章
             </Link>
           </div>
         </div>
@@ -396,31 +398,63 @@ export default async function HomePage() {
                   style={{ textDecoration: 'none' }}
                 >
                   <article className="project-card">
-                    <div className="project-card-image">
-                      {project.thumbnail ? (
+                    <div
+                      className="project-card-image"
+                      style={{
+                        position: 'relative',
+                        height: '200px',
+                        overflow: 'hidden',
+                        backgroundColor: '#2a2a2a', // Fallback color
+                      }}
+                    >
+                      {project.thumbnail &&
+                      typeof project.thumbnail !== 'string' &&
+                      project.thumbnail.url ? (
                         <img
-                          src={
-                            typeof project.thumbnail === 'string'
-                              ? project.thumbnail
-                              : project.thumbnail.url
-                          }
+                          src={project.thumbnail.url}
                           alt={project.title}
+                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                         />
                       ) : (
                         <div
                           style={{
                             width: '100%',
                             height: '100%',
-                            backgroundColor: 'var(--bg-elevated)',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            color: 'var(--text-muted)',
+                            color: '#666',
+                            fontSize: '3rem',
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
                           }}
                         >
-                          No Image
+                          🖼️
                         </div>
                       )}
+                      {/* 分類 Badge (Always render for consistency) */}
+                      <div
+                        style={{
+                          position: 'absolute',
+                          top: '10px',
+                          left: '10px',
+                          padding: '4px 10px',
+                          borderRadius: '20px',
+                          fontSize: '0.75rem',
+                          fontWeight: 500,
+                          color: '#fff',
+                          background: 'rgba(0, 0, 0, 0.6)',
+                          backdropFilter: 'blur(8px)',
+                          border: '1px solid rgba(255, 255, 255, 0.3)',
+                          zIndex: 10,
+                          boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+                        }}
+                      >
+                        {project.category && typeof project.category !== 'string'
+                          ? project.category.name
+                          : '未分類'}
+                      </div>
                     </div>
                     <div className="project-card-body">
                       <h3 className="project-card-title">{project.title}</h3>
@@ -472,6 +506,61 @@ export default async function HomePage() {
               {posts.map((post: any) => (
                 <Link key={post.id} href={`/blog/${post.slug}`} style={{ textDecoration: 'none' }}>
                   <article className="post-card">
+                    <div
+                      className="post-card-image"
+                      style={{
+                        position: 'relative',
+                        height: '200px',
+                        overflow: 'hidden',
+                        backgroundColor: '#2a2a2a', // Fallback color
+                      }}
+                    >
+                      {post.thumbnail &&
+                      typeof post.thumbnail !== 'string' &&
+                      post.thumbnail.url ? (
+                        <img
+                          src={post.thumbnail.url}
+                          alt={post.title}
+                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        />
+                      ) : (
+                        <div
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            color: '#666',
+                            fontSize: '3rem',
+                          }}
+                        >
+                          🖼️
+                        </div>
+                      )}
+                      {/* 分類 Badge (Always render for debugging, maybe '未分類') */}
+                      <div
+                        style={{
+                          position: 'absolute',
+                          top: '10px',
+                          left: '10px',
+                          padding: '4px 10px',
+                          borderRadius: '20px',
+                          fontSize: '0.75rem',
+                          fontWeight: 500,
+                          color: '#fff',
+                          background: 'rgba(0, 0, 0, 0.6)',
+                          backdropFilter: 'blur(8px)',
+                          border: '1px solid rgba(255, 255, 255, 0.3)',
+                          zIndex: 10,
+                          boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+                        }}
+                      >
+                        {post.category && typeof post.category !== 'string'
+                          ? post.category.name
+                          : '未分類'}
+                      </div>
+                    </div>
                     <div className="post-card-content">
                       <h3 className="post-card-title">{post.title}</h3>
                       {post.excerpt && <p className="post-card-excerpt">{post.excerpt}</p>}

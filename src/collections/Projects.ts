@@ -3,8 +3,8 @@ import type { CollectionConfig } from 'payload'
 export const Projects: CollectionConfig = {
   slug: 'projects',
   labels: {
-    singular: 'AI 作品',
-    plural: 'AI 作品集',
+    singular: '作品',
+    plural: '作品集',
   },
   admin: {
     useAsTitle: 'title',
@@ -14,13 +14,38 @@ export const Projects: CollectionConfig = {
   access: {
     read: () => true,
   },
+  hooks: {
+    beforeChange: [
+      ({ data }) => {
+        // 當狀態改為「已發布」且沒有發布日期時，自動填入今天
+        if (data?.status === 'published' && !data?.date) {
+          data.date = new Date().toISOString()
+        }
+
+        // 自動同步縮圖到 SEO OG Image (若 OG Image 未設定)
+        if (data?.thumbnail && !data?.seo?.ogImage) {
+          if (!data.seo) data.seo = {}
+          data.seo.ogImage = data.thumbnail
+        }
+
+        return data
+      },
+    ],
+  },
   fields: [
     // ===== 基本資訊 =====
     {
       name: 'title',
-      label: '作品標題',
+      label: '標題',
       type: 'text',
       required: true,
+      admin: {
+        placeholder: '輸入標題...',
+        style: {
+          fontSize: '1.5rem',
+          fontWeight: 'bold',
+        },
+      },
     },
     {
       name: 'slug',
@@ -29,7 +54,9 @@ export const Projects: CollectionConfig = {
       required: true,
       unique: true,
       admin: {
-        description: '用於 URL，例如 "ai-chatbot-project"',
+        components: {
+          Field: '@/components/SlugField',
+        },
       },
     },
     {
@@ -54,89 +81,50 @@ export const Projects: CollectionConfig = {
         { label: '已發布', value: 'published' },
       ],
     },
+    // ===== 作品內容 =====
+    {
+      name: 'content',
+      label: '作品內容',
+      type: 'richText',
+      required: true,
+      admin: {
+        description: '使用編輯器自由創建內容：技術棧、開發思維、架構說明、圖片等',
+      },
+    },
+    // ===== 縮圖 (右側邊欄) =====
+    // ===== 縮圖 (右側邊欄) =====
+    {
+      name: 'thumbnailGenerator',
+      type: 'ui',
+      admin: {
+        position: 'sidebar',
+        components: {
+          Field: '@/components/ThumbnailGenerator',
+        },
+      },
+    },
     {
       name: 'thumbnail',
       label: '縮圖',
       type: 'upload',
       relationTo: 'media',
-    },
-    // ===== 技術棧 =====
-    {
-      name: 'techStack',
-      label: '技術棧',
-      type: 'array',
       admin: {
-        description: '使用的技術、框架、工具等',
-      },
-      fields: [
-        {
-          name: 'name',
-          label: '技術名稱',
-          type: 'text',
-          required: true,
-        },
-      ],
-    },
-    // ===== Prompt 提示詞區塊 =====
-    {
-      name: 'promptLogic',
-      label: 'Prompt 提示詞邏輯',
-      type: 'code',
-      admin: {
-        language: 'markdown',
-        description: '記錄 AI 專案使用的核心 Prompt 邏輯',
+        position: 'sidebar',
+        description: '作品列表顯示的縮圖，建議尺寸 1200x630px',
       },
     },
-    // ===== 開發思維 =====
+    // ===== 分類與標籤 (右側邊欄) =====
     {
-      name: 'devThinking',
-      label: '開發思維',
-      type: 'richText',
+      name: 'category',
+      label: '分類',
+      type: 'relationship',
+      relationTo: 'categories',
       admin: {
-        description: '記錄開發過程中的思考、決策與心得',
+        allowCreate: true,
+        position: 'sidebar',
+        description: '選擇主要分類（如 n8n、GEM）',
       },
     },
-    // ===== 技術架構拆解 =====
-    {
-      name: 'architecture',
-      label: '技術架構拆解',
-      type: 'richText',
-      admin: {
-        description: '詳細說明專案的技術架構與設計',
-      },
-    },
-    // ===== 外部連結 =====
-    {
-      name: 'externalLinks',
-      label: '外部連結',
-      type: 'array',
-      fields: [
-        {
-          name: 'label',
-          label: '連結文字',
-          type: 'text',
-          required: true,
-        },
-        {
-          name: 'url',
-          label: '網址',
-          type: 'text',
-          required: true,
-        },
-        {
-          name: 'icon',
-          label: '圖示',
-          type: 'select',
-          options: [
-            { label: 'GitHub', value: 'github' },
-            { label: '外部連結', value: 'external-link' },
-            { label: '影片', value: 'video' },
-            { label: '文件', value: 'file-text' },
-          ],
-        },
-      ],
-    },
-    // ===== 標籤（用於雙向關聯） =====
     {
       name: 'tags',
       label: '標籤',
@@ -144,8 +132,86 @@ export const Projects: CollectionConfig = {
       relationTo: 'tags',
       hasMany: true,
       admin: {
-        description: '選擇相關標籤，系統會自動關聯同標籤的文章',
+        allowCreate: true,
+        position: 'sidebar',
+        components: {
+          Field: '@/components/TagsField',
+        },
       },
+    },
+    // ===== SEO 設定 (右側邊欄) =====
+    {
+      name: 'seo',
+      label: 'SEO 設定',
+      type: 'group',
+      admin: {
+        position: 'sidebar',
+        description: '搜尋引擎最佳化設定',
+      },
+      fields: [
+        {
+          name: 'metaTitle',
+          label: 'Meta Title',
+          type: 'text',
+          admin: {
+            components: {
+              Field: '@/components/MetaTitleField',
+            },
+          },
+        },
+        {
+          name: 'metaDescription',
+          label: 'Meta Description',
+          type: 'textarea',
+          admin: {
+            components: {
+              Field: '@/components/MetaDescriptionField',
+            },
+          },
+        },
+        {
+          name: 'ogImage',
+          label: '社群分享圖片 (OG Image)',
+          type: 'upload',
+          relationTo: 'media',
+          admin: {
+            description: '建議尺寸 1200x630px，用於 Facebook、Twitter 等社群分享',
+          },
+        },
+        {
+          name: 'canonicalUrl',
+          label: 'Canonical URL',
+          type: 'text',
+          admin: {
+            description: '指定內容的權威網址 (留空則自動生成)',
+          },
+        },
+        {
+          type: 'row',
+          fields: [
+            {
+              name: 'noIndex',
+              label: '禁止索引 (noindex)',
+              type: 'checkbox',
+              defaultValue: false,
+              admin: {
+                description: '勾選後搜尋引擎不會索引此頁面',
+                width: '50%',
+              },
+            },
+            {
+              name: 'noFollow',
+              label: '禁止跟蹤連結 (nofollow)',
+              type: 'checkbox',
+              defaultValue: false,
+              admin: {
+                description: '勾選後搜尋引擎不會跟蹤此頁面的連結',
+                width: '50%',
+              },
+            },
+          ],
+        },
+      ],
     },
   ],
 }

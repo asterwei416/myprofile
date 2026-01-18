@@ -1,0 +1,101 @@
+.ai-field-wrapper {
+  margin-bottom: 1.5rem;
+}
+
+.ai-field-input-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: stretch;
+}
+
+.ai-field-textarea-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.ai-field-input-row .ai-input,
+.ai-field-textarea-row .ai-textarea {
+  flex: 1;
+}
+
+.ai-generate-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  min-height: 40px;
+}
+
+.ai-generate-button-textarea {
+  align-self: flex-start;
+  margin-top: 0;
+}
+
+.ai-generate-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.ai-generate-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ai-loading {
+  animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.ai-field-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.25rem;
+}
+
+.ai-error {
+  color: #e53e3e;
+  font-size: 0.75rem;
+  margin: 0;
+}
+
+.field-description {
+  color: #718096;
+  font-size: 0.75rem;
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.char-count {
+  font-weight: 500;
+  color: #718096;
+}
+
+.char-count.optimal {
+  color: #38a169;
+}
+
+.char-count.over {
+  color: #e53e3e;
+}

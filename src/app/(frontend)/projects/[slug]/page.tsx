@@ -194,6 +194,17 @@ export default async function ProjectDetailPage({ params }: Props) {
         </section>
       )}
 
+      {/* 作品內容 */}
+      {project.content && (
+        <section className="section">
+          <div className="container">
+            <div className="rich-text-content">
+              <RichText data={project.content} />
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Prompt 邏輯區塊 */}
       {project.promptLogic && (
         <section className="section" style={{ backgroundColor: 'var(--bg-surface)' }}>

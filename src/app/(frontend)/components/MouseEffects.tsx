@@ -53,7 +53,7 @@ export default function MouseEffects() {
           opacity: Math.random() * 0.4 + 0.6,
           driftX: Math.cos(angle) * driftSpeed, // 隨機方向飄散
           driftY: Math.sin(angle) * driftSpeed,
-          hue: 175 + Math.random() * 50, // Cyan 到淺藍
+          hue: 40 + Math.random() * 20, // 金色到亮黃色
           delay: Math.random() * 10, // 延遲出現，製造不規則感
         })
       }

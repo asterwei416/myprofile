@@ -24,10 +24,24 @@ export const Tags: CollectionConfig = {
       name: 'slug',
       label: '網址代稱',
       type: 'text',
-      required: true,
       unique: true,
       admin: {
-        description: '用於 URL，例如 "react" 或 "ai-tools"',
+        readOnly: true,
+        description: '系統自動生成',
+      },
+      hooks: {
+        beforeValidate: [
+          ({ value, data }) => {
+            if (value) return value
+            // 若 slug 為空，則使用 name
+            if (data?.name) {
+              return data.name
+                .replace(/\s+/g, '-') // 空格轉 dash
+                .toLowerCase()
+            }
+            return value
+          },
+        ],
       },
     },
   ],
