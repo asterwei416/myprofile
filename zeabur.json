@@ -1,7 +1,11 @@
 {
   "service": "myprofile",
   "build": {
+    "install": "npm install --legacy-peer-deps",
     "command": "npm run build"
+  },
+  "start": {
+    "command": "npm run start"
   },
   "routes": [
     {
