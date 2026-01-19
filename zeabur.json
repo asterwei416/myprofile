@@ -1,0 +1,11 @@
+{
+  "service": "myprofile",
+  "build": {
+    "command": "npm run build"
+  },
+  "routes": [
+    {
+      "path": "/"
+    }
+  ]
+}

@@ -227,6 +227,54 @@ export interface Project {
     [k: string]: unknown;
   };
   /**
+   * 貼上 Prompt 原始碼或邏輯說明
+   */
+  promptLogic?: string | null;
+  devThinking?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  architecture?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  techStack?:
+    | {
+        name: string;
+        id?: string | null;
+      }[]
+    | null;
+  externalLinks?:
+    | {
+        label: string;
+        url: string;
+        icon?: ('github' | 'video' | 'file-text' | 'external-link') | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
    * 作品列表顯示的縮圖，建議尺寸 1200x630px
    */
   thumbnail?: (string | null) | Media;
@@ -484,6 +532,23 @@ export interface ProjectsSelect<T extends boolean = true> {
   date?: T;
   status?: T;
   content?: T;
+  promptLogic?: T;
+  devThinking?: T;
+  architecture?: T;
+  techStack?:
+    | T
+    | {
+        name?: T;
+        id?: T;
+      };
+  externalLinks?:
+    | T
+    | {
+        label?: T;
+        url?: T;
+        icon?: T;
+        id?: T;
+      };
   thumbnail?: T;
   category?: T;
   tags?: T;

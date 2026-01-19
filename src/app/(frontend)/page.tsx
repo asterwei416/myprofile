@@ -5,8 +5,30 @@ import React from 'react'
 import { Tag } from './components/Tag'
 import config from '@/payload.config'
 
+// 時間軸資料介面定義
+interface TimelineWebsite {
+  name: string
+  url: string
+  image?: string
+}
+
+interface TimelineItem {
+  type: string
+  title: string
+  description: string | string[]
+  icon: string
+  websites?: TimelineWebsite[]
+  images?: string[]
+}
+
+interface TimelinePhase {
+  year: string
+  phase: string
+  items: TimelineItem[]
+}
+
 // 時間軸資料（之後可移至 CMS）
-const timelineData = [
+const timelineData: TimelinePhase[] = [
   {
     year: '2000 - 2013',
     phase: '第一階段：底層邏輯初始化',

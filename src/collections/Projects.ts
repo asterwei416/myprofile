@@ -91,6 +91,67 @@ export const Projects: CollectionConfig = {
         description: '使用編輯器自由創建內容：技術棧、開發思維、架構說明、圖片等',
       },
     },
+    {
+      name: 'promptLogic',
+      label: 'Prompt 邏輯',
+      type: 'textarea',
+      admin: {
+        description: '貼上 Prompt 原始碼或邏輯說明',
+      },
+    },
+    {
+      name: 'devThinking',
+      label: '開發思維',
+      type: 'richText',
+    },
+    {
+      name: 'architecture',
+      label: '技術架構拆解',
+      type: 'richText',
+    },
+    {
+      name: 'techStack',
+      label: '技術棧',
+      type: 'array',
+      fields: [
+        {
+          name: 'name',
+          type: 'text',
+          required: true,
+        },
+      ],
+    },
+    {
+      name: 'externalLinks',
+      label: '外部連結',
+      type: 'array',
+      fields: [
+        {
+          name: 'label',
+          label: '連結文字',
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'url',
+          label: '網址',
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'icon',
+          label: '圖示',
+          type: 'select',
+          options: [
+            { label: 'GitHub', value: 'github' },
+            { label: '影片', value: 'video' },
+            { label: '文件', value: 'file-text' },
+            { label: '連結', value: 'external-link' },
+          ],
+          defaultValue: 'external-link',
+        },
+      ],
+    },
     // ===== 縮圖 (右側邊欄) =====
     // ===== 縮圖 (右側邊欄) =====
     {
