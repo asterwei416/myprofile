@@ -20,7 +20,9 @@
   "dependencies": {
     "@google/genai": "^1.37.0",
     "@google/generative-ai": "^0.24.1",
+    "@lexical/list": "^0.39.0",
     "@lexical/react": "^0.39.0",
+    "@lexical/utils": "^0.39.0",
     "@payloadcms/db-mongodb": "3.71.1",
     "@payloadcms/next": "3.71.1",
     "@payloadcms/richtext-lexical": "3.71.1",
@@ -37,6 +39,7 @@
     "react-dom": "19.2.1"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.3",
     "@playwright/test": "1.56.1",
     "@testing-library/react": "16.3.0",
     "@types/node": "^22.5.4",
