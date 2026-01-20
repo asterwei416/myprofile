@@ -8,15 +8,18 @@ interface AuroraOrb {
   vx: number
   vy: number
   size: number
-  color: string
+  // 預計算的顏色值，避免每幀創建
+  r: number
+  g: number
+  b: number
+  a: number
 }
 
 interface RainDrop {
   x: number
   y: number
   speed: number
-  chars: string
-  fontSize: number
+  char: string
   opacity: number
 }
 
@@ -25,78 +28,59 @@ export default function BackgroundEffects() {
   const animationRef = useRef<number | undefined>(undefined)
   const orbsRef = useRef<AuroraOrb[]>([])
   const rainDropsRef = useRef<RainDrop[]>([])
-  const noisePatternRef = useRef<CanvasPattern | null>(null)
-  const frameRef = useRef(0)
+  const lastFrameTimeRef = useRef(0)
+  const frameCountRef = useRef(0)
+
+  // 目標幀率：30fps（每 33ms 一幀）
+  const TARGET_FRAME_TIME = 33
 
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
 
-    const ctx = canvas.getContext('2d')
+    const ctx = canvas.getContext('2d', { alpha: false })
     if (!ctx) return
 
-    // 1. 生成噪點紋理 (只生成一次，提升效能)
-    const createNoisePattern = () => {
-      const noiseCanvas = document.createElement('canvas')
-      noiseCanvas.width = 200
-      noiseCanvas.height = 200
-      const nCtx = noiseCanvas.getContext('2d')
-      if (!nCtx) return
-
-      const imageData = nCtx.createImageData(200, 200)
-      const data = imageData.data
-      for (let i = 0; i < data.length; i += 4) {
-        // 隨機灰度，但非常透明
-        const val = Math.random() * 255
-        data[i] = val
-        data[i + 1] = val
-        data[i + 2] = val
-        data[i + 3] = 12 // 透明度極低 (0-255)
-      }
-      nCtx.putImageData(imageData, 0, 0)
-      noisePatternRef.current = ctx.createPattern(noiseCanvas, 'repeat')
-    }
-
-    createNoisePattern()
-
-    // 2. 初始化極光光球
+    // 初始化極光光球（預計算顏色）
     const initOrbs = () => {
       orbsRef.current = []
-      // 顏色：深藍、深紫、極淡的青色 - 較亮版本以確保可見
+      // RGB 預計算值
       const colors = [
-        'hsla(220, 80%, 40%, 0.25)', // Brighter Blue
-        'hsla(260, 70%, 40%, 0.2)', // Brighter Purple
-        'hsla(190, 80%, 30%, 0.15)', // Brighter Teal
+        { r: 40, g: 80, b: 160, a: 0.15 }, // Blue
+        { r: 80, g: 40, b: 140, a: 0.12 }, // Purple
+        { r: 30, g: 100, b: 120, a: 0.1 }, // Teal
       ]
 
-      // 只有 3 個巨大的光球，製造極簡氛圍
       for (let i = 0; i < 3; i++) {
+        const c = colors[i]
         orbsRef.current.push({
-          x: Math.random() * window.innerWidth,
-          y: Math.random() * window.innerHeight,
-          vx: (Math.random() - 0.5) * 0.15, // 極慢速 (Float)
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          vx: (Math.random() - 0.5) * 0.15,
           vy: (Math.random() - 0.5) * 0.15,
-          size: Math.min(window.innerWidth, window.innerHeight) * 0.6 + 200, // 非常巨大
-          color: colors[i],
+          size: Math.min(canvas.width, canvas.height) * 0.5 + 150,
+          r: c.r,
+          g: c.g,
+          b: c.b,
+          a: c.a,
         })
       }
     }
 
-    // 3. 初始化數位雨 (稀疏版)
+    // 初始化數位雨（減少數量）
     const initRain = () => {
       rainDropsRef.current = []
-      const columns = Math.floor(window.innerWidth / 20) // 每 20px 一行
+      const columns = Math.floor(canvas.width / 30) // 增加間距
 
       for (let i = 0; i < columns; i++) {
-        // 只有 30% 的列會有雨滴，製造稀疏感
-        if (Math.random() > 0.7) {
+        // 只有 20% 的列會有雨滴
+        if (Math.random() > 0.8) {
           rainDropsRef.current.push({
-            x: i * 20,
-            y: Math.random() * window.innerHeight * 2 - window.innerHeight, // 分散在垂直空間
-            speed: Math.random() * 1.5 + 0.5,
-            chars: Math.random() > 0.5 ? '1' : '0',
-            fontSize: Math.random() * 4 + 10, // 10-14px
-            opacity: Math.random() * 0.15 + 0.05, // 極淡
+            x: i * 30,
+            y: Math.random() * canvas.height * 2 - canvas.height,
+            speed: Math.random() * 1 + 0.3,
+            char: Math.random() > 0.5 ? '1' : '0',
+            opacity: Math.random() * 0.1 + 0.03,
           })
         }
       }
@@ -111,15 +95,38 @@ export default function BackgroundEffects() {
     resizeCanvas()
     window.addEventListener('resize', resizeCanvas)
 
-    // 動畫循環
-    const animate = () => {
-      frameRef.current++
+    // 繪製光球（使用簡單的圓形填充，避免每幀創建 gradient）
+    const drawOrb = (orb: AuroraOrb) => {
+      // 使用多層半透明圓形模擬漸層效果（效能更好）
+      const layers = 3
+      for (let i = layers; i >= 0; i--) {
+        const ratio = i / layers
+        const radius = orb.size * ratio
+        const alpha = orb.a * (1 - ratio) * 0.5
+
+        ctx.beginPath()
+        ctx.arc(orb.x, orb.y, radius, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(${orb.r}, ${orb.g}, ${orb.b}, ${alpha})`
+        ctx.fill()
+      }
+    }
+
+    // 動畫循環（帶幀率限制）
+    const animate = (timestamp: number) => {
+      // 幀率限制
+      const deltaTime = timestamp - lastFrameTimeRef.current
+      if (deltaTime < TARGET_FRAME_TIME) {
+        animationRef.current = requestAnimationFrame(animate)
+        return
+      }
+      lastFrameTimeRef.current = timestamp
+      frameCountRef.current++
 
       // 深色背景
       ctx.fillStyle = '#0a0a0a'
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-      // A. 繪製極光光球 (最底層)
+      // A. 繪製極光光球
       orbsRef.current.forEach((orb) => {
         orb.x += orb.vx
         orb.y += orb.vy
@@ -128,52 +135,30 @@ export default function BackgroundEffects() {
         if (orb.x < -orb.size / 2 || orb.x > canvas.width + orb.size / 2) orb.vx *= -1
         if (orb.y < -orb.size / 2 || orb.y > canvas.height + orb.size / 2) orb.vy *= -1
 
-        // 徑向漸層 - 創造柔和邊緣
-        const g = ctx.createRadialGradient(orb.x, orb.y, 0, orb.x, orb.y, orb.size)
-        g.addColorStop(0, orb.color)
-        g.addColorStop(1, 'hsla(0, 0%, 0%, 0)')
-
-        ctx.fillStyle = g
-        ctx.beginPath()
-        ctx.arc(orb.x, orb.y, orb.size, 0, Math.PI * 2)
-        ctx.fill()
+        drawOrb(orb)
       })
 
-      // B. 繪製數位雨 (中間層) - 極簡風格
+      // B. 繪製數位雨（簡化版）
       ctx.font = '12px monospace'
       rainDropsRef.current.forEach((drop) => {
         drop.y += drop.speed
 
-        // 隨機變換字符 (每 10 幀)
-        if (frameRef.current % 15 === 0 && Math.random() > 0.9) {
-          drop.chars = Math.random() > 0.5 ? '1' : '0'
-        }
-
         // 超出底部重置
         if (drop.y > canvas.height) {
           drop.y = -20
-          drop.speed = Math.random() * 1.5 + 0.5
-          // 隨機決定是否保留此列 (閃爍效果)
-          drop.opacity = Math.random() > 0.4 ? Math.random() * 0.12 + 0.03 : 0
+          drop.opacity = Math.random() > 0.5 ? Math.random() * 0.08 + 0.02 : 0
         }
 
         if (drop.opacity > 0) {
-          // 淡藍白色文字，非常低調
-          ctx.fillStyle = `rgba(200, 220, 255, ${drop.opacity})`
-          ctx.fillText(drop.chars, drop.x, drop.y)
+          ctx.fillStyle = `rgba(180, 200, 240, ${drop.opacity})`
+          ctx.fillText(drop.char, drop.x, drop.y)
         }
       })
-
-      // C. 疊加噪點 (最上層)
-      if (noisePatternRef.current) {
-        ctx.fillStyle = noisePatternRef.current
-        ctx.fillRect(0, 0, canvas.width, canvas.height)
-      }
 
       animationRef.current = requestAnimationFrame(animate)
     }
 
-    animate()
+    animationRef.current = requestAnimationFrame(animate)
 
     return () => {
       window.removeEventListener('resize', resizeCanvas)
