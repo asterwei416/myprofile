@@ -11,7 +11,6 @@ import {
 import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
-import sharp from 'sharp'
 
 // Cloudinary Storage
 import { cloudinaryStorage } from '@pemol/payload-cloudinary'
@@ -80,7 +79,7 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URL || '',
   }),
-  sharp,
+  // Sharp disabled for Docker compatibility
   plugins: [
     // Cloudinary 雲端媒體儲存
     cloudinaryStorage({
