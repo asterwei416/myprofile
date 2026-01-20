@@ -135,131 +135,17 @@ export default async function ProjectDetailPage({ params }: Props) {
                 : ''}
             </span>
 
-            {/* 技術棧標籤 */}
-            {project.techStack && (project.techStack as any[]).length > 0 && (
+            {/* 標籤 */}
+            {project.tags && (project.tags as any[]).length > 0 && (
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-xs)' }}>
-                {(project.techStack as any[]).map((tech, i) => (
-                  <Tag key={i} name={tech.name} />
+                {(project.tags as any[]).map((tag: any, i: number) => (
+                  <Tag key={i} name={typeof tag === 'string' ? tag : tag.name} />
                 ))}
               </div>
             )}
           </div>
-
-          {/* 外部連結 */}
-          {project.externalLinks && (project.externalLinks as any[]).length > 0 && (
-            <div
-              style={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                gap: 'var(--space-sm)',
-                marginBottom: 'var(--space-xl)',
-              }}
-            >
-              {(project.externalLinks as any[]).map((link, i) => (
-                <a
-                  key={i}
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-secondary"
-                  style={{ fontSize: '0.8rem' }}
-                >
-                  {link.icon === 'github' && '🐙 '}
-                  {link.icon === 'video' && '🎬 '}
-                  {link.icon === 'file-text' && '📄 '}
-                  {link.icon === 'external-link' && '🔗 '}
-                  {link.label}
-                </a>
-              ))}
-            </div>
-          )}
         </div>
       </section>
-
-      {/* 縮圖 */}
-      {project.thumbnail && (
-        <section style={{ marginBottom: 'var(--space-xl)' }}>
-          <div className="container">
-            <div
-              style={{
-                borderRadius: '12px',
-                overflow: 'hidden',
-                border: '1px solid var(--border-subtle)',
-              }}
-            >
-              <img
-                src={
-                  typeof project.thumbnail === 'string'
-                    ? project.thumbnail
-                    : (project.thumbnail as any).url
-                }
-                alt={project.title}
-                style={{ width: '100%', display: 'block' }}
-              />
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* 作品內容 */}
-      {project.content && (
-        <section className="section">
-          <div className="container">
-            <div className="rich-text-content">
-              <RichText data={project.content} />
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Prompt 邏輯區塊 */}
-      {project.promptLogic && (
-        <section className="section" style={{ backgroundColor: 'var(--bg-surface)' }}>
-          <div className="container">
-            <div className="section-header">
-              <h2>💡 Prompt 邏輯</h2>
-            </div>
-            <div className="code-block">
-              <div className="code-block-header">
-                <span className="code-block-label">prompt.md</span>
-              </div>
-              <div className="code-block-content">
-                <pre>
-                  <code>{project.promptLogic}</code>
-                </pre>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* 開發思維區塊 */}
-      {project.devThinking && (
-        <section className="section">
-          <div className="container">
-            <div className="section-header">
-              <h2>🧠 開發思維</h2>
-            </div>
-            <div className="rich-text-content">
-              <RichText data={project.devThinking} />
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* 技術架構拆解區塊 */}
-      {project.architecture && (
-        <section className="section" style={{ backgroundColor: 'var(--bg-surface)' }}>
-          <div className="container">
-            <div className="section-header">
-              <h2>🏗️ 技術架構拆解</h2>
-            </div>
-            <div className="rich-text-content">
-              <RichText data={project.architecture} />
-            </div>
-          </div>
-        </section>
-      )}
 
       {/* 相關作品 */}
       {relatedProjects.length > 0 && (

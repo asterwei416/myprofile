@@ -511,13 +511,6 @@ export default async function HomePage() {
                       <p className="project-card-meta">
                         {project.date ? new Date(project.date).toLocaleDateString('zh-TW') : ''}
                       </p>
-                      {project.techStack && project.techStack.length > 0 && (
-                        <div className="project-card-tags">
-                          {project.techStack.slice(0, 3).map((tech: any, i: number) => (
-                            <Tag key={i} name={tech.name} />
-                          ))}
-                        </div>
-                      )}
                     </div>
                   </article>
                 </Link>
