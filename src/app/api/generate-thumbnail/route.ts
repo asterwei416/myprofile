@@ -1,4 +1,3 @@
-import sharp from 'sharp'
 import { GoogleGenAI } from '@google/genai'
 import { NextRequest, NextResponse } from 'next/server'
 import { getPayload } from 'payload'
@@ -86,19 +85,10 @@ ${contentPreview ? `文章內容：${contentPreview}` : ''}
       return NextResponse.json({ error: '圖片資料無效' }, { status: 500 })
     }
 
-    // 將 base64 轉為 Buffer
-    const rawBuffer = Buffer.from(generatedImage.image.imageBytes, 'base64')
+    // 將 base64 轉為 Buffer（直接使用原始圖片，Cloudinary 會處理調整大小）
+    const imageBuffer = Buffer.from(generatedImage.image.imageBytes, 'base64')
     const timestamp = Date.now()
     const filename = `ai-thumbnail-${timestamp}.png`
-
-    // 使用 sharp 調整圖片尺寸為 1200x630 (OG Image 標準)
-    // Imagen 4 (16:9) -> 1200x630 (1.90:1) 需要裁切上下少許
-    const imageBuffer = await sharp(rawBuffer)
-      .resize(1200, 630, {
-        fit: 'cover',
-        position: 'center',
-      })
-      .toBuffer()
 
     // 將圖片儲存到 media 目錄
     const payload = await getPayload({ config })
