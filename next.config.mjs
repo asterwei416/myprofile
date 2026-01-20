@@ -4,6 +4,10 @@ import { withPayload } from '@payloadcms/next/withPayload'
 const nextConfig = {
   // Enable standalone output for Docker deployment
   output: 'standalone',
+  // Disable image optimization to avoid Sharp issues in Docker
+  images: {
+    unoptimized: true,
+  },
   // Your Next.js config here
   webpack: (webpackConfig) => {
     webpackConfig.resolve.extensionAlias = {
