@@ -34,16 +34,24 @@ export async function generateMetadata({ params }: Props) {
 
 // 預先產生靜態路徑
 export async function generateStaticParams() {
-  const payloadConfig = await config
-  const payload = await getPayload({ config: payloadConfig })
+  try {
+    const payloadConfig = await config
+    const payload = await getPayload({ config: payloadConfig })
 
-  const { docs } = await payload.find({
-    collection: 'posts',
-    where: { status: { equals: 'published' } },
-    limit: 100,
-  })
+    const { docs } = await payload.find({
+      collection: 'posts',
+      where: { status: { equals: 'published' } },
+      limit: 100,
+    })
 
-  return docs.map((post) => ({ slug: post.slug }))
+    return docs.map((post) => ({ slug: post.slug }))
+  } catch (error) {
+    console.warn(
+      'Database connection failed during build, skipping static generation for blog posts:',
+      error,
+    )
+    return []
+  }
 }
 
 export default async function BlogPostPage({ params }: Props) {
