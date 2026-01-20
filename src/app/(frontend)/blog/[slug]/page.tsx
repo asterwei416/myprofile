@@ -6,6 +6,7 @@ import { notFound } from 'next/navigation'
 import { Tag } from '../../components/Tag'
 import config from '@/payload.config'
 import { RichText } from '@payloadcms/richtext-lexical/react'
+import { getOptimizedImageUrl } from '@/utils/image'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -175,7 +176,9 @@ export default async function BlogPostPage({ params }: Props) {
             >
               <img
                 src={
-                  typeof post.thumbnail === 'string' ? post.thumbnail : (post.thumbnail as any).url
+                  typeof post.thumbnail === 'string'
+                    ? getOptimizedImageUrl(post.thumbnail, 1200)
+                    : getOptimizedImageUrl((post.thumbnail as any).url, 1200)
                 }
                 alt={post.title}
                 style={{ width: '100%', display: 'block' }}

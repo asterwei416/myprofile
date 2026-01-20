@@ -148,6 +148,15 @@ export default async function ProjectDetailPage({ params }: Props) {
         </div>
       </section>
 
+      {/* 專案內容 */}
+      <section className="section">
+        <div className="container" style={{ maxWidth: '800px' }}>
+          <div className="rich-text-content">
+            <RichText data={project.content} />
+          </div>
+        </div>
+      </section>
+
       {/* 相關作品 */}
       {relatedProjects.length > 0 && (
         <section className="section">
