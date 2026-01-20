@@ -5,8 +5,14 @@ FROM node:22-slim AS base
 
 # Install dependencies only when needed
 FROM base AS deps
-# Install dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends openssl && rm -rf /var/lib/apt/lists/*
+# Install Sharp and build dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  openssl \
+  python3 \
+  make \
+  g++ \
+  libvips-dev \
+  && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 
 # Install dependencies based on the preferred package manager
