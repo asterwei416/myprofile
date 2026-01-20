@@ -13,6 +13,9 @@ import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 
+// Cloudinary Storage
+import { cloudinaryStorage } from '@pemol/payload-cloudinary'
+
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Tags } from './collections/Tags'
@@ -78,5 +81,20 @@ export default buildConfig({
     url: process.env.DATABASE_URL || '',
   }),
   sharp,
-  plugins: [],
+  plugins: [
+    // Cloudinary 雲端媒體儲存
+    cloudinaryStorage({
+      collections: {
+        media: true,
+      },
+      config: {
+        cloud_name: process.env.CLOUDINARY_CLOUD_NAME || '',
+        api_key: process.env.CLOUDINARY_API_KEY || '',
+        api_secret: process.env.CLOUDINARY_API_SECRET || '',
+      },
+      folder: 'myprofile-media',
+      disableLocalStorage: true,
+      enabled: Boolean(process.env.CLOUDINARY_CLOUD_NAME),
+    }),
+  ],
 })
