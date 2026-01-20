@@ -93,7 +93,7 @@ export default function BackgroundEffects() {
             y: Math.random() * canvas.height * 2 - canvas.height,
             speed: Math.random() * 1.2 + 0.4,
             char: Math.random() > 0.5 ? '1' : '0',
-            opacity: Math.random() * 0.12 + 0.04,
+            opacity: Math.random() * 0.3 + 0.1,
           })
         }
       }
@@ -118,7 +118,7 @@ export default function BackgroundEffects() {
       lastFrameTimeRef.current = timestamp
 
       // 深色背景
-      ctx.fillStyle = '#0a0a0a'
+      ctx.fillStyle = '#050505' // Match --bg-base
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
       // A. 繪製極光光球（使用 RadialGradient 保持質感）
@@ -147,11 +147,11 @@ export default function BackgroundEffects() {
 
         if (drop.y > canvas.height) {
           drop.y = -20
-          drop.opacity = Math.random() > 0.5 ? Math.random() * 0.1 + 0.03 : 0
+          drop.opacity = Math.random() > 0.5 ? Math.random() * 0.3 + 0.1 : 0
         }
 
         if (drop.opacity > 0) {
-          ctx.fillStyle = `rgba(200, 220, 255, ${drop.opacity})`
+          ctx.fillStyle = `rgba(0, 245, 255, ${drop.opacity})` // Cyber Cyan
           ctx.fillText(drop.char, drop.x, drop.y)
         }
       })
