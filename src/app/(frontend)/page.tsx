@@ -4,6 +4,7 @@ import React from 'react'
 
 import { Tag } from './components/Tag'
 import config from '@/payload.config'
+import { getOptimizedImageUrl } from '@/utils/image'
 
 // 時間軸資料介面定義
 interface TimelineWebsite {
@@ -461,7 +462,7 @@ export default async function HomePage() {
                       typeof project.thumbnail !== 'string' &&
                       project.thumbnail.url ? (
                         <img
-                          src={project.thumbnail.url}
+                          src={getOptimizedImageUrl(project.thumbnail.url, 800)}
                           alt={project.title}
                           style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                         />
@@ -560,7 +561,7 @@ export default async function HomePage() {
                       typeof post.thumbnail !== 'string' &&
                       post.thumbnail.url ? (
                         <img
-                          src={post.thumbnail.url}
+                          src={getOptimizedImageUrl(post.thumbnail.url, 800)}
                           alt={post.title}
                           style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                         />

@@ -6,6 +6,7 @@ import { notFound } from 'next/navigation'
 import { Tag } from '../../components/Tag'
 import config from '@/payload.config'
 import { RichText } from '@payloadcms/richtext-lexical/react'
+import { getOptimizedImageUrl } from '@/utils/image'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -166,7 +167,11 @@ export default async function ProjectDetailPage({ params }: Props) {
                       <div className="project-card-image">
                         {rp.thumbnail ? (
                           <img
-                            src={typeof rp.thumbnail === 'string' ? rp.thumbnail : rp.thumbnail.url}
+                            src={
+                              typeof rp.thumbnail === 'string'
+                                ? getOptimizedImageUrl(rp.thumbnail, 600)
+                                : getOptimizedImageUrl(rp.thumbnail.url, 600)
+                            }
                             alt={rp.title}
                           />
                         ) : (

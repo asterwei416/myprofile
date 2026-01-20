@@ -19,5 +19,17 @@ export const Media: CollectionConfig = {
       required: true,
     },
   ],
-  upload: true,
+  upload: {
+    adminThumbnail: ({ doc }) => {
+      const url = doc?.url as string
+      if (!url || typeof url !== 'string') return null
+      if (!url.includes('res.cloudinary.com')) return url
+
+      // 針對 Cloudinary 圖片產生 300px 寬的縮圖
+      const parts = url.split('/upload/')
+      if (parts.length !== 2) return url
+
+      return `${parts[0]}/upload/f_auto,q_auto,w_300/${parts[1]}`
+    },
+  },
 }
