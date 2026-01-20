@@ -19,12 +19,12 @@ export default function MouseEffects() {
   const lastMouseMoveRef = useRef(0)
   const lastFrameTimeRef = useRef(0)
 
-  // Throttle 間隔：16ms（約 60fps 輸入）
-  const MOUSE_THROTTLE = 16
+  // Throttle 間隔
+  const MOUSE_THROTTLE = 20
   // 目標幀率：30fps
   const TARGET_FRAME_TIME = 33
   // 最大粒子數量
-  const MAX_PARTICLES = 80
+  const MAX_PARTICLES = 100
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -33,7 +33,6 @@ export default function MouseEffects() {
     const ctx = canvas.getContext('2d', { alpha: true })
     if (!ctx) return
 
-    // 設置 canvas 大小
     const resizeCanvas = () => {
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
@@ -41,14 +40,13 @@ export default function MouseEffects() {
     resizeCanvas()
     window.addEventListener('resize', resizeCanvas)
 
-    // 滑鼠移動時產生粒子（帶 throttle）
+    // 滑鼠移動時產生粒子
     const handleMouseMove = (e: MouseEvent) => {
       const now = Date.now()
       if (now - lastMouseMoveRef.current < MOUSE_THROTTLE) return
       lastMouseMoveRef.current = now
 
-      // 只產生 2 個粒子（原本 4 個）
-      for (let i = 0; i < 2; i++) {
+      for (let i = 0; i < 3; i++) {
         const angle = Math.random() * Math.PI * 2
         const speed = Math.random() * 0.6 + 0.2
 
@@ -63,7 +61,6 @@ export default function MouseEffects() {
         })
       }
 
-      // 嚴格限制粒子數量
       if (particlesRef.current.length > MAX_PARTICLES) {
         particlesRef.current = particlesRef.current.slice(-MAX_PARTICLES)
       }
@@ -71,9 +68,8 @@ export default function MouseEffects() {
 
     window.addEventListener('mousemove', handleMouseMove)
 
-    // 動畫循環（帶幀率限制）
+    // 動畫循環
     const animate = (timestamp: number) => {
-      // 幀率限制
       const deltaTime = timestamp - lastFrameTimeRef.current
       if (deltaTime < TARGET_FRAME_TIME) {
         animationRef.current = requestAnimationFrame(animate)
@@ -81,24 +77,25 @@ export default function MouseEffects() {
       }
       lastFrameTimeRef.current = timestamp
 
-      // 清除畫布
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-      // 繪製粒子（簡化版，無 gradient）
       particlesRef.current.forEach((p) => {
-        // 移動
         p.x += p.vx
         p.y += p.vy
-
-        // 淡出
-        p.opacity -= 0.015
-        p.size *= 0.99
+        p.opacity -= 0.012
+        p.size *= 0.995
 
         if (p.opacity > 0.05) {
-          // 外層光暈（簡單圓形，非 gradient）
+          // 外層光暈（使用 RadialGradient 恢復質感）
+          const glowSize = p.size * 5
+          const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, glowSize)
+          glow.addColorStop(0, `hsla(${p.hue}, 100%, 75%, ${p.opacity * 0.4})`)
+          glow.addColorStop(0.5, `hsla(${p.hue}, 100%, 60%, ${p.opacity * 0.15})`)
+          glow.addColorStop(1, `hsla(${p.hue}, 100%, 50%, 0)`)
+
           ctx.beginPath()
-          ctx.arc(p.x, p.y, p.size * 3, 0, Math.PI * 2)
-          ctx.fillStyle = `hsla(${p.hue}, 100%, 70%, ${p.opacity * 0.2})`
+          ctx.arc(p.x, p.y, glowSize, 0, Math.PI * 2)
+          ctx.fillStyle = glow
           ctx.fill()
 
           // 核心亮點
@@ -109,7 +106,6 @@ export default function MouseEffects() {
         }
       })
 
-      // 移除消失的粒子
       particlesRef.current = particlesRef.current.filter((p) => p.opacity > 0.05)
 
       animationRef.current = requestAnimationFrame(animate)
