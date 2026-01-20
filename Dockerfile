@@ -25,6 +25,11 @@ COPY . .
 # Uncomment the following line in case you want to disable telemetry during the build.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
+ARG DATABASE_URL
+ARG PAYLOAD_SECRET
+ENV DATABASE_URL=${DATABASE_URL}
+ENV PAYLOAD_SECRET=${PAYLOAD_SECRET}
+
 RUN npm run build
 
 # Production image, copy all the files and run next
