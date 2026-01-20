@@ -20,6 +20,7 @@
   "dependencies": {
     "@google/genai": "^1.37.0",
     "@google/generative-ai": "^0.24.1",
+    "@lexical/react": "^0.39.0",
     "@payloadcms/db-mongodb": "3.71.1",
     "@payloadcms/next": "3.71.1",
     "@payloadcms/richtext-lexical": "3.71.1",
