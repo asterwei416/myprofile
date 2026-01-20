@@ -85,15 +85,17 @@ ${contentPreview ? `文章內容：${contentPreview}` : ''}
       return NextResponse.json({ error: '圖片資料無效' }, { status: 500 })
     }
 
-    // 將 base64 轉為 Buffer（直接使用原始圖片，Cloudinary 會處理調整大小）
+    // 將 base64 轉為 Buffer
     const imageBuffer = Buffer.from(generatedImage.image.imageBytes, 'base64')
     const timestamp = Date.now()
-    const filename = `ai-thumbnail-${timestamp}.png`
+    // 改用 webp 格式（Cloudinary 會自動轉換）
+    const filename = `ai-thumbnail-${timestamp}.webp`
 
     // 將圖片儲存到 media 目錄
     const payload = await getPayload({ config })
 
     // 透過 Payload 上傳到 media collection
+    // Cloudinary 插件會自動處理上傳，我們在這裡用較小的 buffer
     const mediaDoc = await payload.create({
       collection: 'media',
       data: {
@@ -101,7 +103,8 @@ ${contentPreview ? `文章內容：${contentPreview}` : ''}
       },
       file: {
         data: imageBuffer,
-        mimetype: 'image/png',
+        // 使用 webp 格式減少體積
+        mimetype: 'image/webp',
         name: filename,
         size: imageBuffer.length,
       },
