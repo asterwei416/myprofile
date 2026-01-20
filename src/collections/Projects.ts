@@ -92,24 +92,6 @@ export const Projects: CollectionConfig = {
       },
     },
     {
-      name: 'promptLogic',
-      label: 'Prompt 邏輯',
-      type: 'textarea',
-      admin: {
-        description: '貼上 Prompt 原始碼或邏輯說明',
-      },
-    },
-    {
-      name: 'devThinking',
-      label: '開發思維',
-      type: 'richText',
-    },
-    {
-      name: 'architecture',
-      label: '技術架構拆解',
-      type: 'richText',
-    },
-    {
       name: 'techStack',
       label: '技術棧',
       type: 'array',
