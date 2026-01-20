@@ -1,9 +1,10 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
 
-export default function PageLoader() {
+// 內部組件：使用 useSearchParams
+function PageLoaderContent() {
   const [progress, setProgress] = useState(0)
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -34,5 +35,23 @@ export default function PageLoader() {
         <div className="page-loader-text">LOADING SYSTEM...</div>
       </div>
     </div>
+  )
+}
+
+// 外部組件：用 Suspense 包裝
+export default function PageLoader() {
+  return (
+    <Suspense
+      fallback={
+        <div className="page-loader">
+          <div className="page-loader-content">
+            <div className="page-loader-progress">0%</div>
+            <div className="page-loader-text">LOADING SYSTEM...</div>
+          </div>
+        </div>
+      }
+    >
+      <PageLoaderContent />
+    </Suspense>
   )
 }
