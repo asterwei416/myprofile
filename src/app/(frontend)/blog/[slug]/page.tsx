@@ -156,7 +156,7 @@ export default async function BlogPostPage({ params }: Props) {
               fontSize: '0.875rem',
             }}
           >
-            ← 返回部落格
+            ← 返回「就亂寫」
           </Link>
 
           <h1 style={{ marginBottom: 'var(--space-md)' }}>{post.title}</h1>

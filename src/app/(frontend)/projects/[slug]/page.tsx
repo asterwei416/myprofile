@@ -123,7 +123,7 @@ export default async function ProjectDetailPage({ params }: Props) {
               fontSize: '0.875rem',
             }}
           >
-            ← 返回作品集
+            ← 返回「就瞎做」
           </Link>
 
           <h1 style={{ marginBottom: 'var(--space-md)' }}>{project.title}</h1>
