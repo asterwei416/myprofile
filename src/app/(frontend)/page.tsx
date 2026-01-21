@@ -380,7 +380,7 @@ export default async function HomePage() {
               marginRight: 'auto',
             }}
           >
-            從數據解碼到 AI 建築師
+            從數據解碼到AI First 實踐玩家
           </p>
           <div className="timeline">
             {(() => {
