@@ -459,7 +459,7 @@ export default async function HomePage() {
                                         <iframe
                                           src={site.iframeUrl}
                                           width="100%"
-                                          height="500"
+                                          height="280"
                                           style={{
                                             border: 'none',
                                             overflow: 'hidden',
