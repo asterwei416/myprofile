@@ -29,7 +29,7 @@ export const Media: CollectionConfig = {
       const parts = url.split('/upload/')
       if (parts.length !== 2) return url
 
-      return `${parts[0]}/upload/f_auto,q_auto,w_300/${parts[1]}`
+      return `${parts[0]}/upload/f_auto,q_auto:low,w_100,c_limit/${parts[1]}`
     },
   },
 }
