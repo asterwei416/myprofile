@@ -208,8 +208,7 @@ const timelineData: TimelinePhase[] = [
           {
             name: 'AI 思維實驗室',
             url: 'https://www.facebook.com/groups/aithinkinglab',
-            iframeUrl:
-              'https://www.facebook.com/plugins/group.php?href=https%3A%2F%2Fwww.facebook.com%2Fgroups%2F572073306000708&width=280&show_social_context=true&show_metadata=false&skin=light',
+            image: '/screenshots/ai-thinking-lab-preview.jpg',
           },
         ],
       },
