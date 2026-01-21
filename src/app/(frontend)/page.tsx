@@ -256,7 +256,7 @@ export default async function HomePage() {
 
           {/* 名字 */}
           <h1 className="profile-name">Aster</h1>
-          <p className="profile-role">AI實驗玩家</p>
+          <p className="profile-role">AI First 實踐玩家</p>
 
           {/* 座右銘 */}
           <blockquote className="profile-quote">
@@ -291,7 +291,7 @@ export default async function HomePage() {
                 這波「超音速海嘯」來了之後，我發現人類史上第一次有機會「開外掛」當超人，這次決心不想錯過！
               </p>
               <p>
-                目前的狀態：<strong>AI實驗玩家</strong> / 也是專業的「數位行銷廢材」。
+                目前的狀態：<strong>AI First 實踐玩家</strong> / 也是專業的「數位行銷廢材」。
               </p>
               <p>做法直白：無聊的事全丟給 AI，時間拿來體驗生活和創造。</p>
               <p
