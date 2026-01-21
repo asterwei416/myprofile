@@ -1103,7 +1103,7 @@ pre code {
 
 .post-card-image {
   flex-shrink: 0;
-  width: 320px;
+  width: 380px;
   height: auto; /* Allow natural height to preserve aspect ratio */
   border-radius: 8px;
   overflow: hidden;
