@@ -207,6 +207,7 @@ export default async function HomePage() {
     },
     sort: '-date',
     limit: 3,
+    depth: 1,
   })
 
   // 取得最新發布的文章（最多 3 個）
@@ -217,6 +218,7 @@ export default async function HomePage() {
     },
     sort: '-publishedAt',
     limit: 3,
+    depth: 1,
   })
 
   // 預處理文章資料：生成摘要

@@ -1,8 +1,10 @@
 import React from 'react'
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
 import './styles.css'
-import MouseEffects from './components/MouseEffects'
-import BackgroundEffects from './components/BackgroundEffects'
+
+const MouseEffects = dynamic(() => import('./components/MouseEffects'), { ssr: false })
+const BackgroundEffects = dynamic(() => import('./components/BackgroundEffects'), { ssr: false })
 
 export const metadata = {
   title: 'Aster (欸斯特) · AI 實驗家 | 數據驅動 × AI 賦能的成長實踐',
