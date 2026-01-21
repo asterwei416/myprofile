@@ -5,8 +5,8 @@ export async function POST(request: NextRequest) {
   try {
     const { title, content } = await request.json()
 
-    if (!title) {
-      return NextResponse.json({ error: '標題不可為空' }, { status: 400 })
+    if (!title && !content) {
+      return NextResponse.json({ error: '標題或內容不可皆為空' }, { status: 400 })
     }
 
     const apiKey = process.env.GEMINI_API_KEY
@@ -18,8 +18,9 @@ export async function POST(request: NextRequest) {
     const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' })
 
     const fullContent = content || ''
+    const currentTitle = title || '未命名文章'
 
-    const prompt = `你是一個專業的 SEO 標題優化師。請根據文章標題和內容，生成一個能在此主題下獲得最佳排名的 Meta Title。
+    const prompt = `你是一個專業的 SEO 標題優化師。請根據以下資訊，生成一個能在此主題下獲得最佳排名的 Meta Title。
 
 規則：
 1. **長度控制**：50-60 個繁體中文字元 (包含標點符號)。
@@ -28,7 +29,7 @@ export async function POST(request: NextRequest) {
 4. **拒絕農場文**：不要使用過度聳動的標題黨寫法。
 5. 只回傳標題文字，不要有其他解釋。
 
-原始標題：${title}
+${title ? `原始標題：${title}` : '標題：(未提供，請根據內容生成)'}
 ${fullContent ? `文章內容參考：${fullContent}` : ''}
 
 優化後的 Meta Title：`

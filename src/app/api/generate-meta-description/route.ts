@@ -5,8 +5,8 @@ export async function POST(request: NextRequest) {
   try {
     const { title, content } = await request.json()
 
-    if (!title) {
-      return NextResponse.json({ error: '標題不可為空' }, { status: 400 })
+    if (!title && !content) {
+      return NextResponse.json({ error: '標題或內容不可皆為空' }, { status: 400 })
     }
 
     const apiKey = process.env.GEMINI_API_KEY
@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
     // 移除摘要長度限制，讓 AI 閱讀全文
     const fullContent = content || ''
 
-    const prompt = `你是一個專業的 SEO 內容分析師。請根據以下文章標題和完整內容，生成一段高資訊含量的 Meta Description。
+    const prompt = `你是一個專業的 SEO 內容分析師。請根據以下文章資訊，生成一段高資訊含量的 Meta Description。
 
 規則：
 1. 長度嚴格控制在 140-160 個繁體中文字元之間 (包含標點符號)。
@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
 4. **客觀專業**：語氣需客觀、精煉，讓搜尋者一眼就能看到乾貨。
 5. 只回傳 Meta Description，不要有任何其他文字。
 
-文章標題：${title}
+${title ? `文章標題：${title}` : '文章標題：(未提供)'}
 ${fullContent ? `文章完整內容：${fullContent}` : ''}
 
 Meta Description：`

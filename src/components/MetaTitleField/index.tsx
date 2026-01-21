@@ -32,15 +32,15 @@ export const MetaTitleField: React.FC<TextFieldClientProps> = (props) => {
   }, [])
 
   const generateMetaTitle = useCallback(async () => {
-    if (!title) {
-      setError('請先填寫標題')
+    const fullContent = extractTextFromLexical(content)
+
+    if (!title && !fullContent) {
+      setError('請填寫標題或文章內容')
       return
     }
 
     setIsGenerating(true)
     setError(null)
-
-    const fullContent = extractTextFromLexical(content)
 
     try {
       const response = await fetch('/api/generate-meta-title', {
@@ -66,6 +66,8 @@ export const MetaTitleField: React.FC<TextFieldClientProps> = (props) => {
   const charCount = value?.length || 0
   const isOptimalLength = charCount >= 50 && charCount <= 60
 
+  const hasContent = title || (content && extractTextFromLexical(content).length > 0)
+
   return (
     <div className="ai-field-wrapper">
       <FieldLabel
@@ -84,8 +86,8 @@ export const MetaTitleField: React.FC<TextFieldClientProps> = (props) => {
           type="button"
           className="ai-generate-button"
           onClick={generateMetaTitle}
-          disabled={isGenerating || !title}
-          title={!title ? '請先填寫標題' : 'AI 生成標題'}
+          disabled={isGenerating || !hasContent}
+          title={!hasContent ? '請先填寫標題或文章內容' : 'AI 生成標題'}
         >
           {isGenerating ? <span className="ai-loading">⏳</span> : <span>✨ AI 生成</span>}
         </button>
