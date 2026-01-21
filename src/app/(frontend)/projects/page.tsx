@@ -4,6 +4,7 @@ import React from 'react'
 
 import { Tag } from '../components/Tag'
 import config from '@/payload.config'
+import { CloudinaryImage } from '@/components/CloudinaryImage'
 
 export const metadata = {
   title: '作品集 | Aster',
@@ -22,6 +23,7 @@ export default async function ProjectsPage() {
     },
     sort: '-date',
     limit: 100,
+    depth: 1,
   })
 
   return (
@@ -62,10 +64,11 @@ export default async function ProjectsPage() {
                       {project.thumbnail &&
                       typeof project.thumbnail !== 'string' &&
                       project.thumbnail.url ? (
-                        <img
+                        <CloudinaryImage
                           src={project.thumbnail.url}
                           alt={project.title}
-                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                          style={{ objectFit: 'cover' }}
+                          sizes="(max-width: 768px) 100vw, 400px"
                         />
                       ) : (
                         <div

@@ -40,6 +40,7 @@ export default async function BlogPage() {
     },
     sort: '-publishedAt',
     limit: 100,
+    depth: 1,
   })
 
   // 預處理文章資料：生成摘要
