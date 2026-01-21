@@ -458,12 +458,13 @@ export default async function HomePage() {
                                       >
                                         <iframe
                                           src={site.iframeUrl}
-                                          width="280"
-                                          height="280"
+                                          width="100%"
+                                          height="500"
                                           style={{
                                             border: 'none',
                                             overflow: 'hidden',
                                             borderRadius: '8px',
+                                            display: 'block',
                                           }}
                                           scrolling="no"
                                           frameBorder="0"
