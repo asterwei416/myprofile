@@ -16,7 +16,8 @@ type NodeTypes =
 
 export const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConverters }) => ({
   ...defaultConverters,
-  upload: ({ node }) => {
+  upload: (args) => {
+    const { node } = args
     const uploadNode = node as SerializedUploadNode
     const doc = uploadNode.value
 
@@ -56,9 +57,8 @@ export const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConvert
     }
 
     // 非圖片類型，回傳預設處理 (或不做處理)
-    // 非圖片類型，回傳預設處理 (或不做處理)
-    if (defaultConverters?.upload) {
-      return defaultConverters.upload({ node })
+    if (typeof defaultConverters?.upload === 'function') {
+      return defaultConverters.upload(args)
     }
     return null
   },
