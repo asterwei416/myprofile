@@ -19,7 +19,7 @@ export const metadata = {
 
 export default async function FrontendLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="zh-Hant">
+    <html lang="zh-Hant" suppressHydrationWarning>
       <body>
         {/* 動態特效 (Client Component) */}
         <DynamicEffectsWrapper />
