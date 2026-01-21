@@ -1,13 +1,17 @@
 'use client'
 
 import Image, { ImageProps } from 'next/image'
-import { useState } from 'react'
-import cloudinaryLoader from '@/utils/cloudinaryLoader'
+import { useMemo } from 'react'
+import { createCloudinaryLoader } from '@/utils/cloudinaryLoader'
 
-interface CloudinaryImageProps extends Omit<ImageProps, 'loader'> {
+interface CloudinaryImageProps extends Omit<ImageProps, 'loader' | 'quality'> {
   src: string
   alt: string
   className?: string
+  crop?: string
+  gravity?: string
+  aspectRatio?: string
+  quality?: number | string
 }
 
 export function CloudinaryImage({
@@ -15,8 +19,24 @@ export function CloudinaryImage({
   alt,
   className,
   fill = true,
+  crop,
+  gravity,
+  aspectRatio,
+  quality = 'auto:low', // Default to low quality for better performance
   ...props
 }: CloudinaryImageProps) {
+  // Create a memoized loader with the specific options
+  const loader = useMemo(
+    () =>
+      createCloudinaryLoader({
+        crop,
+        gravity,
+        aspectRatio,
+        fixedQuality: quality.toString(),
+      }),
+    [crop, gravity, aspectRatio, quality],
+  )
+
   // 建立 LQIP (Low Quality Image Placeholder) URL
   // 從 src 中解析出路徑，並插入模糊化參數
   let blurUrl = ''
@@ -27,7 +47,14 @@ export function CloudinaryImage({
       // e_blur:1000: 強烈模糊 (美化過渡效果)
       // q_1: 最低品質 (極致壓縮)
       // f_auto: 自動格式 (通常是 webp/avif)
-      blurUrl = `${parts[0]}/upload/w_20,e_blur:1000,q_1,f_auto/${parts[1]}`
+      const params = ['w_20', 'e_blur:1000', 'q_1', 'f_auto']
+
+      // Keep aspect ratio in LQIP to match main image
+      if (aspectRatio) params.push(`ar_${aspectRatio}`)
+      if (crop) params.push(`c_${crop}`)
+      if (gravity) params.push(`g_${gravity}`)
+
+      blurUrl = `${parts[0]}/upload/${params.join(',')}/${parts[1]}`
     }
   }
 
@@ -49,10 +76,11 @@ export function CloudinaryImage({
   return (
     <div className={`image-container ${className || ''}`} style={containerStyle}>
       <Image
-        loader={cloudinaryLoader}
+        loader={loader}
         src={src}
         alt={alt}
         fill={fill}
+        quality={typeof quality === 'number' ? quality : undefined}
         {...props}
         // 圖片載入後淡入效果 (Next.js 預設有，但可以確保一下)
         style={{

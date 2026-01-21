@@ -284,6 +284,7 @@ export default async function HomePage() {
                 alt="Aster"
                 className="profile-avatar-img"
                 priority // Hero image, load immediately (LCP)
+                quality="auto:good" // Keep high quality for avatar
               />
             </div>
           </div>
@@ -556,6 +557,9 @@ export default async function HomePage() {
                           alt={project.title}
                           style={{ objectFit: 'cover' }}
                           sizes="(max-width: 768px) 100vw, 400px"
+                          crop="fill"
+                          gravity="auto"
+                          aspectRatio="2.0"
                         />
                       ) : (
                         <div
@@ -661,6 +665,9 @@ export default async function HomePage() {
                             display: 'block',
                           }}
                           sizes="(max-width: 768px) 100vw, 400px"
+                          crop="fill"
+                          gravity="auto"
+                          aspectRatio="1.5"
                         />
                       ) : (
                         <div

@@ -70,6 +70,9 @@ export default async function ProjectsPage() {
                           style={{ objectFit: 'cover' }}
                           sizes="(max-width: 768px) 100vw, 400px"
                           priority={index < 2}
+                          crop="fill"
+                          gravity="auto"
+                          aspectRatio="2.0"
                         />
                       ) : (
                         <div
