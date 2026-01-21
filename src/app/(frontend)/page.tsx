@@ -11,6 +11,7 @@ interface TimelineWebsite {
   name: string
   url: string
   image?: string
+  iframeUrl?: string
 }
 
 interface TimelineItem {
@@ -186,6 +187,14 @@ const timelineData: TimelinePhase[] = [
           '這不是教學，而是第一手的人機協作現場轉播——拒絕過度包裝，只呈現最原本的碰撞過程。',
         ],
         icon: '📡',
+        websites: [
+          {
+            name: 'Aster Wei',
+            url: 'https://www.facebook.com/asterwei',
+            iframeUrl:
+              'https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fasterwei&tabs=timeline&width=280&height=400&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=true&appId',
+          },
+        ],
       },
       {
         type: 'community',
@@ -195,7 +204,14 @@ const timelineData: TimelinePhase[] = [
           '我們拒絕討論虛無飄渺的未來趨勢，只專注於「現在能怎麼用」的落地應用，構建一個抗焦慮的實戰同溫層。',
         ],
         icon: '🧪',
-        websites: [{ name: 'AI 思維實驗室', url: 'https://www.facebook.com/groups/aithinkinglab' }],
+        websites: [
+          {
+            name: 'AI 思維實驗室',
+            url: 'https://www.facebook.com/groups/aithinkinglab',
+            iframeUrl:
+              'https://www.facebook.com/plugins/group.php?href=https%3A%2F%2Fwww.facebook.com%2Fgroups%2F572073306000708&width=280&show_social_context=true&show_metadata=false&skin=light',
+          },
+        ],
       },
     ],
   },
@@ -427,26 +443,57 @@ export default async function HomePage() {
                               <div className="timeline-websites-grid">
                                 {item.websites.map(
                                   (
-                                    site: { name: string; url: string; image?: string },
+                                    site: {
+                                      name: string
+                                      url: string
+                                      image?: string
+                                      iframeUrl?: string
+                                    },
                                     siteIndex: number,
-                                  ) => (
-                                    <a
-                                      key={siteIndex}
-                                      href={site.url}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="timeline-website-item"
-                                    >
-                                      <div className="timeline-website-preview">
-                                        {site.image ? (
-                                          <img src={site.image} alt={site.name} />
-                                        ) : (
-                                          <iframe src={site.url} title={site.name} loading="lazy" />
-                                        )}
+                                  ) =>
+                                    site.iframeUrl ? (
+                                      <div
+                                        key={siteIndex}
+                                        className="timeline-website-iframe-container"
+                                        style={{ marginTop: 'var(--space-md)' }}
+                                      >
+                                        <iframe
+                                          src={site.iframeUrl}
+                                          width="280"
+                                          height="280"
+                                          style={{
+                                            border: 'none',
+                                            overflow: 'hidden',
+                                            borderRadius: '8px',
+                                          }}
+                                          scrolling="no"
+                                          frameBorder="0"
+                                          allowTransparency={true}
+                                          allow="encrypted-media"
+                                        ></iframe>
                                       </div>
-                                      <span className="timeline-website-name">{site.name}</span>
-                                    </a>
-                                  ),
+                                    ) : (
+                                      <a
+                                        key={siteIndex}
+                                        href={site.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="timeline-website-item"
+                                      >
+                                        <div className="timeline-website-preview">
+                                          {site.image ? (
+                                            <img src={site.image} alt={site.name} />
+                                          ) : (
+                                            <iframe
+                                              src={site.url}
+                                              title={site.name}
+                                              loading="lazy"
+                                            />
+                                          )}
+                                        </div>
+                                        <span className="timeline-website-name">{site.name}</span>
+                                      </a>
+                                    ),
                                 )}
                               </div>
                             </div>
@@ -468,7 +515,7 @@ export default async function HomePage() {
         <div className="container">
           <h2 className="section-title-center">
             <img src="/projects-icon.jpg" alt="" className="section-title-icon-img" />
-            最新作品
+            最新瞎做
           </h2>
           {projects.length > 0 ? (
             <div className="grid grid-3">
@@ -572,7 +619,7 @@ export default async function HomePage() {
         <div className="container">
           <h2 className="section-title-center">
             <img src="/blog-icon.jpg" alt="" className="section-title-icon-img" />
-            最新文章
+            最新亂寫
           </h2>
           {postsWithExcerpt.length > 0 ? (
             <div className="grid" style={{ gap: 'var(--space-md)' }}>
