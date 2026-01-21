@@ -15,7 +15,7 @@ export default function cloudinaryLoader({ src, width, quality }: ImageLoaderPro
   }
 
   // Cloudinary params
-  const params = ['f_auto', 'c_limit', `w_${width}`, `q_${quality || 'auto'}`]
+  const params = ['f_auto', 'c_limit', `w_${width}`, `q_${quality || 'auto:eco'}`]
 
   return `${parts[0]}/upload/${params.join(',')}/${parts[1]}`
 }

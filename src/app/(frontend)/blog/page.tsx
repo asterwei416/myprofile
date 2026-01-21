@@ -78,7 +78,7 @@ export default async function BlogPage() {
         <div className="container">
           {postsWithExcerpt.length > 0 ? (
             <div className="grid" style={{ gap: 'var(--space-md)' }}>
-              {postsWithExcerpt.map((post: any) => (
+              {postsWithExcerpt.map((post: any, index: number) => (
                 <Link key={post.id} href={`/blog/${post.slug}`} style={{ textDecoration: 'none' }}>
                   <article className="post-card">
                     <div
@@ -98,6 +98,7 @@ export default async function BlogPage() {
                           alt={post.title}
                           style={{ objectFit: 'cover' }}
                           sizes="(max-width: 768px) 100vw, 400px"
+                          priority={index < 2}
                         />
                       ) : (
                         <div

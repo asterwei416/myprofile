@@ -45,7 +45,7 @@ export default async function ProjectsPage() {
         <div className="container">
           {projects.length > 0 ? (
             <div className="grid grid-3">
-              {projects.map((project: any) => (
+              {projects.map((project: any, index: number) => (
                 <Link
                   key={project.id}
                   href={`/projects/${project.slug}`}
@@ -69,6 +69,7 @@ export default async function ProjectsPage() {
                           alt={project.title}
                           style={{ objectFit: 'cover' }}
                           sizes="(max-width: 768px) 100vw, 400px"
+                          priority={index < 2}
                         />
                       ) : (
                         <div
