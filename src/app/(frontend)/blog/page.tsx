@@ -63,7 +63,7 @@ export default async function BlogPage() {
       <section className="section" style={{ paddingBottom: 0 }}>
         <div className="container">
           <div className="section-header">
-            <h1>文章</h1>
+            <h1>就亂寫</h1>
           </div>
           <p style={{ maxWidth: '600px', marginBottom: 'var(--space-xl)' }}>
             只探討邏輯但沒什麼大道理，純粹是我的「釋放記憶體」儀式，

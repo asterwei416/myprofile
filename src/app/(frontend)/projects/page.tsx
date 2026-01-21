@@ -32,7 +32,7 @@ export default async function ProjectsPage() {
       <section className="section" style={{ paddingBottom: 0 }}>
         <div className="container">
           <div className="section-header">
-            <h1>AI 作品</h1>
+            <h1>就瞎做</h1>
           </div>
           <p style={{ maxWidth: '600px', marginBottom: 'var(--space-xl)' }}>
             做人如果沒有一點廢物專案，那跟鹹魚有什麼分別？這些東西幫我擋掉了那些蠢到想哭的手動任務，節省下來的數百個小時—讓我能毫無愧疚地多追幾百集影集。

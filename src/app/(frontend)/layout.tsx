@@ -4,9 +4,9 @@ import './styles.css'
 import DynamicEffectsWrapper from './components/DynamicEffectsWrapper'
 
 export const metadata = {
-  title: 'Aster (欸斯特) · AI First 實踐玩家 | 數據驅動 × AI 賦能的成長實踐',
+  title: 'AI First 實踐玩家 | 數據驅動 × AI 賦能的成長實踐 | Aster (欸斯特)',
   description:
-    '從數位行銷到 AI 探索者，用系統思考拆解大局，用算力放大想像。這是我的 #AI廢人養成計劃 實踐紀錄。',
+    '從數位行銷到 AI 探索者，用系統思考拆解大局，用算力放大想像，這是我的 #AI廢人養成計劃 實踐紀錄。',
   keywords: [
     'AI First 實踐玩家',
     '數據分析',
