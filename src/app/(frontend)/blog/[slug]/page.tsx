@@ -7,6 +7,7 @@ import { Tag } from '../../components/Tag'
 import config from '@/payload.config'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 import { CloudinaryImage } from '@/components/CloudinaryImage'
+import { jsxConverters } from '@/components/RichText/converters'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -232,7 +233,7 @@ export default async function BlogPostPage({ params }: Props) {
       <section className="section">
         <div className="container" style={{ maxWidth: '800px' }}>
           <div className="rich-text-content">
-            <RichText data={post.content} />
+            <RichText data={post.content} converters={jsxConverters} />
           </div>
         </div>
       </section>
@@ -285,9 +286,11 @@ export default async function BlogPostPage({ params }: Props) {
                     <article className="project-card">
                       <div className="project-card-image">
                         {rp.thumbnail ? (
-                          <img
+                          <CloudinaryImage
                             src={typeof rp.thumbnail === 'string' ? rp.thumbnail : rp.thumbnail.url}
                             alt={rp.title}
+                            style={{ objectFit: 'cover' }}
+                            sizes="(max-width: 768px) 100vw, 300px"
                           />
                         ) : (
                           <div

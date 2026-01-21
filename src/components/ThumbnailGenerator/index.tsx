@@ -13,6 +13,15 @@ const styles = [
   { value: 'neon', label: '⚡ 霓虹故障風' },
 ]
 
+// Helper to resize Cloudinary URL
+const resizeCloudinaryUrl = (url: string, width = 600) => {
+  if (!url || typeof url !== 'string') return ''
+  if (!url.includes('res.cloudinary.com')) return url
+  const parts = url.split('/upload/')
+  if (parts.length !== 2) return url
+  return `${parts[0]}/upload/f_auto,q_auto:eco,w_${width},c_limit/${parts[1]}`
+}
+
 const ThumbnailGenerator: React.FC = () => {
   const [isGenerating, setIsGenerating] = useState(false)
   const [selectedStyle, setSelectedStyle] = useState('pixar')
@@ -40,7 +49,7 @@ const ThumbnailGenerator: React.FC = () => {
         .then((res) => res.json())
         .then((data) => {
           if (data.url) {
-            setPreviewUrl(data.url)
+            setPreviewUrl(resizeCloudinaryUrl(data.url))
           }
         })
         .catch((err) => console.error('Error fetching thumbnail preview:', err))
@@ -102,7 +111,7 @@ const ThumbnailGenerator: React.FC = () => {
       // 同步更新 OG Image
       setOgImageValue(data.mediaId)
 
-      setPreviewUrl(data.url)
+      setPreviewUrl(resizeCloudinaryUrl(data.url))
 
       setMessage({ type: 'success', text: '✨ 生成成功！圖片已填入下方的縮圖欄位' })
     } catch (error) {

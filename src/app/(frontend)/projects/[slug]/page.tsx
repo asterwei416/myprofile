@@ -7,6 +7,7 @@ import { Tag } from '../../components/Tag'
 import config from '@/payload.config'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 import { CloudinaryImage } from '@/components/CloudinaryImage'
+import { jsxConverters } from '@/components/RichText/converters'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -170,7 +171,9 @@ export default async function ProjectDetailPage({ params }: Props) {
       <section className="section">
         <div className="container" style={{ maxWidth: '800px' }}>
           <div className="rich-text-content">
-            <RichText data={project.content} />
+            <div className="rich-text-content">
+              <RichText data={project.content} converters={jsxConverters} />
+            </div>
           </div>
         </div>
       </section>
