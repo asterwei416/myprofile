@@ -642,8 +642,6 @@ export default async function HomePage() {
                       className="post-card-image"
                       style={{
                         position: 'relative',
-                        height: '200px',
-                        overflow: 'hidden',
                         backgroundColor: '#2a2a2a', // Fallback color
                       }}
                     >
