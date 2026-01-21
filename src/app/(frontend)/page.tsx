@@ -120,7 +120,7 @@ const timelineData: TimelinePhase[] = [
           {
             name: '壹蘋新聞網',
             url: 'https://news.nextapple.com/',
-            image: '/screenshots/nextapple.png',
+            image: '/screenshots/nextapple-v2.jpg',
           },
         ],
       },
@@ -139,7 +139,11 @@ const timelineData: TimelinePhase[] = [
         ],
         icon: '👥',
         websites: [
-          { name: '樂屋網', url: 'https://www.rakuya.com.tw/', image: '/screenshots/rakuya.png' },
+          {
+            name: '樂屋網',
+            url: 'https://www.rakuya.com.tw/',
+            image: '/screenshots/rakuya-v2.png',
+          },
         ],
       },
       {
