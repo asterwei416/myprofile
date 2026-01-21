@@ -321,13 +321,13 @@ export default async function HomePage() {
                 認識 Aster (欸斯特)
               </h2>
               <p>
-                以前的我，搞數位行銷、玩數據、做成長駭客，但 AI
-                這波「超音速海嘯」來了之後，我發現人類史上第一次有機會「開外掛」當超人，這次決心不想錯過！
+                過去的我，搞數位行銷、玩數據、做成長駭客；直到 AI
+                這波「超音速海嘯」襲來，我看見了人類史上首度能「開外掛」當超人的契機——這一次，我絕不錯過。
               </p>
               <p>
                 目前的狀態：<strong>AI First 實踐玩家</strong> / 也是專業的「數位行銷廢材」。
               </p>
-              <p>做法直白：無聊的事全丟給 AI，時間拿來體驗生活和創造。</p>
+              <p>做法直白： 把無聊的事全丟給 AI，將時間留給體驗生活與創造。</p>
               <p
                 style={{
                   marginTop: 'var(--space-lg)',
@@ -340,21 +340,21 @@ export default async function HomePage() {
               </p>
               <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                 <li style={{ marginBottom: 'var(--space-sm)', color: 'var(--text-secondary)' }}>
-                  <strong style={{ color: 'var(--color-primary)' }}>優雅解構</strong>
-                  ：利用程式碼將複雜的業務邏輯化為優雅的流程。
+                  <strong style={{ color: 'var(--color-primary)' }}>優雅解構</strong>：
+                  以程式碼將複雜的業務邏輯，轉化為優雅流暢的流程。
                 </li>
                 <li style={{ marginBottom: 'var(--space-sm)', color: 'var(--text-secondary)' }}>
-                  <strong style={{ color: 'var(--color-primary)' }}>算力放大</strong>
-                  ：利用 AI 作為槓桿，將人類的理解深度與想像力無限放大。
+                  <strong style={{ color: 'var(--color-primary)' }}>算力放大</strong>： 以 AI
+                  為槓桿，無限放大人類的理解深度與想像力。
                 </li>
                 <li style={{ color: 'var(--text-secondary)' }}>
-                  <strong style={{ color: 'var(--color-primary)' }}>系統思考</strong>
-                  ：將龐雜的「局」拆解成清晰的架構。
+                  <strong style={{ color: 'var(--color-primary)' }}>系統思考</strong>：
+                  將龐雜的「局」，拆解為清晰可控的架構。
                 </li>
               </ul>
               <p style={{ marginTop: 'var(--space-lg)' }}>
-                本質來看，我就是在做一場認知的「逆向工程」，在這個執行力逐漸貶值的時代，用系統化的視角看透本質，並用
-                AI 加速實現那個被我們定義好的未來。
+                本質上，我正在進行一場認知的「逆向工程」，在這個執行力逐漸貶值的時代，用系統化視角看透虛實，並透過
+                AI 加速實現那個由我們定義好的未來。
               </p>
               <p
                 style={{
@@ -363,8 +363,8 @@ export default async function HomePage() {
                   color: 'var(--color-primary)',
                 }}
               >
-                這裡就是我的 #AI廢人養成計劃 —— 看我怎麼用 n8n、Gemini、GPT 跟 Vibe
-                Coding等工具，一步步把自己「自動化」。
+                這裡就是我的 #AI廢人養成計劃 —— 看我怎麼用 GenAI、AI Workflow 跟 Vibe
+                Coding等工具，一步步把自己「自動化」！
               </p>
               <div className="about-tags">
                 <Tag name="Growth Hacking" className="tag-green" />

@@ -21,7 +21,7 @@ export const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConvert
     const doc = uploadNode.value
 
     // 檢查是否為有效的媒體檔案
-    if (!doc || typeof doc === 'string' || !doc.url) {
+    if (!doc || typeof doc === 'string' || typeof doc === 'number' || !('url' in doc) || !doc.url) {
       return null // 或者回傳預設的 empty state
     }
 
@@ -56,6 +56,10 @@ export const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConvert
     }
 
     // 非圖片類型，回傳預設處理 (或不做處理)
-    return defaultConverters.upload({ node })
+    // 非圖片類型，回傳預設處理 (或不做處理)
+    if (defaultConverters?.upload) {
+      return defaultConverters.upload({ node })
+    }
+    return null
   },
 })
