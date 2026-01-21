@@ -5,8 +5,15 @@ const nextConfig = {
   // Enable standalone output for Docker deployment
   output: 'standalone',
   // Disable image optimization to avoid Sharp issues in Docker
+  // Enable image optimization with Cloudinary loader
   images: {
-    unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+        pathname: '/**',
+      },
+    ],
   },
   // Your Next.js config here
   webpack: (webpackConfig) => {

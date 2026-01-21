@@ -6,7 +6,7 @@ import { notFound } from 'next/navigation'
 import { Tag } from '../../components/Tag'
 import config from '@/payload.config'
 import { RichText } from '@payloadcms/richtext-lexical/react'
-import { getOptimizedImageUrl } from '@/utils/image'
+import { CloudinaryImage } from '@/components/CloudinaryImage'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -174,15 +174,19 @@ export default async function BlogPostPage({ params }: Props) {
                 border: '1px solid var(--border-subtle)',
               }}
             >
-              <img
-                src={
-                  typeof post.thumbnail === 'string'
-                    ? getOptimizedImageUrl(post.thumbnail, 1200)
-                    : getOptimizedImageUrl((post.thumbnail as any).url, 1200)
-                }
-                alt={post.title}
-                style={{ width: '100%', display: 'block' }}
-              />
+              <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9' }}>
+                <CloudinaryImage
+                  src={
+                    typeof post.thumbnail === 'string'
+                      ? post.thumbnail
+                      : (post.thumbnail as any).url
+                  }
+                  alt={post.title}
+                  style={{ objectFit: 'cover' }}
+                  priority // LCP image
+                  sizes="100vw"
+                />
+              </div>
             </div>
           </div>
         </section>

@@ -4,7 +4,7 @@ import React from 'react'
 
 import { Tag } from './components/Tag'
 import config from '@/payload.config'
-import { getOptimizedImageUrl } from '@/utils/image'
+import { CloudinaryImage } from '@/components/CloudinaryImage'
 
 // 時間軸資料介面定義
 interface TimelineWebsite {
@@ -239,7 +239,12 @@ export default async function HomePage() {
           {/* 頭像 */}
           <div className="profile-avatar">
             <div className="profile-avatar-inner">
-              <img src="/avatar.jpg" alt="Aster" className="profile-avatar-img" />
+              <CloudinaryImage
+                src="/avatar.jpg"
+                alt="Aster"
+                className="profile-avatar-img"
+                priority // Hero image, load immediately (LCP)
+              />
             </div>
           </div>
 
@@ -461,10 +466,11 @@ export default async function HomePage() {
                       {project.thumbnail &&
                       typeof project.thumbnail !== 'string' &&
                       project.thumbnail.url ? (
-                        <img
-                          src={getOptimizedImageUrl(project.thumbnail.url, 800)}
+                        <CloudinaryImage
+                          src={project.thumbnail.url}
                           alt={project.title}
-                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                          style={{ objectFit: 'cover' }}
+                          sizes="(max-width: 768px) 100vw, 400px"
                         />
                       ) : (
                         <div
@@ -560,10 +566,11 @@ export default async function HomePage() {
                       {post.thumbnail &&
                       typeof post.thumbnail !== 'string' &&
                       post.thumbnail.url ? (
-                        <img
-                          src={getOptimizedImageUrl(post.thumbnail.url, 800)}
+                        <CloudinaryImage
+                          src={post.thumbnail.url}
                           alt={post.title}
-                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                          style={{ objectFit: 'cover' }}
+                          sizes="(max-width: 768px) 100vw, 400px"
                         />
                       ) : (
                         <div

@@ -4,7 +4,7 @@ import React from 'react'
 
 import { Tag } from '../components/Tag'
 import config from '@/payload.config'
-import { getOptimizedImageUrl } from '@/utils/image'
+import { CloudinaryImage } from '@/components/CloudinaryImage'
 
 export const metadata = {
   title: '技術部落格 | Aster',
@@ -92,10 +92,11 @@ export default async function BlogPage() {
                       {post.thumbnail &&
                       typeof post.thumbnail !== 'string' &&
                       post.thumbnail.url ? (
-                        <img
-                          src={getOptimizedImageUrl(post.thumbnail.url, 800)}
+                        <CloudinaryImage
+                          src={post.thumbnail.url}
                           alt={post.title}
-                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                          style={{ objectFit: 'cover' }}
+                          sizes="(max-width: 768px) 100vw, 400px"
                         />
                       ) : (
                         <div
