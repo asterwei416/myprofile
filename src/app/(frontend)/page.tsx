@@ -651,7 +651,11 @@ export default async function HomePage() {
                         <CloudinaryImage
                           src={post.thumbnail.url}
                           alt={post.title}
-                          style={{ objectFit: 'cover' }}
+                          style={{
+                            width: '100%',
+                            height: 'auto',
+                            display: 'block',
+                          }}
                           sizes="(max-width: 768px) 100vw, 400px"
                         />
                       ) : (

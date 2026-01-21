@@ -1104,10 +1104,10 @@ pre code {
 .post-card-image {
   flex-shrink: 0;
   width: 200px;
-  /* aspect-ratio: 16 / 10; removed to allow height control from inline style or just use width */
-  height: 200px; /* Enforcing height match with page.tsx inline style */
+  height: auto; /* Allow natural height to preserve aspect ratio */
   border-radius: 8px;
   overflow: hidden;
+  align-self: flex-start; /* Prevent stretching */
 }
 
 .post-card:hover {
