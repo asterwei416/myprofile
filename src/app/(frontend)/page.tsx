@@ -463,7 +463,7 @@ export default async function HomePage() {
                                           style={{
                                             border: 'none',
                                             overflow: 'hidden',
-                                            borderRadius: '8px',
+                                            borderRadius: '8px 8px 0 0',
                                             display: 'block',
                                           }}
                                           scrolling="no"
@@ -471,6 +471,25 @@ export default async function HomePage() {
                                           allowTransparency={true}
                                           allow="encrypted-media"
                                         ></iframe>
+                                        <a
+                                          href={site.url}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          style={{
+                                            display: 'block',
+                                            padding: 'var(--space-xs) var(--space-sm)',
+                                            textAlign: 'center',
+                                            fontSize: '0.7rem',
+                                            fontWeight: 600,
+                                            color: 'var(--text-primary)',
+                                            borderTop: '1px solid var(--border-subtle)',
+                                            background: 'var(--bg-surface)',
+                                            textDecoration: 'none',
+                                            borderRadius: '0 0 8px 8px',
+                                          }}
+                                        >
+                                          {site.name} ↗
+                                        </a>
                                       </div>
                                     ) : (
                                       <a
