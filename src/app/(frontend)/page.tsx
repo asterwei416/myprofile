@@ -280,7 +280,7 @@ export default async function HomePage() {
           <div className="profile-avatar">
             <div className="profile-avatar-inner">
               <CloudinaryImage
-                src="/avatar-2025.jpg"
+                src="/avatar-3d.jpg"
                 alt="Aster"
                 className="profile-avatar-img"
                 priority // Hero image, load immediately (LCP)
@@ -552,12 +552,10 @@ export default async function HomePage() {
                       typeof project.thumbnail !== 'string' &&
                       project.thumbnail.url ? (
                         <CloudinaryImage
-                          src="/avatar-2025.jpg"
-                          alt="Aster - AI First 實踐玩家"
-                          fill={true}
-                          priority
+                          src={project.thumbnail.url}
+                          alt={project.title}
                           style={{ objectFit: 'cover' }}
-                          sizes="(max-width: 768px) 100vw, 33vw"
+                          sizes="(max-width: 768px) 100vw, 400px"
                         />
                       ) : (
                         <div
