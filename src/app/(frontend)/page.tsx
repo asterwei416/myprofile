@@ -178,6 +178,25 @@ const timelineData: TimelinePhase[] = [
         ],
         icon: '🚀',
       },
+      {
+        type: 'media',
+        title: '個人 IP 的實戰轉向',
+        description: [
+          '將個人 FB 轉型為專業模式，專注於輸出那些尚未被定義、看似「亂寫瞎做」但絕對真實的 AI 實驗紀錄。',
+          '這不是教學，而是第一手的人機協作現場轉播——拒絕過度包裝，只呈現最原本的碰撞過程。',
+        ],
+        icon: '📡',
+      },
+      {
+        type: 'community',
+        title: '「AI 思維實驗室」社群啟動',
+        description: [
+          '成立只講真話的操作筆記社群，目前已匯聚 1000+ 名實踐者。',
+          '我們拒絕討論虛無飄渺的未來趨勢，只專注於「現在能怎麼用」的落地應用，構建一個抗焦慮的實戰同溫層。',
+        ],
+        icon: '🧪',
+        websites: [{ name: 'AI 思維實驗室', url: 'https://www.facebook.com/groups/aithinkinglab' }],
+      },
     ],
   },
 ]
