@@ -7,10 +7,10 @@ const MouseEffects = dynamic(() => import('./components/MouseEffects'), { ssr: f
 const BackgroundEffects = dynamic(() => import('./components/BackgroundEffects'), { ssr: false })
 
 export const metadata = {
-  title: 'Aster (欸斯特) · AI 實驗家 | 數據驅動 × AI 賦能的成長實踐',
+  title: 'Aster (欸斯特) · AI實驗玩家 | 數據驅動 × AI 賦能的成長實踐',
   description:
     '從數位行銷到 AI 探索者，用系統思考拆解大局，用算力放大想像。這是我的 #AI廢人養成計劃 實踐紀錄。',
-  keywords: ['AI 實驗家', '數據分析', 'Growth Hacking', 'AI 自動化', 'Vibe Coding', '數位行銷'],
+  keywords: ['AI實驗玩家', '數據分析', 'Growth Hacking', 'AI 自動化', 'Vibe Coding', '數位行銷'],
 }
 
 export default async function FrontendLayout({ children }: { children: React.ReactNode }) {
