@@ -481,7 +481,11 @@ export default async function HomePage() {
                                       >
                                         <div className="timeline-website-preview">
                                           {site.image ? (
-                                            <img src={site.image} alt={site.name} />
+                                            <img
+                                              src={site.image}
+                                              alt={site.name}
+                                              style={{ objectPosition: 'top' }}
+                                            />
                                           ) : (
                                             <iframe
                                               src={site.url}
