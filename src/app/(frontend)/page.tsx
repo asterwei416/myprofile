@@ -467,7 +467,8 @@ export default async function HomePage() {
                                           }}
                                           scrolling="no"
                                           frameBorder="0"
-                                          allowTransparency={true}
+                                          // @ts-expect-error React warning vs TS types conflict: allows transparency in iframe
+                                          allowtransparency="true"
                                           allow="encrypted-media"
                                         ></iframe>
                                         <a
@@ -651,6 +652,7 @@ export default async function HomePage() {
                         <CloudinaryImage
                           src={post.thumbnail.url}
                           alt={post.title}
+                          fill={false}
                           style={{
                             width: '100%',
                             height: 'auto',

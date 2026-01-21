@@ -10,25 +10,31 @@ interface CloudinaryImageProps extends Omit<ImageProps, 'loader'> {
   className?: string
 }
 
-export function CloudinaryImage({ src, alt, className, ...props }: CloudinaryImageProps) {
+export function CloudinaryImage({
+  src,
+  alt,
+  className,
+  fill = true,
+  ...props
+}: CloudinaryImageProps) {
   const [isLoading, setIsLoading] = useState(true)
 
-  // Generate a tiny low-res blurred placeholder URL
-  // This is a manual construction because we can't easily use the loader for a different transformation *inside* the component props logic cleanly for blurDataURL without being static
-  // But we can use specific Cloudinary params for the "loading" state if we used a background image approach.
-  // Here we use a CSS class approach combined with Next.js Image's onLoadingComplete.
+  // 決定外層容器樣式：如果 fill=true，則強制佔滿；否則依內容或 className 決定
+  const containerStyle = fill
+    ? { position: 'relative' as const, overflow: 'hidden', width: '100%', height: '100%' }
+    : { position: 'relative' as const, overflow: 'hidden' } // Height/Width controlled by parent or props
+
+  // 決定 Image 元件樣式
+  const imageClassName = `transition-opacity duration-500 ${isLoading ? 'opacity-0' : 'opacity-100'}`
 
   return (
-    <div
-      className={`image-container ${className || ''}`}
-      style={{ position: 'relative', overflow: 'hidden', width: '100%', height: '100%' }}
-    >
+    <div className={`image-container ${className || ''}`} style={containerStyle}>
       <Image
         loader={cloudinaryLoader}
         src={src}
         alt={alt}
-        fill
-        className={`transition-opacity duration-500 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
+        fill={fill}
+        className={imageClassName}
         onLoad={() => setIsLoading(false)}
         {...props}
       />
