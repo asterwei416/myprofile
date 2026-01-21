@@ -653,6 +653,8 @@ export default async function HomePage() {
                           src={post.thumbnail.url}
                           alt={post.title}
                           fill={false}
+                          width={post.thumbnail.width || 400} // Add default fallback
+                          height={post.thumbnail.height || 300} // Add default fallback
                           style={{
                             width: '100%',
                             height: 'auto',
