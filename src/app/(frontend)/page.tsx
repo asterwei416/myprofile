@@ -301,7 +301,7 @@ export default async function HomePage() {
 
           {/* 快速連結 */}
           <div className="profile-links">
-            <Link href="/projects" className="btn btn-primary">
+            <Link href="/projects" className="btn btn-secondary">
               AI 作品
             </Link>
             <Link href="/blog" className="btn btn-secondary">
