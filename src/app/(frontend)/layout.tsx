@@ -1,10 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
-import dynamic from 'next/dynamic'
 import './styles.css'
-
-const MouseEffects = dynamic(() => import('./components/MouseEffects'), { ssr: false })
-const BackgroundEffects = dynamic(() => import('./components/BackgroundEffects'), { ssr: false })
+import DynamicEffectsWrapper from './components/DynamicEffectsWrapper'
 
 export const metadata = {
   title: 'Aster (欸斯特) · AI First 實踐玩家 | 數據驅動 × AI 賦能的成長實踐',
@@ -24,10 +21,8 @@ export default async function FrontendLayout({ children }: { children: React.Rea
   return (
     <html lang="zh-Hant">
       <body>
-        {/* 星空網格背景 */}
-        <BackgroundEffects />
-        {/* 滑鼠光軌效果 */}
-        <MouseEffects />
+        {/* 動態特效 (Client Component) */}
+        <DynamicEffectsWrapper />
         {/* 導覽列 */}
         <nav className="nav">
           <div className="container nav-container">
