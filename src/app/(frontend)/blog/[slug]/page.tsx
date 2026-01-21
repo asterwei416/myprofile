@@ -70,11 +70,13 @@ export default async function BlogPostPage({ params }: Props) {
   const post = docs[0]
   if (!post) notFound()
 
-  // 取得相關文章（同標籤）
+  // 1. 取得相關文章（同標籤優先，不足補最新）
   let relatedPosts: any[] = []
+  let excludePostIds: string[] = [post.id] // 排除目前這篇
+
+  // 1-1. 先找同標籤
   if (post.tags && (post.tags as any[]).length > 0) {
     const tagIds = (post.tags as any[]).map((tag) => (typeof tag === 'string' ? tag : tag.id))
-
     const { docs: related } = await payload.find({
       collection: 'posts',
       where: {
@@ -85,23 +87,57 @@ export default async function BlogPostPage({ params }: Props) {
         ],
       },
       limit: 3,
+      depth: 1,
     })
     relatedPosts = related
+    excludePostIds = [...excludePostIds, ...related.map((p: any) => p.id)]
   }
 
-  // 取得相關作品（同標籤）
+  // 1-2. 不滿 3 篇，補上最新文章
+  if (relatedPosts.length < 3) {
+    const { docs: latest } = await payload.find({
+      collection: 'posts',
+      where: {
+        and: [{ status: { equals: 'published' } }, { id: { not_in: excludePostIds } }],
+      },
+      sort: '-publishedAt',
+      limit: 3 - relatedPosts.length,
+      depth: 1,
+    })
+    relatedPosts = [...relatedPosts, ...latest]
+  }
+
+  // 2. 取得相關作品（同標籤優先，不足補最新）
   let relatedProjects: any[] = []
+  let excludeProjectIds: string[] = []
+
+  // 2-1. 先找同標籤
   if (post.tags && (post.tags as any[]).length > 0) {
     const tagIds = (post.tags as any[]).map((tag) => (typeof tag === 'string' ? tag : tag.id))
-
     const { docs: projects } = await payload.find({
       collection: 'projects',
       where: {
         and: [{ status: { equals: 'published' } }, { tags: { in: tagIds } }],
       },
       limit: 3,
+      depth: 1,
     })
     relatedProjects = projects
+    excludeProjectIds = [...projects.map((p: any) => p.id)]
+  }
+
+  // 2-2. 不滿 3 個，補上最新作品
+  if (relatedProjects.length < 3) {
+    const { docs: latestProjects } = await payload.find({
+      collection: 'projects',
+      where: {
+        and: [{ status: { equals: 'published' } }, { id: { not_in: excludeProjectIds } }],
+      },
+      sort: '-date',
+      limit: 3 - relatedProjects.length,
+      depth: 1,
+    })
+    relatedProjects = [...relatedProjects, ...latestProjects]
   }
 
   return (

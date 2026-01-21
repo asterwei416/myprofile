@@ -70,11 +70,13 @@ export default async function ProjectDetailPage({ params }: Props) {
   const project = docs[0]
   if (!project) notFound()
 
-  // 取得相關作品（同標籤）
+  // 取得相關作品（同標籤優先，不足補最新）
   let relatedProjects: any[] = []
+  let excludeProjectIds: string[] = [project.id]
+
+  // 1. 先找同標籤
   if (project.tags && (project.tags as any[]).length > 0) {
     const tagIds = (project.tags as any[]).map((tag) => (typeof tag === 'string' ? tag : tag.id))
-
     const { docs: related } = await payload.find({
       collection: 'projects',
       where: {
@@ -85,8 +87,24 @@ export default async function ProjectDetailPage({ params }: Props) {
         ],
       },
       limit: 3,
+      depth: 1,
     })
     relatedProjects = related
+    excludeProjectIds = [...excludeProjectIds, ...related.map((p: any) => p.id)]
+  }
+
+  // 2. 不滿 3 個，補上最新作品
+  if (relatedProjects.length < 3) {
+    const { docs: latest } = await payload.find({
+      collection: 'projects',
+      where: {
+        and: [{ status: { equals: 'published' } }, { id: { not_in: excludeProjectIds } }],
+      },
+      sort: '-date',
+      limit: 3 - relatedProjects.length,
+      depth: 1,
+    })
+    relatedProjects = [...relatedProjects, ...latest]
   }
 
   return (
