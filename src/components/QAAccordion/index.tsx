@@ -13,9 +13,9 @@ interface QAAccordionProps {
 }
 
 export function QAAccordion({ items }: QAAccordionProps) {
-  if (!items || items.length === 0) return null
-
   const [activeIndex, setActiveIndex] = useState<number | null>(null)
+
+  if (!items || items.length === 0) return null
 
   const toggleIndex = (index: number) => {
     setActiveIndex(activeIndex === index ? null : index)
