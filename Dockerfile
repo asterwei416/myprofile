@@ -33,7 +33,7 @@ RUN \
   fi
 
 # Production image, copy all the files and run next
-FROMyb base AS runner
+FROM base AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
