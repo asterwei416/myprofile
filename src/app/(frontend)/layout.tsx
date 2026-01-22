@@ -54,7 +54,9 @@ export default async function FrontendLayout({ children }: { children: React.Rea
         {/* 頁尾 */}
         <footer className="footer">
           <div className="container">
-            <p className="footer-text">© 2026 Aster. Built with Next.js + Payload CMS.</p>
+            <p className="footer-text">
+              Aster &copy; {new Date().getFullYear()} All Rights Reserved.
+            </p>
           </div>
         </footer>
       </body>
