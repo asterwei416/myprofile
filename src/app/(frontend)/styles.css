@@ -352,6 +352,22 @@ pre code {
   align-items: center;
 }
 
+/* === 手機版選單按鈕 (Desktop: Hidden) === */
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--space-xs);
+  color: var(--text-primary);
+  transition: color var(--transition-fast);
+}
+
+.nav-toggle:hover {
+  color: var(--color-primary);
+  text-shadow: var(--shadow-glow-cyan);
+}
+
 .nav-brand {
   font-family: var(--font-mono);
   font-size: 1.125rem;

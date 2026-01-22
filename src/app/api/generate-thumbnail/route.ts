@@ -16,12 +16,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'GEMINI_API_KEY 未設定' }, { status: 500 })
     }
 
-    // 定義風格 Prompt
+    // 定義風格 Prompt (優化版：移除 4k resolution 以提升速度與減小體積)
     const stylePrompts: Record<string, string> = {
       pixar:
-        '3D Pixar animation style, cute, vibrant colors, soft lighting, 3D render, high quality, detailed',
+        '3D Pixar animation style, cute, vibrant colors, soft lighting, 3D render, high quality',
       realistic:
-        'Cinematic photo, realistic, high technology, sleek, modern, professional, 4k resolution',
+        'Cinematic photo, realistic, high technology, sleek, modern, professional, high quality',
       cyberpunk:
         'Cyberpunk style, neon lights, futuristic city, high contrast, purple and blue tones, sci-fi',
       minimalist:
@@ -35,35 +35,11 @@ export async function POST(request: NextRequest) {
     // 初始化 Google Generative AI
     const genAI = new GoogleGenAI({ apiKey })
 
-    // 先用 Gemini 生成圖片描述 prompt
-    const promptResult = await genAI.models.generateContent({
-      model: 'gemini-2.0-flash',
-      contents: `你是一位精通視覺設計與 Imagen 4 提示詞工程的專家。
-你的任務是根據提供的「文章標題」與「文章內容」，為部落格設計一張吸睛且符合內容深度的高品質首圖 (16:9)。
+    // 直通車模式 (Direct Prompting)：直接組合 Prompt，省去 AI 思考時間
+    // 結構：[電影質感] + [標題主體] + [風格關鍵詞] + [光影細節]
+    const imagePrompt = `Cinematic shot of "${title}", ${selectedStyle}, volumetric lighting, cinematic lighting, soft bokeh, high quality composition, no text`
 
-## 視覺策略 (固定為：電影情境感 + 寫實幻想)
-請忽略抽象或極簡的表現手法。無論文章主題為何，一律將其轉化為具體的**「電影場景 (Cinematic Scene)」**。
-1. **寫實基底 + 幻想元素**：場景必須有真實的物理質感 (寫實)，但可以包含超現實或科幻的元素 (幻想)。
-2. **拒絕抽象**：不要畫抽象的線條或符號。即使是抽象概念 (如 "AI 思考")，也要具象化為實體場景 (如 "發光的精密類神經網絡與水晶般的數據流")。
-3. **沉浸感**：構圖要像電影劇照 (Movie Still)，強調景深與氛圍。
-4. **風格融合**：將用戶選擇的「${selectedStyle}」風格融入這個電影場景中 (例如：如果是 Pixar 風，就是「皮克斯電影的劇照」)。
-
-## Imagen 4 優化規則
-1. **光影與質感**：必須包含 "Volumetric lighting", "Cinematic lighting", "Soft bokeh", "High detailed texture", "4k resolution" 等高品質關鍵詞。
-2. **構圖**：構圖乾淨平衡，主體明確，預留視覺呼吸空間 (Negative space)。
-3. **絕對禁止**：不要包含任何文字 (No text)、不要有人臉特寫 (No close-up faces)、不要有模糊或變形的物體。
-4. **輸出語言**：僅回傳一段優化過的 **英文 Prompt**。
-
-## 輸入資料
-文章標題：${title}
-${contentPreview ? `文章內容：${contentPreview}` : ''}
-
-## 你的回應 (僅英文 Prompt)：`,
-    })
-
-    const imagePrompt =
-      promptResult.text?.trim() ||
-      `${selectedStyle} illustration for: ${title}, high quality, cinematic lighting`
+    console.log('Generating thumbnail with prompt:', imagePrompt)
 
     // 使用 Imagen 4 生成圖片
     const imageResult = await genAI.models.generateImages({
@@ -71,6 +47,7 @@ ${contentPreview ? `文章內容：${contentPreview}` : ''}
       prompt: imagePrompt,
       config: {
         numberOfImages: 1,
+        // 確保長寬比
         aspectRatio: '16:9',
         // 優化速度參數
         sampleCount: 1,
