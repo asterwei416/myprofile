@@ -8,6 +8,7 @@ import config from '@/payload.config'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 import { CloudinaryImage } from '@/components/CloudinaryImage'
 import { jsxConverters } from '@/components/RichText/converters'
+import { QAAccordion } from '@/components/QAAccordion'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -28,9 +29,48 @@ export async function generateMetadata({ params }: Props) {
   const post = docs[0]
   if (!post) return { title: '文章不存在' }
 
+  const ogImage =
+    post.thumbnail && typeof post.thumbnail !== 'string' && post.thumbnail.url
+      ? [
+          {
+            url: post.thumbnail.url.replace('/upload/', '/upload/w_1200,h_630,c_fill,q_auto/'),
+            width: 1200,
+            height: 630,
+            alt: post.title,
+          },
+        ]
+      : []
+
   return {
     title: `${post.title} | Aster`,
     description: (post as any).meta?.description || `閱讀 ${post.title} — Aster 技術部落格`,
+    openGraph: {
+      type: 'article',
+      publishedTime: post.publishedAt,
+      images: ogImage,
+      tags: (post.tags as any[])?.map((t) => (typeof t === 'string' ? t : t.name)),
+    },
+  }
+}
+
+// JSON-LD 產生器
+function generateJsonLd(post: any) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    // AEO: 如果有摘要，優先使用摘要作為 description，讓 AI 更容易抓取
+    description: post.summary || post.meta?.description,
+    image: post.thumbnail && typeof post.thumbnail !== 'string' ? [post.thumbnail.url] : [],
+    datePublished: post.publishedAt,
+    dateModified: post.updatedAt,
+    author: [
+      {
+        '@type': 'Person',
+        name: 'Aster',
+        url: 'https://aster.dev',
+      },
+    ],
   }
 }
 
@@ -108,39 +148,6 @@ export default async function BlogPostPage({ params }: Props) {
     relatedPosts = [...relatedPosts, ...latest]
   }
 
-  // 2. 取得相關作品（同標籤優先，不足補最新）
-  let relatedProjects: any[] = []
-  let excludeProjectIds: string[] = []
-
-  // 2-1. 先找同標籤
-  if (post.tags && (post.tags as any[]).length > 0) {
-    const tagIds = (post.tags as any[]).map((tag) => (typeof tag === 'string' ? tag : tag.id))
-    const { docs: projects } = await payload.find({
-      collection: 'projects',
-      where: {
-        and: [{ status: { equals: 'published' } }, { tags: { in: tagIds } }],
-      },
-      limit: 3,
-      depth: 1,
-    })
-    relatedProjects = projects
-    excludeProjectIds = [...projects.map((p: any) => p.id)]
-  }
-
-  // 2-2. 不滿 3 個，補上最新作品
-  if (relatedProjects.length < 3) {
-    const { docs: latestProjects } = await payload.find({
-      collection: 'projects',
-      where: {
-        and: [{ status: { equals: 'published' } }, { id: { not_in: excludeProjectIds } }],
-      },
-      sort: '-date',
-      limit: 3 - relatedProjects.length,
-      depth: 1,
-    })
-    relatedProjects = [...relatedProjects, ...latestProjects]
-  }
-
   return (
     <>
       {/* 返回按鈕 + 標題區塊 */}
@@ -161,6 +168,11 @@ export default async function BlogPostPage({ params }: Props) {
           </Link>
 
           <h1 style={{ marginBottom: 'var(--space-md)' }}>{post.title}</h1>
+
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(generateJsonLd(post)) }}
+          />
 
           {/* Meta 資訊 */}
           <div
@@ -232,9 +244,49 @@ export default async function BlogPostPage({ params }: Props) {
       {/* 文章內容 */}
       <section className="section">
         <div className="container" style={{ maxWidth: '800px' }}>
+          {/* AEO: 重點摘要區塊 (Key Takeaways) */}
+          {(post as any).summary && (
+            <section
+              className="post-summary"
+              style={{
+                backgroundColor: 'var(--bg-surface)',
+                borderRadius: '12px',
+                padding: 'var(--space-lg)',
+                marginBottom: 'var(--space-xl)',
+                border: '1px solid var(--border-subtle)',
+              }}
+            >
+              <h2
+                style={{
+                  fontSize: '1.25rem',
+                  marginBottom: 'var(--space-md)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 'var(--space-xs)',
+                }}
+              >
+                <span>💡</span> 重點摘要 (TL;DR)
+              </h2>
+              <div
+                style={{
+                  whiteSpace: 'pre-line',
+                  lineHeight: '1.8',
+                  color: 'var(--text-primary)',
+                }}
+              >
+                {(post as any).summary}
+              </div>
+            </section>
+          )}
+
           <div className="rich-text-content">
             <RichText data={post.content} converters={jsxConverters} />
           </div>
+
+          {/* AI 讀心問答區塊 */}
+          {(post as any).aiQA && (post as any).aiQA.length > 0 && (
+            <QAAccordion items={(post as any).aiQA} />
+          )}
         </div>
       </section>
 
@@ -250,66 +302,83 @@ export default async function BlogPostPage({ params }: Props) {
                 {relatedPosts.map((rp: any) => (
                   <Link key={rp.id} href={`/blog/${rp.slug}`} style={{ textDecoration: 'none' }}>
                     <article className="post-card">
-                      <div className="post-card-content">
-                        <h3 className="post-card-title">{rp.title}</h3>
-                        {rp.excerpt && <p className="post-card-excerpt">{rp.excerpt}</p>}
-                        <p className="post-card-meta">
-                          {rp.publishedAt
-                            ? new Date(rp.publishedAt).toLocaleDateString('zh-TW')
-                            : ''}
-                        </p>
-                      </div>
-                    </article>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* 相關作品 */}
-      {relatedProjects.length > 0 && (
-        <section className="section">
-          <div className="container">
-            <div className="related-section">
-              <h3 className="related-section-title">
-                相關<span className="accent">作品</span>
-              </h3>
-              <div className="grid grid-3">
-                {relatedProjects.map((rp: any) => (
-                  <Link
-                    key={rp.id}
-                    href={`/projects/${rp.slug}`}
-                    style={{ textDecoration: 'none' }}
-                  >
-                    <article className="project-card">
-                      <div className="project-card-image">
-                        {rp.thumbnail ? (
+                      <div
+                        className="post-card-image"
+                        style={{
+                          position: 'relative',
+                          backgroundColor: '#2a2a2a',
+                        }}
+                      >
+                        {rp.thumbnail && typeof rp.thumbnail !== 'string' && rp.thumbnail.url ? (
                           <CloudinaryImage
-                            src={typeof rp.thumbnail === 'string' ? rp.thumbnail : rp.thumbnail.url}
+                            src={rp.thumbnail.url}
                             alt={rp.title}
-                            style={{ objectFit: 'cover' }}
-                            sizes="(max-width: 768px) 100vw, 300px"
+                            fill={false}
+                            width={rp.thumbnail.width || 400}
+                            height={rp.thumbnail.height || 300}
+                            style={{
+                              width: '100%',
+                              height: 'auto',
+                              display: 'block',
+                            }}
+                            sizes="(max-width: 768px) 100vw, 400px"
+                            crop="fill"
+                            gravity="auto"
+                            aspectRatio="1.5"
                           />
                         ) : (
                           <div
                             style={{
                               width: '100%',
                               height: '100%',
-                              backgroundColor: 'var(--bg-elevated)',
                               display: 'flex',
                               alignItems: 'center',
                               justifyContent: 'center',
-                              color: 'var(--text-muted)',
+                              color: '#666',
+                              fontSize: '3rem',
                             }}
                           >
-                            No Image
+                            🖼️
                           </div>
                         )}
                       </div>
-                      <div className="project-card-body">
-                        <h3 className="project-card-title">{rp.title}</h3>
+                      <div className="post-card-content">
+                        <h3 className="post-card-title">{rp.title}</h3>
+                        {rp.excerpt && (
+                          <p
+                            className="post-card-excerpt"
+                            style={{
+                              fontSize: '0.9rem',
+                              color: 'var(--text-secondary)',
+                              margin: '0.5rem 0',
+                              display: '-webkit-box',
+                              WebkitLineClamp: 3,
+                              WebkitBoxOrient: 'vertical',
+                              overflow: 'hidden',
+                            }}
+                          >
+                            {rp.excerpt}
+                          </p>
+                        )}
+                        {/* 標籤顯示 */}
+                        {rp.tags && (rp.tags as any[]).length > 0 && (
+                          <div
+                            style={{
+                              display: 'flex',
+                              gap: 'var(--space-xs)',
+                              marginBottom: 'var(--space-sm)',
+                            }}
+                          >
+                            {(rp.tags as any[]).slice(0, 3).map((tag: any, i: number) => (
+                              <Tag key={i} name={typeof tag === 'string' ? tag : tag.name} />
+                            ))}
+                          </div>
+                        )}
+                        <p className="post-card-meta">
+                          {rp.publishedAt
+                            ? new Date(rp.publishedAt).toLocaleDateString('zh-TW')
+                            : ''}
+                        </p>
                       </div>
                     </article>
                   </Link>

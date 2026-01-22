@@ -4,7 +4,11 @@ import './styles.css'
 import DynamicEffectsWrapper from './components/DynamicEffectsWrapper'
 
 export const metadata = {
-  title: 'AI First 實踐玩家 | 數據驅動 × AI 賦能的成長實踐 | Aster (欸斯特)',
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SERVER_URL || 'https://aster.dev'),
+  title: {
+    default: 'Aster | AI First 實踐玩家',
+    template: '%s | Aster',
+  },
   description:
     '從數位行銷到 AI 探索者，用系統思考拆解大局，用算力放大想像，這是我的 #AI廢人養成計劃 實踐紀錄。',
   keywords: [
@@ -15,6 +19,23 @@ export const metadata = {
     'Vibe Coding',
     '數位行銷',
   ],
+  openGraph: {
+    type: 'website',
+    locale: 'zh_TW',
+    siteName: 'Aster Profile',
+    images: [
+      {
+        url: '/avatar-3d.jpg', // Default OG image
+        width: 1200,
+        height: 630,
+        alt: 'Aster Profile',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    creator: '@asterwei',
+  },
 }
 
 export default async function FrontendLayout({ children }: { children: React.ReactNode }) {

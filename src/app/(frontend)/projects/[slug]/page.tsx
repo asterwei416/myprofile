@@ -8,6 +8,7 @@ import config from '@/payload.config'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 import { CloudinaryImage } from '@/components/CloudinaryImage'
 import { jsxConverters } from '@/components/RichText/converters'
+import { QAAccordion } from '@/components/QAAccordion'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -28,9 +29,25 @@ export async function generateMetadata({ params }: Props) {
   const project = docs[0]
   if (!project) return { title: '作品不存在' }
 
+  const ogImage =
+    project.thumbnail && typeof project.thumbnail !== 'string' && project.thumbnail.url
+      ? [
+          {
+            url: project.thumbnail.url.replace('/upload/', '/upload/w_1200,h_630,c_fill,q_auto/'),
+            width: 1200,
+            height: 630,
+            alt: project.title,
+          },
+        ]
+      : []
+
   return {
     title: `${project.title} | Aster`,
     description: `探索 ${project.title} 的 Prompt 邏輯、開發思維與技術架構。`,
+    openGraph: {
+      titles: project.title,
+      images: ogImage,
+    },
   }
 }
 
@@ -167,17 +184,83 @@ export default async function ProjectDetailPage({ params }: Props) {
         </div>
       </section>
 
+      {/* 封面圖片 (縮圖) */}
+      {project.thumbnail && (
+        <section style={{ marginBottom: 'var(--space-xl)' }}>
+          <div className="container" style={{ maxWidth: '800px' }}>
+            <div
+              style={{
+                borderRadius: '12px',
+                overflow: 'hidden',
+                border: '1px solid var(--border-subtle)',
+              }}
+            >
+              <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9' }}>
+                <CloudinaryImage
+                  src={
+                    typeof project.thumbnail === 'string'
+                      ? project.thumbnail
+                      : (project.thumbnail as any).url
+                  }
+                  alt={project.title}
+                  style={{ objectFit: 'cover' }}
+                  priority // LCP image
+                  sizes="100vw"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* 專案內容 */}
       <section className="section">
         <div className="container" style={{ maxWidth: '800px' }}>
+          {/* AEO: 重點摘要區塊 (Key Takeaways) */}
+          {(project as any).summary && (
+            <section
+              className="project-summary"
+              style={{
+                backgroundColor: 'var(--bg-surface)',
+                borderRadius: '12px',
+                padding: 'var(--space-lg)',
+                marginBottom: 'var(--space-xl)',
+                border: '1px solid var(--border-subtle)',
+              }}
+            >
+              <h2
+                style={{
+                  fontSize: '1.25rem',
+                  marginBottom: 'var(--space-md)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 'var(--space-xs)',
+                }}
+              >
+                <span>💡</span> 重點摘要 (TL;DR)
+              </h2>
+              <div
+                style={{
+                  whiteSpace: 'pre-line',
+                  lineHeight: '1.8',
+                  color: 'var(--text-primary)',
+                }}
+              >
+                {(project as any).summary}
+              </div>
+            </section>
+          )}
+
           <div className="rich-text-content">
-            <div className="rich-text-content">
-              <RichText data={project.content} converters={jsxConverters} />
-            </div>
+            <RichText data={project.content} converters={jsxConverters} />
           </div>
+
+          {/* AI 讀心問答區塊 */}
+          {(project as any).aiQA && (project as any).aiQA.length > 0 && (
+            <QAAccordion items={(project as any).aiQA} />
+          )}
         </div>
       </section>
-
       {/* 相關作品 */}
       {relatedProjects.length > 0 && (
         <section className="section">

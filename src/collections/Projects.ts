@@ -91,6 +91,40 @@ export const Projects: CollectionConfig = {
         description: '使用編輯器自由創建內容：技術棧、開發思維、架構說明、圖片等',
       },
     },
+    {
+      name: 'summary',
+      label: '重點摘要 (TL;DR)',
+      type: 'textarea',
+      required: false,
+      admin: {
+        position: 'sidebar',
+        components: {
+          Field: '@/components/SummaryField',
+        },
+      },
+    },
+    {
+      name: 'aiQA',
+      label: 'AI 讀心問答',
+      type: 'array',
+      admin: {
+        components: {
+          Field: '@/components/AIQuestionField',
+        },
+      },
+      fields: [
+        {
+          name: 'question',
+          label: '問題',
+          type: 'text',
+        },
+        {
+          name: 'answer',
+          label: '解答',
+          type: 'textarea',
+        },
+      ],
+    },
     // ===== 縮圖 (右側邊欄) =====
     // ===== 縮圖 (右側邊欄) =====
     {

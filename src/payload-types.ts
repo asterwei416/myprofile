@@ -226,6 +226,14 @@ export interface Project {
     };
     [k: string]: unknown;
   };
+  summary?: string | null;
+  aiQA?:
+    | {
+        question?: string | null;
+        answer?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   /**
    * 作品列表顯示的縮圖，建議尺寸 1200x630px
    */
@@ -289,6 +297,14 @@ export interface Post {
     };
     [k: string]: unknown;
   };
+  summary?: string | null;
+  aiQA?:
+    | {
+        question?: string | null;
+        answer?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   /**
    * 文章列表顯示的縮圖，建議尺寸 1200x630px
    */
@@ -484,6 +500,14 @@ export interface ProjectsSelect<T extends boolean = true> {
   date?: T;
   status?: T;
   content?: T;
+  summary?: T;
+  aiQA?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
+        id?: T;
+      };
   thumbnail?: T;
   category?: T;
   tags?: T;
@@ -510,6 +534,14 @@ export interface PostsSelect<T extends boolean = true> {
   publishedAt?: T;
   status?: T;
   content?: T;
+  summary?: T;
+  aiQA?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
+        id?: T;
+      };
   thumbnail?: T;
   category?: T;
   tags?: T;

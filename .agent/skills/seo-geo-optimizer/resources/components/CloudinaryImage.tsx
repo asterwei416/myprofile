@@ -1,7 +1,7 @@
 'use client'
 
 import Image, { ImageProps } from 'next/image'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { createCloudinaryLoader } from '@/utils/cloudinaryLoader'
 
 interface CloudinaryImageProps extends Omit<ImageProps, 'loader' | 'quality'> {
@@ -25,8 +25,6 @@ export function CloudinaryImage({
   quality = 'auto:low', // Default to low quality for better performance
   ...props
 }: CloudinaryImageProps) {
-  const [isLoaded, setIsLoaded] = useState(false)
-
   // Create a memoized loader with the specific options
   const loader = useMemo(
     () =>
@@ -40,14 +38,15 @@ export function CloudinaryImage({
   )
 
   // 建立 LQIP (Low Quality Image Placeholder) URL
+  // 從 src 中解析出路徑，並插入模糊化參數
   let blurUrl = ''
   if (src && src.includes('/upload/')) {
     const parts = src.split('/upload/')
     if (parts.length === 2) {
-      // w_20: 極小寬度
-      // e_blur:1000: 強烈模糊
-      // q_1: 最低品質
-      // f_auto: 自動格式
+      // w_20: 極小寬度 (降低檔案大小)
+      // e_blur:1000: 強烈模糊 (美化過渡效果)
+      // q_1: 最低品質 (極致壓縮)
+      // f_auto: 自動格式 (通常是 webp/avif)
       const params = ['w_20', 'e_blur:1000', 'q_1', 'f_auto']
 
       // Keep aspect ratio in LQIP to match main image
@@ -59,34 +58,23 @@ export function CloudinaryImage({
     }
   }
 
+  // 決定外層容器樣式
   const containerStyle: React.CSSProperties = {
     position: 'relative',
     overflow: 'hidden',
     ...(fill ? { width: '100%', height: '100%' } : {}),
+    // 設置模糊預覽圖為背景
+    ...(blurUrl
+      ? {
+          backgroundImage: `url(${blurUrl})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }
+      : {}),
   }
 
   return (
     <div className={`image-container ${className || ''}`} style={containerStyle}>
-      {/* Blur Placeholder */}
-      {blurUrl && (
-        <img
-          src={blurUrl}
-          alt=""
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            objectFit: fill ? 'cover' : 'contain',
-            opacity: isLoaded ? 0 : 1,
-            transition: 'opacity 0.5s ease-in-out',
-            pointerEvents: 'none', // Avoid interfering with clicks
-          }}
-        />
-      )}
-
-      {/* Main Image */}
       <Image
         loader={loader}
         src={src}
@@ -94,14 +82,15 @@ export function CloudinaryImage({
         fill={fill}
         quality={typeof quality === 'number' ? quality : undefined}
         {...props}
+        // 圖片載入後淡入效果 (Next.js 預設有，但可以確保一下)
         style={{
           ...props.style,
-          opacity: isLoaded ? 1 : 0,
+          opacity: 0,
           transition: 'opacity 0.5s ease-in-out',
         }}
         onLoad={(e) => {
-          setIsLoaded(true)
-          props.onLoad?.(e)
+          const img = e.currentTarget
+          img.style.opacity = '1'
         }}
       />
     </div>

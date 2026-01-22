@@ -90,6 +90,40 @@ export const Posts: CollectionConfig = {
         description: '使用編輯器自由創建內容：插入圖片、標題、列表、引用等',
       },
     },
+    {
+      name: 'summary',
+      label: '重點摘要 (TL;DR)',
+      type: 'textarea',
+      required: false,
+      admin: {
+        position: 'sidebar',
+        components: {
+          Field: '@/components/SummaryField',
+        },
+      },
+    },
+    {
+      name: 'aiQA',
+      label: 'AI 讀心問答',
+      type: 'array',
+      admin: {
+        components: {
+          Field: '@/components/AIQuestionField',
+        },
+      },
+      fields: [
+        {
+          name: 'question',
+          label: '問題',
+          type: 'text',
+        },
+        {
+          name: 'answer',
+          label: '解答',
+          type: 'textarea',
+        },
+      ],
+    },
     // ===== 縮圖 (右側邊欄) =====
     // ===== 縮圖 (右側邊欄) =====
     {

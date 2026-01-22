@@ -87,8 +87,8 @@ export default function BackgroundEffects() {
       const columns = Math.floor(canvas.width / 25)
 
       for (let i = 0; i < columns; i++) {
-        // 初始密度調整：90% 的列都會有雨滴 (原本 25%)
-        if (Math.random() > 0.1) {
+        // 初始密度調整：63% 的列都會有雨滴 (原本 90% * 0.7)
+        if (Math.random() > 0.37) {
           rainDropsRef.current.push({
             x: i * 25,
             y: Math.random() * canvas.height * 2 - canvas.height,
@@ -148,9 +148,9 @@ export default function BackgroundEffects() {
 
         if (drop.y > canvas.height) {
           drop.y = -20
-          // 重生機率調整：90% 機率重生為可見 (原本 50%)
+          // 重生機率調整：63% 機率重生為可見 (原本 90% * 0.7)
           // 亮度調整：0.15 ~ 0.55 (原本 0.1 ~ 0.4)
-          drop.opacity = Math.random() > 0.1 ? Math.random() * 0.4 + 0.15 : 0
+          drop.opacity = Math.random() > 0.37 ? Math.random() * 0.4 + 0.15 : 0
         }
 
         if (drop.opacity > 0) {

@@ -1,0 +1,40 @@
+@layer payload-default {
+  /* 
+   * Payload Admin Layout Optimization
+   * 1. Shrink Left Sidebar (Navigation)
+   * 2. Expand Right Sidebar (Meta/Thumbnail)
+   */
+
+  :root {
+    /* 1. 縮減左側導覽列寬度 (預設約 300-350px) */
+    --nav-width: 200px !important;
+  }
+
+  /* 2. 調整右側編輯區塊的 Grid 比例 */
+  /* Payload 預設在寬螢幕是用 Grid 排版 (75% Main / 25% Sidebar) */
+  /* 我們透過調寬右側欄位，讓縮圖區塊更有呼吸空間 */
+
+  @media (min-width: 1440px) {
+    .collection-edit__main {
+      /* 將右側欄位從預設的 25% 增加到 30% 或固定寬度 */
+      /* Payload CSS 變數控制可能有限，這裡直接覆寫 grid-template-columns */
+    }
+
+    /* 針對表單 Grid 系統微調 */
+    .form-submit {
+      /* 調整存檔按鈕區塊寬度 */
+    }
+  }
+
+  /* 強制針對 .sidebar-wrap (右側欄位容器) 進行寬度優化 */
+  .doc-sidebar {
+    min-width: 350px !important; /* 確保右側欄位至少有 350px，讓縮圖和按鈕不擁擠 */
+  }
+
+  /* 如果畫面夠大，讓主內容區與側邊欄比例更優 */
+  @media (min-width: 1200px) {
+    body {
+      --gutter-h: 40px; /* 增加邊距讓畫面不那麼壓迫 */
+    }
+  }
+}
