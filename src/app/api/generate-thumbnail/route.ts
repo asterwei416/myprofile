@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
       pixar:
         '3D Pixar animation style, cute, vibrant colors, soft lighting, 3D render, high quality, detailed',
       realistic:
-        'Cinematic photo, realistic, high technology, sleek, modern, professional, 8k resolution',
+        'Cinematic photo, realistic, high technology, sleek, modern, professional, 4k resolution',
       cyberpunk:
         'Cyberpunk style, neon lights, futuristic city, high contrast, purple and blue tones, sci-fi',
       minimalist:
@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
 4. **風格融合**：將用戶選擇的「${selectedStyle}」風格融入這個電影場景中 (例如：如果是 Pixar 風，就是「皮克斯電影的劇照」)。
 
 ## Imagen 4 優化規則
-1. **光影與質感**：必須包含 "Volumetric lighting", "Cinematic lighting", "Soft bokeh", "High detailed texture", "8k resolution" 等高品質關鍵詞。
+1. **光影與質感**：必須包含 "Volumetric lighting", "Cinematic lighting", "Soft bokeh", "High detailed texture", "4k resolution" 等高品質關鍵詞。
 2. **構圖**：構圖乾淨平衡，主體明確，預留視覺呼吸空間 (Negative space)。
 3. **絕對禁止**：不要包含任何文字 (No text)、不要有人臉特寫 (No close-up faces)、不要有模糊或變形的物體。
 4. **輸出語言**：僅回傳一段優化過的 **英文 Prompt**。
@@ -72,7 +72,9 @@ ${contentPreview ? `文章內容：${contentPreview}` : ''}
       config: {
         numberOfImages: 1,
         aspectRatio: '16:9',
-      },
+        // 優化速度參數
+        sampleCount: 1,
+      } as any,
     })
 
     if (!imageResult.generatedImages || imageResult.generatedImages.length === 0) {

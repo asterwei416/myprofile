@@ -15,7 +15,10 @@ export async function POST(request: NextRequest) {
     }
 
     const genAI = new GoogleGenerativeAI(apiKey)
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' })
+    const model = genAI.getGenerativeModel({
+      model: 'gemini-2.0-flash',
+      generationConfig: { responseMimeType: 'application/json' },
+    })
 
     const prompt = `你是一位資深的技術顧問。請解析這篇文章，提取出 **3 個** 最具價值的核心洞察，並轉化為問答形式。
 
