@@ -537,14 +537,15 @@ export default async function HomePage() {
                 <Link
                   key={project.id}
                   href={`/projects/${project.slug}`}
-                  style={{ textDecoration: 'none' }}
+                  style={{ textDecoration: 'none', display: 'block' }}
                 >
                   <article className="project-card">
                     <div
                       className="project-card-image"
                       style={{
                         position: 'relative',
-                        height: '200px',
+                        // height: '200px', // Removed to let CSS aspect-ratio handle responsive sizing
+                        width: '100%', // Ensure it fills the card
                         overflow: 'hidden',
                         backgroundColor: '#2a2a2a', // Fallback color
                       }}
