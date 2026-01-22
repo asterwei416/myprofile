@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: Props) {
 
   return {
     title: `${post.title} | Aster`,
-    description: (post as any).meta?.description || `閱讀 ${post.title} — Aster 技術部落格`,
+    description: (post as any).seo?.metaDescription || `閱讀 ${post.title} — Aster 技術部落格`,
     openGraph: {
       type: 'article',
       publishedTime: post.publishedAt,
@@ -60,7 +60,7 @@ function generateJsonLd(post: any) {
     '@type': 'BlogPosting',
     headline: post.title,
     // AEO: 如果有摘要，優先使用摘要作為 description，讓 AI 更容易抓取
-    description: post.summary || post.meta?.description,
+    description: post.summary || post.seo?.metaDescription,
     image: post.thumbnail && typeof post.thumbnail !== 'string' ? [post.thumbnail.url] : [],
     datePublished: post.publishedAt,
     dateModified: post.updatedAt,

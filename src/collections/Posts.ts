@@ -40,10 +40,8 @@ export const Posts: CollectionConfig = {
       type: 'text',
       required: true,
       admin: {
-        placeholder: '輸入標題...',
-        style: {
-          fontSize: '1.5rem',
-          fontWeight: 'bold',
+        components: {
+          Field: '@/components/TitleField',
         },
       },
     },
@@ -182,16 +180,6 @@ export const Posts: CollectionConfig = {
         description: '搜尋引擎最佳化設定',
       },
       fields: [
-        {
-          name: 'metaTitle',
-          label: 'Meta Title',
-          type: 'text',
-          admin: {
-            components: {
-              Field: '@/components/MetaTitleField',
-            },
-          },
-        },
         {
           name: 'metaDescription',
           label: 'Meta Description',

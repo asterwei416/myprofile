@@ -31,6 +31,7 @@ import { default as default_7b9dfa7e750f268744751867bf992dfb } from '@/component
 import { default as default_cc167cfbb2c3c71eb66e054c6fc934c5 } from '@/components/TagsField'
 import { default as default_d347e0610a4287b340937142e46f2f25 } from '@/components/MetaTitleField'
 import { default as default_94c595c3ee165b826fedaec1cf909c80 } from '@/components/MetaDescriptionField'
+import { default as default_d066691215cc9df48c5ade3b2be1491b } from '@/components/TitleField'
 import { CollectionCards as CollectionCards_ab83ff7e88da8d3530831f296ec4756a } from '@payloadcms/ui/rsc'
 
 export const importMap = {
@@ -67,5 +68,6 @@ export const importMap = {
   "@/components/TagsField#default": default_cc167cfbb2c3c71eb66e054c6fc934c5,
   "@/components/MetaTitleField#default": default_d347e0610a4287b340937142e46f2f25,
   "@/components/MetaDescriptionField#default": default_94c595c3ee165b826fedaec1cf909c80,
+  "@/components/TitleField#default": default_d066691215cc9df48c5ade3b2be1491b,
   "@payloadcms/ui/rsc#CollectionCards": CollectionCards_ab83ff7e88da8d3530831f296ec4756a
 }
