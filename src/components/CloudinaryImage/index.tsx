@@ -40,24 +40,30 @@ export function CloudinaryImage({
   )
 
   // 建立 LQIP (Low Quality Image Placeholder) URL
-  let blurUrl = ''
-  if (src && src.includes('/upload/')) {
-    const parts = src.split('/upload/')
-    if (parts.length === 2) {
-      // w_20: 極小寬度
-      // e_blur:1000: 強烈模糊
-      // q_1: 最低品質
-      // f_auto: 自動格式
-      const params = ['w_20', 'e_blur:1000', 'q_1', 'f_auto']
+  const blurUrl = useMemo(() => {
+    if (!src) return ''
 
-      // Keep aspect ratio in LQIP to match main image
-      if (aspectRatio) params.push(`ar_${aspectRatio}`)
-      if (crop) params.push(`c_${crop}`)
-      if (gravity) params.push(`g_${gravity}`)
+    let targetSrc = src
+    const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
 
-      blurUrl = `${parts[0]}/upload/${params.join(',')}/${parts[1]}`
+    // 如果網址是本地 API 路徑且有設定 Cloudinary，則嘗試轉換為 Cloudinary 路徑
+    if (src.startsWith('/api/media/file/') && cloudName) {
+      const fileName = src.split('/').pop()
+      targetSrc = `https://res.cloudinary.com/${cloudName}/image/upload/v1/myprofile-media/${fileName}`
     }
-  }
+
+    if (targetSrc.includes('/upload/')) {
+      const parts = targetSrc.split('/upload/')
+      if (parts.length === 2) {
+        const params = ['w_20', 'e_blur:1000', 'q_1', 'f_auto']
+        if (aspectRatio) params.push(`ar_${aspectRatio}`)
+        if (crop) params.push(`c_${crop}`)
+        if (gravity) params.push(`g_${gravity}`)
+        return `${parts[0]}/upload/${params.join(',')}/${parts[1]}`
+      }
+    }
+    return ''
+  }, [src, aspectRatio, crop, gravity])
 
   const containerStyle: React.CSSProperties = {
     position: 'relative',

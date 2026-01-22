@@ -9,15 +9,24 @@ export interface CloudinaryLoaderOptions {
 
 export function createCloudinaryLoader(options: CloudinaryLoaderOptions = {}) {
   return function cloudinaryLoader({ src, width, quality }: ImageLoaderProps) {
+    let targetSrc = src
+    const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
+
+    // 如果網址是本地 API 路徑且有設定 Cloudinary，則嘗試轉換為 Cloudinary 路徑
+    if (src.startsWith('/api/media/file/') && cloudName) {
+      const fileName = src.split('/').pop()
+      targetSrc = `https://res.cloudinary.com/${cloudName}/image/upload/v1/myprofile-media/${fileName}`
+    }
+
     // If it's not a Cloudinary URL, return as is (of handle local images if needed)
-    if (!src.includes('res.cloudinary.com')) {
-      return src
+    if (!targetSrc.includes('res.cloudinary.com')) {
+      return targetSrc
     }
 
     // Split the URL to inject transformations
-    const parts = src.split('/upload/')
+    const parts = targetSrc.split('/upload/')
     if (parts.length !== 2) {
-      return src
+      return targetSrc
     }
 
     // Cloudinary params
