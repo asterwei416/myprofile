@@ -1,7 +1,7 @@
 import React from 'react'
-import Link from 'next/link'
 import './styles.css'
 import DynamicEffectsWrapper from './components/DynamicEffectsWrapper'
+import Navbar from './components/Navbar'
 
 export const metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SERVER_URL || 'https://aster.dev'),
@@ -44,31 +44,9 @@ export default async function FrontendLayout({ children }: { children: React.Rea
       <body>
         {/* 動態特效 (Client Component) */}
         <DynamicEffectsWrapper />
-        {/* 導覽列 */}
-        <nav className="nav">
-          <div className="container nav-container">
-            <Link href="/" className="nav-brand">
-              <img src="/logo.jpg" alt="Aster.dev" className="nav-logo" />
-            </Link>
-            <ul className="nav-links">
-              <li>
-                <Link href="/" className="nav-link">
-                  開場白
-                </Link>
-              </li>
-              <li>
-                <Link href="/projects" className="nav-link">
-                  就瞎做
-                </Link>
-              </li>
-              <li>
-                <Link href="/blog" className="nav-link">
-                  就亂寫
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </nav>
+
+        {/* 導覽列 (Client Component) */}
+        <Navbar />
 
         {/* 主要內容 */}
         <main>{children}</main>

@@ -103,8 +103,23 @@ export default function BackgroundEffects() {
     const resizeCanvas = () => {
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
+
+      const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      const isMobile = window.innerWidth < 768
+
+      if (isReducedMotion) {
+        // 如果使用者要求減少動態，則清空所有特效列
+        orbsRef.current = []
+        rainDropsRef.current = []
+        return
+      }
+
       initOrbs()
+      // 手機版進一步降低數位雨密度 (原本 63% -> 手機 40% 左右)
       initRain()
+      if (isMobile) {
+        rainDropsRef.current = rainDropsRef.current.filter(() => Math.random() > 0.4)
+      }
     }
     resizeCanvas()
     window.addEventListener('resize', resizeCanvas)

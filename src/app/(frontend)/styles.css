@@ -59,6 +59,7 @@ html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden; /* 防止橫向捲動 */
 }
 
 body {
@@ -67,6 +68,7 @@ body {
   color: var(--text-primary);
   line-height: 1.6;
   min-height: 100vh;
+  overflow-x: hidden; /* 防止橫向捲動 */
 
   /* Grid 背景紋理 */
   background-image:
@@ -164,6 +166,12 @@ pre code {
   padding: 0 var(--space-lg);
 }
 
+@media (max-width: 768px) {
+  .container {
+    padding: 0 var(--space-md); /* 手機版間距縮小，增加內容空間 */
+  }
+}
+
 /* === 導覽列 Logo === */
 .nav-logo {
   height: 40px;
@@ -207,6 +215,7 @@ pre code {
   cursor: pointer;
   transition: all var(--transition-fast);
   text-decoration: none;
+  min-height: 44px; /* A11y: Touch target size */
 }
 
 .btn-primary {
@@ -1104,10 +1113,20 @@ pre code {
 .post-card-image {
   flex-shrink: 0;
   width: 380px;
-  height: auto; /* Allow natural height to preserve aspect ratio */
+  height: auto;
   border-radius: 8px;
   overflow: hidden;
-  align-self: flex-start; /* Prevent stretching */
+  align-self: flex-start;
+}
+
+@media (max-width: 768px) {
+  .post-card {
+    flex-direction: column;
+  }
+  .post-card-image {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+  }
 }
 
 .post-card:hover {
@@ -1273,6 +1292,15 @@ pre code {
   overflow: hidden;
 }
 
+@media (max-width: 768px) {
+  .blog-card {
+    flex-direction: column;
+  }
+  .blog-card-image {
+    width: 100%;
+  }
+}
+
 .blog-card-image img {
   width: 100%;
   height: 100%;
@@ -1298,6 +1326,7 @@ pre code {
   flex: 1;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -1398,8 +1427,48 @@ pre code {
     padding: var(--space-xl) 0;
   }
 
+  .nav-toggle {
+    display: block;
+  }
+
   .nav-links {
-    display: none;
+    display: none; /* 預設隱藏 */
+  }
+
+  .nav-links.active {
+    display: flex;
+    position: fixed;
+    top: 70px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    flex-direction: column;
+    background-color: rgba(5, 5, 5, 0.98);
+    backdrop-filter: blur(20px);
+    padding: var(--space-2xl) var(--space-lg);
+    gap: var(--space-xl);
+    z-index: 1000;
+  }
+
+  .nav-link {
+    font-size: 1.5rem;
+    text-align: center;
+  }
+}
+
+/* === 時間軸手機版最佳化 === */
+@media (max-width: 768px) {
+  .timeline-item {
+    padding-left: 35px !important; /* 縮小間距防止溢出 */
+  }
+
+  .timeline-card {
+    padding: var(--space-md) !important;
+  }
+
+  .timeline-phase {
+    max-width: 90% !important;
+    font-size: 0.875rem !important;
   }
 }
 
