@@ -1126,6 +1126,7 @@ pre code {
   .post-card-image {
     width: 100%;
     aspect-ratio: 16 / 9;
+    align-self: center; /* 強制置中 */
   }
 }
 
@@ -1298,6 +1299,7 @@ pre code {
   }
   .blog-card-image {
     width: 100%;
+    align-self: center; /* 強制置中 */
   }
 }
 
@@ -1347,16 +1349,6 @@ pre code {
 .blog-card-tags {
   display: flex;
   gap: var(--space-xs);
-}
-
-@media (max-width: 768px) {
-  .blog-card {
-    flex-direction: column;
-  }
-
-  .blog-card-image {
-    width: 100%;
-  }
 }
 
 /* === Rich Text 內容 === */
