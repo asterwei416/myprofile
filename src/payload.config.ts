@@ -22,6 +22,9 @@ import { Categories } from './collections/Categories'
 import { Projects } from './collections/Projects'
 import { Posts } from './collections/Posts'
 
+// Globals
+import { AdSettings } from './globals/AdSettings'
+
 // 自訂 Lexical Features
 import { ClearFormattingFeature } from './features/ClearFormatting/feature.server'
 import { ListStartNumberFeature } from './features/ListStartNumber/feature.server'
@@ -39,6 +42,7 @@ export default buildConfig({
       titleSuffix: ' - Wei Aster Portfolio',
     },
   },
+  globals: [AdSettings],
   collections: [Users, Media, Tags, Categories, Projects, Posts],
   editor: lexicalEditor({
     features: ({ defaultFeatures }) => [

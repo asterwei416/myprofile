@@ -95,8 +95,12 @@ export interface Config {
     defaultIDType: string;
   };
   fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    'ad-settings': AdSetting;
+  };
+  globalsSelect: {
+    'ad-settings': AdSettingsSelect<false> | AdSettingsSelect<true>;
+  };
   locale: null;
   user: User & {
     collection: 'users';
@@ -595,6 +599,78 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ad-settings".
+ */
+export interface AdSetting {
+  id: string;
+  homepageFooterAd?: {
+    enabled?: boolean | null;
+    type?: ('banner' | 'code') | null;
+    banner?: {
+      image: string | Media;
+      url: string;
+      openInNewTab?: boolean | null;
+    };
+    /**
+     * 請在此貼上 Google AdSense 或其他廣告商提供的完整程式碼
+     */
+    code?: string | null;
+  };
+  postFooterAd?: {
+    enabled?: boolean | null;
+    type?: ('banner' | 'code') | null;
+    banner?: {
+      image: string | Media;
+      url: string;
+      openInNewTab?: boolean | null;
+    };
+    /**
+     * 請在此貼上 Google AdSense 或其他廣告商提供的完整程式碼
+     */
+    code?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ad-settings_select".
+ */
+export interface AdSettingsSelect<T extends boolean = true> {
+  homepageFooterAd?:
+    | T
+    | {
+        enabled?: T;
+        type?: T;
+        banner?:
+          | T
+          | {
+              image?: T;
+              url?: T;
+              openInNewTab?: T;
+            };
+        code?: T;
+      };
+  postFooterAd?:
+    | T
+    | {
+        enabled?: T;
+        type?: T;
+        banner?:
+          | T
+          | {
+              image?: T;
+              url?: T;
+              openInNewTab?: T;
+            };
+        code?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

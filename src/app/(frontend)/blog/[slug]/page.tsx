@@ -9,6 +9,7 @@ import { RichText } from '@payloadcms/richtext-lexical/react'
 import { CloudinaryImage } from '@/components/CloudinaryImage'
 import { jsxConverters } from '@/components/RichText/converters'
 import { QAAccordion } from '@/components/QAAccordion'
+import { AdUnit } from '@/components/AdUnit'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -282,6 +283,9 @@ export default async function BlogPostPage({ params }: Props) {
           <div className="rich-text-content">
             <RichText data={post.content} converters={jsxConverters} />
           </div>
+
+          {/* 文章底部廣告 */}
+          <AdUnit slot="postFooterAd" />
 
           {/* AI 讀心問答區塊 */}
           {(post as any).aiQA && (post as any).aiQA.length > 0 && (

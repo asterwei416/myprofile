@@ -2,6 +2,8 @@ import Link from 'next/link'
 import { getPayload } from 'payload'
 import React from 'react'
 
+import { AdUnit } from '@/components/AdUnit'
+
 import { Tag } from './components/Tag'
 import config from '@/payload.config'
 import { CloudinaryImage } from '@/components/CloudinaryImage'
@@ -397,6 +399,11 @@ export default async function HomePage() {
           )}
         </div>
       </section>
+
+      {/* 首頁底部廣告 */}
+      <div className="container" style={{ maxWidth: '800px', margin: '0 auto' }}>
+        <AdUnit slot="homepageFooterAd" />
+      </div>
     </>
   )
 }

@@ -6,7 +6,7 @@ import Navbar from './components/Navbar'
 export const metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SERVER_URL || 'https://aster.dev'),
   title: {
-    default: 'Aster | AI First 實踐玩家',
+    default: 'Aster | AI First 實踐與思維重構',
     template: '%s | Aster',
   },
   description:
