@@ -28,42 +28,60 @@ function extractTextFromLexical(node: any): string {
 }
 
 export default async function HomePage() {
-  const payloadConfig = await config
-  const payload = await getPayload({ config: payloadConfig })
+  let projects = []
+  let posts = []
+  let postsWithExcerpt = []
 
-  // 取得最新發布的作品（最多 3 個）
-  const { docs: projects } = await payload.find({
-    collection: 'projects',
-    where: {
-      status: { equals: 'published' },
-    },
-    sort: '-date',
-    limit: 3,
-    depth: 1,
-  })
+  try {
+    const payloadConfig = await config
+    const payload = await getPayload({ config: payloadConfig })
 
-  // 取得最新發布的文章（最多 3 個）
-  const { docs: posts } = await payload.find({
-    collection: 'posts',
-    where: {
-      status: { equals: 'published' },
-    },
-    sort: '-publishedAt',
-    limit: 3,
-    depth: 1,
-  })
-
-  // 預處理文章資料：生成摘要
-  const postsWithExcerpt = posts.map((post: any) => {
-    let excerpt = ''
-    if (post.content && post.content.root) {
-      const fullText = extractTextFromLexical(post.content)
-      // 截取前 250 字
-      excerpt = fullText.slice(0, 250)
-      if (fullText.length > 250) excerpt += '...'
+    // 取得最新發布的作品（最多 3 個）
+    try {
+      const projectsResult = await payload.find({
+        collection: 'projects',
+        where: {
+          status: { equals: 'published' },
+        },
+        sort: '-date',
+        limit: 3,
+        depth: 1,
+      })
+      projects = projectsResult.docs
+    } catch (e) {
+      console.error('Error fetching projects:', e)
     }
-    return { ...post, excerpt }
-  })
+
+    // 取得最新發布的文章（最多 3 個）
+    try {
+      const postsResult = await payload.find({
+        collection: 'posts',
+        where: {
+          status: { equals: 'published' },
+        },
+        sort: '-publishedAt',
+        limit: 3,
+        depth: 1,
+      })
+      posts = postsResult.docs
+    } catch (e) {
+      console.error('Error fetching posts:', e)
+    }
+
+    // 預處理文章資料：生成摘要
+    postsWithExcerpt = posts.map((post: any) => {
+      let excerpt = ''
+      if (post.content && post.content.root) {
+        const fullText = extractTextFromLexical(post.content)
+        // 截取前 250 字
+        excerpt = fullText.slice(0, 250)
+        if (fullText.length > 250) excerpt += '...'
+      }
+      return { ...post, excerpt }
+    })
+  } catch (error) {
+    console.error('HomePage General Error:', error)
+  }
 
   return (
     <>

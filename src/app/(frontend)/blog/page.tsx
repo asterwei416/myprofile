@@ -6,6 +6,8 @@ import { Tag } from '../components/Tag'
 import config from '@/payload.config'
 import { CloudinaryImage } from '@/components/CloudinaryImage'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata = {
   title: '技術部落格 | Aster',
   description: '分享前端開發、AI 應用、React、Next.js、TypeScript 等技術文章與心得。',

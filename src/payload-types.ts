@@ -251,7 +251,6 @@ export interface Project {
    * 搜尋引擎最佳化設定
    */
   seo?: {
-    metaTitle?: string | null;
     metaDescription?: string | null;
     /**
      * 建議尺寸 1200x630px，用於 Facebook、Twitter 等社群分享
@@ -517,7 +516,6 @@ export interface ProjectsSelect<T extends boolean = true> {
   seo?:
     | T
     | {
-        metaTitle?: T;
         metaDescription?: T;
         ogImage?: T;
         canonicalUrl?: T;

@@ -184,16 +184,6 @@ export const Projects: CollectionConfig = {
       },
       fields: [
         {
-          name: 'metaTitle',
-          label: 'Meta Title',
-          type: 'text',
-          admin: {
-            components: {
-              Field: '@/components/MetaTitleField',
-            },
-          },
-        },
-        {
           name: 'metaDescription',
           label: 'Meta Description',
           type: 'textarea',
