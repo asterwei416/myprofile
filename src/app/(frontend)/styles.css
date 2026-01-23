@@ -1100,6 +1100,13 @@ pre code {
 .project-card-title {
   font-size: 1.25rem;
   margin-bottom: var(--space-sm);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2; /* Standard property for compatibility */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 3rem; /* 1.25rem * 1.2 line-height * 2 lines = 3rem */
 }
 
 .project-card-meta {
@@ -1158,6 +1165,11 @@ pre code {
 .post-card-title {
   font-size: 1.125rem;
   margin-bottom: var(--space-sm);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .post-card-excerpt {
@@ -1335,6 +1347,11 @@ pre code {
   font-size: 1.25rem;
   margin-bottom: var(--space-sm);
   color: var(--text-primary);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .blog-card-excerpt {
