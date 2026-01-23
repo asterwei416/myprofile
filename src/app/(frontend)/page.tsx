@@ -27,10 +27,12 @@ function extractTextFromLexical(node: any): string {
   return ''
 }
 
+import { Project, Post } from '@/payload-types'
+
 export default async function HomePage() {
-  let projects = []
-  let posts = []
-  let postsWithExcerpt = []
+  let projects: Project[] = []
+  let posts: Post[] = []
+  let postsWithExcerpt: (Post & { excerpt?: string })[] = []
 
   try {
     const payloadConfig = await config
