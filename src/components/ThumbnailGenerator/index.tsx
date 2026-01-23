@@ -22,11 +22,20 @@ const resizeCloudinaryUrl = (url: string, width = 600) => {
   return `${parts[0]}/upload/f_auto,q_auto:eco,w_${width},c_limit/${parts[1]}`
 }
 
+// Loading messages sequence
+const loadingMessages = [
+  '🧠 AI 正在閱讀文章內容...',
+  '🎨 正在構思畫面構圖...',
+  '✨ 正在渲染光影細節...',
+  '📤 正在上傳到雲端...',
+]
+
 const ThumbnailGenerator: React.FC = () => {
   const [isGenerating, setIsGenerating] = useState(false)
   const [selectedStyle, setSelectedStyle] = useState('pixar')
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
+  const [loadingStage, setLoadingStage] = useState<string>('啟動 AI 引擎...')
 
   // 獲取標題
   const titleField = useFormFields(([fields]) => fields['title'])
@@ -84,6 +93,17 @@ const ThumbnailGenerator: React.FC = () => {
 
     setIsGenerating(true)
     setMessage(null)
+    setLoadingStage(loadingMessages[0])
+
+    // Start rotating messages
+    let msgIndex = 0
+    const msgInterval = setInterval(() => {
+      msgIndex = (msgIndex + 1) % loadingMessages.length
+      // Keep the last message (Uploading) if we are deep in time
+      if (msgIndex < loadingMessages.length) {
+        setLoadingStage(loadingMessages[msgIndex])
+      }
+    }, 2500) // Switch every 2.5s to match approx 8-10s total time
 
     // 提取全文內容
     const fullText = extractTextFromLexical(content)
@@ -121,6 +141,7 @@ const ThumbnailGenerator: React.FC = () => {
         text: error instanceof Error ? error.message : '生成失敗，請稍後再試',
       })
     } finally {
+      clearInterval(msgInterval)
       setIsGenerating(false)
     }
   }, [title, selectedStyle, setThumbnailValue, setOgImageValue, content, extractTextFromLexical])
@@ -148,10 +169,10 @@ const ThumbnailGenerator: React.FC = () => {
           disabled={isGenerating || !title}
         >
           {isGenerating ? (
-            <>
+            <div className="generating-status">
               <div className="loading-spinner" />
-              生成中...
-            </>
+              <span className="loading-text">{loadingStage}</span>
+            </div>
           ) : (
             <>✨ AI 生成縮圖</>
           )}
