@@ -8,10 +8,25 @@ import { CloudinaryImage } from '@/components/CloudinaryImage'
 
 export const dynamic = 'force-dynamic'
 
+const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL || 'https://aster.dev'
+
 export const metadata = {
-  title: 'Aster 技術部落格 | 前端開發、AI Agent 實戰與系統思考筆記',
+  title: '就亂寫 - Aster 技術部落格',
   description:
     '分享前端開發、AI 應用、React、Next.js、TypeScript 等技術文章與心得。從系統思考出發，紀錄 AI 時代的開發實戰與思維轉變。',
+  alternates: {
+    canonical: `${baseUrl}/blog`,
+  },
+  openGraph: {
+    title: '就亂寫 - Aster 技術部落格',
+    description: '從系統思考出發，紀錄 AI 時代的開發實戰與思維轉變',
+    url: `${baseUrl}/blog`,
+    siteName: 'Aster | AI First 實踐玩家',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+  },
 }
 
 // 輔助函式：從 Lexical JSON 遞迴提取純文字

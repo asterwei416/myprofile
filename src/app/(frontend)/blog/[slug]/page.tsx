@@ -42,14 +42,28 @@ export async function generateMetadata({ params }: Props) {
         ]
       : []
 
+  const seo = (post as any).seo || {}
+  const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL || 'https://aster.dev'
+  const canonicalUrl = seo.canonicalUrl || `${baseUrl}/blog/${slug}`
+
   return {
     title: `${post.title} | Aster`,
-    description: (post as any).seo?.metaDescription || `閱讀 ${post.title} — Aster 技術部落格`,
+    description: seo.metaDescription || `閱讀 ${post.title} — Aster 技術部落格`,
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
       type: 'article',
+      url: canonicalUrl,
+      siteName: 'Aster | AI First 實踐玩家',
       publishedTime: post.publishedAt,
+      modifiedTime: post.updatedAt,
+      authors: ['Aster Wei'],
       images: ogImage,
       tags: (post.tags as any[])?.map((t) => (typeof t === 'string' ? t : t.name)),
+    },
+    twitter: {
+      card: 'summary_large_image',
     },
   }
 }

@@ -45,11 +45,16 @@ export async function generateMetadata({ params }: Props) {
   const metaTitle = seo.metaTitle || project.title
   const isNoIndex = seo.noIndex || false
   const isNoFollow = seo.noFollow || false
+  const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL || 'https://aster.dev'
+  const canonicalUrl = seo.canonicalUrl || `${baseUrl}/projects/${slug}`
 
   return {
     title: `${metaTitle} | Aster`,
     description:
       seo.metaDescription || `探索 ${project.title} 的 Prompt 邏輯、開發思維與技術架構。`,
+    alternates: {
+      canonical: canonicalUrl,
+    },
     robots: {
       index: !isNoIndex,
       follow: !isNoFollow,
@@ -63,7 +68,13 @@ export async function generateMetadata({ params }: Props) {
     },
     openGraph: {
       title: `${metaTitle} | Aster`,
+      url: canonicalUrl,
+      siteName: 'Aster | AI First 實踐玩家',
       images: ogImage,
+      type: 'article',
+    },
+    twitter: {
+      card: 'summary_large_image',
     },
   }
 }

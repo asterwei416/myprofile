@@ -6,10 +6,24 @@ import { Tag } from '../components/Tag'
 import config from '@/payload.config'
 import { CloudinaryImage } from '@/components/CloudinaryImage'
 
+const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL || 'https://aster.dev'
+
 export const metadata = {
-  title: 'AI 應用作品集 | 實戰自動化 Workflow、Prompt Engineering 與開發案例',
-  description:
-    '探索我的 AI 作品集——包含自動化工作流 (Workflow)、Prompt Engineering 技巧、以及全端開發實戰案例。每個專案都包含完整的技術架構拆解。',
+  title: '就瞎做 - AI 實踐作品集',
+  description: '探索 AI 應用的各種可能性，從 Prompt 邏輯到技術架構的完整實作紀錄。',
+  alternates: {
+    canonical: `${baseUrl}/projects`,
+  },
+  openGraph: {
+    title: '就瞎做 - AI 實踐作品集 | Aster',
+    description: '探索 AI 應用的各種可能性，從 Prompt 邏輯到技術架構的完整實作紀錄',
+    url: `${baseUrl}/projects`,
+    siteName: 'Aster | AI First 實踐玩家',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+  },
 }
 
 export default async function ProjectsPage() {

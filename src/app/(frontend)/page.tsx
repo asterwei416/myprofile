@@ -10,6 +10,49 @@ import { CloudinaryImage } from '@/components/CloudinaryImage'
 
 import { TimelineSection } from '@/components/TimelineSection'
 
+// 生成首頁結構化資料
+function generateHomeJsonLd() {
+  const siteUrl = process.env.NEXT_PUBLIC_SERVER_URL || 'https://aster.dev'
+
+  const personSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: 'Aster Wei',
+    alternateName: 'Aster',
+    description: 'AI First 實踐玩家，專注於數據分析、Growth Hacking 與 AI 自動化應用',
+    url: siteUrl,
+    image: `${siteUrl}/avatar-3d.jpg`,
+    jobTitle: 'AI First 實踐玩家',
+    knowsAbout: [
+      'AI First',
+      'Prompt Engineering',
+      'Growth Hacking',
+      '數據分析',
+      'AI 自動化',
+      'Vibe Coding',
+      '數位行銷',
+    ],
+    sameAs: [
+      // 可以加入你的社交媒體連結（GitHub、LinkedIn 等）
+    ],
+  }
+
+  const websiteSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Aster | AI First 實踐玩家',
+    description: '從數位行銷到 AI 探索者，用系統思考拆解大局，用算力放大想像',
+    url: siteUrl,
+    author: {
+      '@type': 'Person',
+      name: 'Aster Wei',
+    },
+    inLanguage: 'zh-TW',
+  }
+
+  return [personSchema, websiteSchema]
+}
+
 // 輔助函式：從 Lexical JSON 遞迴提取純文字
 function extractTextFromLexical(node: any): string {
   if (!node) return ''
@@ -87,6 +130,12 @@ export default async function HomePage() {
 
   return (
     <>
+      {/* 結構化資料 */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(generateHomeJsonLd()) }}
+      />
+
       {/* Hero 區塊 - 置中設計 */}
       <section className="profile-hero">
         <div className="profile-hero-content">
