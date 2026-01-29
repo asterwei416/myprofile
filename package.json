@@ -23,6 +23,7 @@
     "@lexical/list": "0.35.0",
     "@lexical/react": "0.35.0",
     "@lexical/utils": "0.35.0",
+    "@payloadcms/plugin-cloud-storage": "3.71.1",
     "@payloadcms/db-mongodb": "3.71.1",
     "@payloadcms/next": "3.71.1",
     "@payloadcms/richtext-lexical": "3.71.1",
@@ -64,6 +65,9 @@
     "onlyBuiltDependencies": [
       "esbuild",
       "unrs-resolver"
-    ]
+    ],
+    "overrides": {
+      "@payloadcms/plugin-cloud-storage": "3.71.1"
+    }
   }
 }
