@@ -7,6 +7,7 @@ import {
   UploadFeature,
   BlockquoteFeature,
   AlignFeature,
+  LinkFeature,
 } from '@payloadcms/richtext-lexical'
 import path from 'path'
 import { buildConfig } from 'payload'
@@ -70,6 +71,45 @@ export default buildConfig({
       BlockquoteFeature(),
       // 對齊功能 (左/中/右/兩端)
       AlignFeature(),
+      // 連結功能
+      LinkFeature({
+        fields: [
+          {
+            name: 'url',
+            label: '連結網址',
+            type: 'text',
+            required: true,
+            admin: {
+              placeholder: 'https://example.com',
+            },
+          },
+          {
+            name: 'rel',
+            label: 'Rel 屬性（SEO 與安全性設定）',
+            type: 'select',
+            hasMany: true,
+            defaultValue: ['noopener', 'noreferrer'],
+            options: [
+              {
+                label: 'noopener - 安全性（建議外部連結使用）',
+                value: 'noopener',
+              },
+              {
+                label: 'noreferrer - 隱私保護（不傳送來源資訊）',
+                value: 'noreferrer',
+              },
+              {
+                label: 'nofollow - SEO（告訴搜尋引擎不追蹤此連結）',
+                value: 'nofollow',
+              },
+            ],
+            admin: {
+              description:
+                '💡 預設已選「noopener + noreferrer」提升安全性；如為廣告或不信任連結可再加上「nofollow」避免影響 SEO',
+            },
+          },
+        ],
+      }),
       // 清除格式 - 自訂功能
       ClearFormattingFeature(),
       // 列表起始編號 - 自訂功能

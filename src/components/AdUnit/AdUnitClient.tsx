@@ -11,7 +11,10 @@ interface AdConfig {
     url: string
     openInNewTab: boolean
   }
-  code?: string
+  code?: {
+    content: string
+    openInNewTab: boolean
+  } | string // Support old format for backward compatibility
 }
 
 interface AdUnitClientProps {
@@ -83,10 +86,39 @@ export const AdUnitClient = ({ adConfig, className = '' }: AdUnitClientProps) =>
 
       {/* 模式 B: 自訂程式碼 (Google AdSense等) */}
       {adConfig.type === 'code' && adConfig.code && (
-        <div className="ad-code">
-          <div dangerouslySetInnerHTML={{ __html: adConfig.code }} />
-        </div>
+        <CodeAdUnit adConfig={adConfig.code} />
       )}
+    </div>
+  )
+}
+
+// Code Ad Unit Component with forced new tab option
+const CodeAdUnit = ({ adConfig }: { adConfig: AdConfig['code'] }) => {
+  const codeRef = React.useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!adConfig) return
+    
+    // Backward compatibility: handle string format
+    const openInNewTab = typeof adConfig === 'string' ? false : adConfig.openInNewTab
+    
+    if (openInNewTab && codeRef.current) {
+      // Find all links within the ad code and force them to open in new tab
+      const links = codeRef.current.querySelectorAll('a')
+      links.forEach(link => {
+        link.setAttribute('target', '_blank')
+        link.setAttribute('rel', 'noopener noreferrer')
+      })
+    }
+  }, [adConfig])
+
+  if (!adConfig) return null
+
+  const htmlContent = typeof adConfig === 'string' ? adConfig : adConfig.content
+
+  return (
+    <div className="ad-code" ref={codeRef}>
+      <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
     </div>
   )
 }

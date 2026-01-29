@@ -635,10 +635,35 @@ export interface AdSetting {
       url: string;
       openInNewTab?: boolean | null;
     };
-    /**
-     * 請在此貼上 Google AdSense 或其他廣告商提供的完整程式碼
-     */
-    code?: string | null;
+    code?: {
+      /**
+       * 請在此貼上 Google AdSense 或其他廣告商提供的完整程式碼
+       */
+      content: string;
+      /**
+       * 啟用後，程式碼中的所有連結都會自動在新分頁開啟
+       */
+      openInNewTab?: boolean | null;
+    };
+  };
+  projectFooterAd?: {
+    enabled?: boolean | null;
+    type?: ('banner' | 'code') | null;
+    banner?: {
+      image: string | Media;
+      url: string;
+      openInNewTab?: boolean | null;
+    };
+    code?: {
+      /**
+       * 請在此貼上 Google AdSense 或其他廣告商提供的完整程式碼
+       */
+      content: string;
+      /**
+       * 啟用後，程式碼中的所有連結都會自動在新分頁開啟
+       */
+      openInNewTab?: boolean | null;
+    };
   };
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -674,7 +699,31 @@ export interface AdSettingsSelect<T extends boolean = true> {
               url?: T;
               openInNewTab?: T;
             };
-        code?: T;
+        code?:
+          | T
+          | {
+              content?: T;
+              openInNewTab?: T;
+            };
+      };
+  projectFooterAd?:
+    | T
+    | {
+        enabled?: T;
+        type?: T;
+        banner?:
+          | T
+          | {
+              image?: T;
+              url?: T;
+              openInNewTab?: T;
+            };
+        code?:
+          | T
+          | {
+              content?: T;
+              openInNewTab?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;

@@ -9,6 +9,7 @@ import { RichText } from '@payloadcms/richtext-lexical/react'
 import { CloudinaryImage } from '@/components/CloudinaryImage'
 import { jsxConverters } from '@/components/RichText/converters'
 import { QAAccordion } from '@/components/QAAccordion'
+import { AdUnitClient } from '@/components/AdUnit/AdUnitClient'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -183,6 +184,12 @@ export default async function ProjectDetailPage({ params }: Props) {
 
   const project = docs[0]
   if (!project) notFound()
+
+  // 取得廣告設定
+  const adSettings = await payload.findGlobal({
+    slug: 'ad-settings',
+  })
+  const projectAdConfig = (adSettings as any)?.projectFooterAd
 
   // 取得相關作品（同標籤優先，不足補最新）
   let relatedProjects: any[] = []
@@ -362,6 +369,15 @@ export default async function ProjectDetailPage({ params }: Props) {
           )}
         </div>
       </section>
+
+      {/* 作品集頁廣告 */}
+      {projectAdConfig?.enabled && (
+        <section className="section">
+          <div className="container" style={{ maxWidth: '800px' }}>
+            <AdUnitClient adConfig={projectAdConfig} />
+          </div>
+        </section>
+      )}
       {/* 相關作品 */}
       {relatedProjects.length > 0 && (
         <section className="section">
