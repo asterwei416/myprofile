@@ -45,7 +45,7 @@ importers:
         specifier: ^7.0.3
         version: 7.0.3
       dotenv:
-        specifier: 16.4.7
+        specifier: ^16.4.7
         version: 16.4.7
       graphql:
         specifier: ^16.8.1

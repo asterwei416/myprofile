@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" next build",
-    "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev",
+    "dev": "cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=4096\" next dev",
     "devsafe": "rm -rf .next && cross-env NODE_OPTIONS=--no-deprecation next dev",
     "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
     "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
@@ -30,7 +30,7 @@
     "@pemol/payload-cloudinary": "^1.6.1",
     "cloudinary": "^2.9.0",
     "cross-env": "^7.0.3",
-    "dotenv": "16.4.7",
+    "dotenv": "^16.4.7",
     "graphql": "^16.8.1",
     "lexical": "0.35.0",
     "next": "15.4.10",
