@@ -41,14 +41,99 @@ export async function generateMetadata({ params }: Props) {
         ]
       : []
 
+  const seo = (project as any).seo || {}
+  const metaTitle = seo.metaTitle || project.title
+  const isNoIndex = seo.noIndex || false
+  const isNoFollow = seo.noFollow || false
+
   return {
-    title: `${project.title} | Aster`,
-    description: `探索 ${project.title} 的 Prompt 邏輯、開發思維與技術架構。`,
+    title: `${metaTitle} | Aster`,
+    description:
+      seo.metaDescription || `探索 ${project.title} 的 Prompt 邏輯、開發思維與技術架構。`,
+    robots: {
+      index: !isNoIndex,
+      follow: !isNoFollow,
+      googleBot: {
+        index: !isNoIndex,
+        follow: !isNoFollow,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
     openGraph: {
-      titles: project.title,
+      title: `${metaTitle} | Aster`,
       images: ogImage,
     },
   }
+}
+
+// JSON-LD 產生器
+function generateJsonLd(project: any) {
+  const siteUrl = process.env.NEXT_PUBLIC_SERVER_URL || 'https://aster.dev'
+
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: project.title,
+    description: project.summary || project.seo?.metaDescription,
+    image:
+      project.thumbnail && typeof project.thumbnail !== 'string' ? [project.thumbnail.url] : [],
+    datePublished: project.date,
+    dateModified: project.updatedAt,
+    author: [
+      {
+        '@type': 'Person',
+        name: 'Aster',
+        url: 'https://aster.dev',
+      },
+    ],
+  }
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: '首頁',
+        item: siteUrl,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: '就瞎做',
+        item: `${siteUrl}/projects`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: project.title,
+        item: `${siteUrl}/projects/${project.slug}`,
+      },
+    ],
+  }
+
+  const schemas: any[] = [articleSchema, breadcrumbSchema]
+
+  if (project.aiQA && (project.aiQA as any[]).length > 0) {
+    const faqSchema = {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: (project.aiQA as any[]).map((qa: any) => ({
+        '@type': 'Question',
+        name: qa.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: qa.answer,
+        },
+      })),
+    }
+    schemas.push(faqSchema)
+  }
+
+  return schemas
 }
 
 // 預先產生靜態路徑
@@ -145,6 +230,11 @@ export default async function ProjectDetailPage({ params }: Props) {
           </Link>
 
           <h1 style={{ marginBottom: 'var(--space-md)' }}>{project.title}</h1>
+
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(generateJsonLd(project)) }}
+          />
 
           {/* Meta 資訊 */}
           <div

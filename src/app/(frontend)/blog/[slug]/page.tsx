@@ -42,9 +42,25 @@ export async function generateMetadata({ params }: Props) {
         ]
       : []
 
+  const seo = (post as any).seo || {}
+  const metaTitle = seo.metaTitle || post.title
+  const isNoIndex = seo.noIndex || false
+  const isNoFollow = seo.noFollow || false
+
   return {
-    title: `${post.title} | Aster`,
-    description: (post as any).seo?.metaDescription || `閱讀 ${post.title} — Aster 技術部落格`,
+    title: `${metaTitle} | Aster`,
+    description: seo.metaDescription || `閱讀 ${post.title} — Aster 技術部落格`,
+    robots: {
+      index: !isNoIndex,
+      follow: !isNoFollow,
+      googleBot: {
+        index: !isNoIndex,
+        follow: !isNoFollow,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
     openGraph: {
       type: 'article',
       publishedTime: post.publishedAt,
@@ -56,7 +72,9 @@ export async function generateMetadata({ params }: Props) {
 
 // JSON-LD 產生器
 function generateJsonLd(post: any) {
-  return {
+  const siteUrl = process.env.NEXT_PUBLIC_SERVER_URL || 'https://aster.dev'
+
+  const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
     headline: post.title,
@@ -73,6 +91,52 @@ function generateJsonLd(post: any) {
       },
     ],
   }
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: '首頁',
+        item: siteUrl,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: '就亂寫',
+        item: `${siteUrl}/blog`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: post.title,
+        item: `${siteUrl}/blog/${post.slug}`,
+      },
+    ],
+  }
+
+  const schemas: any[] = [articleSchema, breadcrumbSchema]
+
+  // GEO: 加入 FAQPage 結構化資料
+  if (post.aiQA && (post.aiQA as any[]).length > 0) {
+    const faqSchema = {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: (post.aiQA as any[]).map((qa: any) => ({
+        '@type': 'Question',
+        name: qa.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: qa.answer,
+        },
+      })),
+    }
+    schemas.push(faqSchema)
+  }
+
+  return schemas
 }
 
 // 預先產生靜態路徑

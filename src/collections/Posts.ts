@@ -181,6 +181,14 @@ export const Posts: CollectionConfig = {
       },
       fields: [
         {
+          name: 'metaTitle',
+          label: 'Meta Title',
+          type: 'text',
+          admin: {
+            description: 'SEO 專用標題 (若留空則使用文章 H1 標題)',
+          },
+        },
+        {
           name: 'metaDescription',
           label: 'Meta Description',
           type: 'textarea',

@@ -9,8 +9,9 @@ import { CloudinaryImage } from '@/components/CloudinaryImage'
 export const dynamic = 'force-dynamic'
 
 export const metadata = {
-  title: '技術部落格 | Aster',
-  description: '分享前端開發、AI 應用、React、Next.js、TypeScript 等技術文章與心得。',
+  title: 'Aster 技術部落格 | 前端開發、AI Agent 實戰與系統思考筆記',
+  description:
+    '分享前端開發、AI 應用、React、Next.js、TypeScript 等技術文章與心得。從系統思考出發，紀錄 AI 時代的開發實戰與思維轉變。',
 }
 
 // 輔助函式：從 Lexical JSON 遞迴提取純文字

@@ -7,8 +7,9 @@ import config from '@/payload.config'
 import { CloudinaryImage } from '@/components/CloudinaryImage'
 
 export const metadata = {
-  title: '作品集 | Aster',
-  description: '探索我的 AI 作品集——每個專案都包含完整的 Prompt 邏輯、開發思維、以及技術架構拆解。',
+  title: 'AI 應用作品集 | 實戰自動化 Workflow、Prompt Engineering 與開發案例',
+  description:
+    '探索我的 AI 作品集——包含自動化工作流 (Workflow)、Prompt Engineering 技巧、以及全端開發實戰案例。每個專案都包含完整的技術架構拆解。',
 }
 
 export default async function ProjectsPage() {
