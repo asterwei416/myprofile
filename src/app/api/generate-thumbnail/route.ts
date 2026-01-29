@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
 
     // 直通車模式 (Direct Prompting)：直接組合 Prompt，省去 AI 思考時間
     // 結構：[電影質感] + [標題主體] + [風格關鍵詞] + [光影細節]
-    const imagePrompt = `Cinematic shot of "${title}", ${selectedStyle}, volumetric lighting, cinematic lighting, soft bokeh, high quality composition, no text`
+    const imagePrompt = `Cinematic shot of "${title}", ${selectedStyle}, volumetric lighting, cinematic lighting, soft bokeh, high quality composition, avoid any Chinese characters; if any text appears, it must be English only`
 
     console.log('Generating thumbnail with prompt:', imagePrompt)
 
