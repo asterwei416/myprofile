@@ -203,7 +203,7 @@ const timelineData: TimelinePhase[] = [
         websites: [
           {
             name: 'AI 思維實驗室',
-            url: 'https://www.facebook.com/groups/aithinkinglab',
+            url: 'https://www.facebook.com/groups/572073306000708',
             image: '/screenshots/ai-thinking-lab-preview.jpg',
           },
         ],
